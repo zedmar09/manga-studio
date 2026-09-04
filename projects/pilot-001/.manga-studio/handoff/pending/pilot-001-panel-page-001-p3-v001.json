@@ -1,0 +1,97 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "pilot-001-panel-page-001-p3-v001",
+  "job_type": "manga_panel",
+  "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-03-v001.png",
+  "required_reference_images": [],
+  "reference_priority": [
+    "protagonist-mira-reference-v001",
+    "brass-ticket-punch-reference-v001",
+    "rain-platform-reference-v001"
+  ],
+  "scene_state": {
+    "page_id": "page-001",
+    "panel_id": "p3",
+    "time": "night",
+    "weather": "rain reflected behind the character",
+    "beat": "Mira lifts the brass ticket punch into the frame."
+  },
+  "character_state": {
+    "mira": "Close shot, focused expression, right hand lifting the closed ticket punch."
+  },
+  "composition": {
+    "panel_canvas": {
+      "width": 1400,
+      "height": 2200
+    },
+    "camera": "close vertical shot",
+    "framing": "Mira's face in upper third, ticket punch prominent in foreground",
+    "reading_focus": "Mira's eyes, then ticket punch"
+  },
+  "dialogue_safe_zones": [
+    {
+      "x": 150,
+      "y": 120,
+      "width": 1020,
+      "height": 300
+    }
+  ],
+  "manga_style": {
+    "palette": "black-and-white",
+    "linework": "expressive close-up ink linework",
+    "screen_tones": "soft rain reflections, strong prop highlights",
+    "genre": "quiet supernatural mystery manga"
+  },
+  "required_elements": [
+    "Mira's crescent hair clip",
+    "closed brass ticket punch in right hand",
+    "ticket punch large enough to recognize",
+    "rain streak reflections",
+    "tense quiet expression"
+  ],
+  "prohibited_elements": [
+    "dialogue_text",
+    "captions",
+    "speech_balloons",
+    "sound_effect_text",
+    "panel_borders",
+    "page_numbers",
+    "signatures",
+    "watermarks",
+    "color"
+  ],
+  "revision_history": [
+    {
+      "version": "v001",
+      "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-03-v001.png",
+      "supersedes_job_id": null,
+      "supersedes_output_filename": null,
+      "notes": "Initial page 001 panel 3 job."
+    }
+  ],
+  "release_status": "deferred",
+  "blocking_reasons": [
+    "IMAGE_READY is false.",
+    "Image generation is disabled for the pilot fixture."
+  ],
+  "deferred_reference_dependencies": [
+    {
+      "reference_id": "protagonist-mira-reference-v001",
+      "source_job_id": "pilot-001-ref-protagonist-v001",
+      "kind": "character_reference",
+      "usage": "Use for Mira's face, hair, hair clip, wardrobe, and right hand."
+    },
+    {
+      "reference_id": "brass-ticket-punch-reference-v001",
+      "source_job_id": "pilot-001-ref-prop-v001",
+      "kind": "prop_reference",
+      "usage": "Use for exact shape, scale, and worn surface of the ticket punch."
+    },
+    {
+      "reference_id": "rain-platform-reference-v001",
+      "source_job_id": "pilot-001-ref-location-v001",
+      "kind": "location_reference",
+      "usage": "Use for background roof edge and rainy night texture."
+    }
+  ]
+}

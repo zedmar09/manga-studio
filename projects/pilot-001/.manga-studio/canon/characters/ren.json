@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "character_id": "ren",
+  "display_name": "Ren",
+  "role": "supporting character",
+  "locked_reference_images": [],
+  "visual_identity": {
+    "age_range": "late teens",
+    "silhouette": "tall, straight posture, side-parted hair, long coat",
+    "wardrobe": "dark long coat, white shirt collar, messenger bag strap",
+    "recurring_details": [
+      "round glasses",
+      "left hand often holding umbrella handle"
+    ]
+  },
+  "continuity_notes": [
+    "Glasses must remain round and readable in close shots.",
+    "Coat length should fall below the knees."
+  ]
+}

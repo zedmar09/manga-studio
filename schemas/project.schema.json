@@ -1,0 +1,91 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/project.schema.json",
+  "title": "Portable Manga Studio Project",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "project_id", "title", "source_language", "output_language",
+    "project_type", "genre", "source_roots", "source_inclusion_patterns",
+    "source_exclusion_patterns", "chapter_detection_strategy",
+    "existing_structure_preservation", "revision_mode", "author_voice_preservation",
+    "reading_direction", "target_manga_format", "workflow_phase", "operating_mode",
+    "stage_locks", "image_generation_enabled", "active_manuscript_version",
+    "active_canon_version", "active_storyboard_version", "blocking_reasons"
+  ],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "project_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "title": {"type": "string", "minLength": 1},
+    "source_language": {"type": "string", "minLength": 2},
+    "output_language": {"type": "string", "minLength": 2},
+    "project_type": {"type": "string", "enum": ["new_story", "existing_story", "mixed_sources"]},
+    "genre": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "source_roots": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/relativePath"}},
+    "source_inclusion_patterns": {"type": "array", "items": {"type": "string"}},
+    "source_exclusion_patterns": {"type": "array", "items": {"type": "string"}},
+    "chapter_detection_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["mode", "filename_patterns", "heading_levels", "require_review_on_ambiguity"],
+      "properties": {
+        "mode": {"type": "string", "enum": ["auto", "single_document", "file_per_chapter", "headings", "manual"]},
+        "filename_patterns": {"type": "array", "items": {"type": "string"}},
+        "heading_levels": {"type": "array", "items": {"type": "integer", "minimum": 1, "maximum": 6}},
+        "require_review_on_ambiguity": {"type": "boolean"}
+      }
+    },
+    "existing_structure_preservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["preserve_original_paths", "preserve_chapter_order", "preserve_titles", "never_rewrite_originals"],
+      "properties": {
+        "preserve_original_paths": {"type": "boolean"},
+        "preserve_chapter_order": {"type": "boolean"},
+        "preserve_titles": {"type": "boolean"},
+        "never_rewrite_originals": {"const": true}
+      }
+    },
+    "revision_mode": {"type": "string", "enum": ["proposal_only", "approved_versions_only", "direct_draft_versions"]},
+    "author_voice_preservation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "notes"],
+      "properties": {"required": {"type": "boolean"}, "notes": {"type": "array", "items": {"type": "string"}}}
+    },
+    "reading_direction": {"type": "string", "enum": ["right-to-left", "left-to-right"]},
+    "target_manga_format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["color_mode", "page_width_px", "page_height_px"],
+      "properties": {
+        "color_mode": {"type": "string", "enum": ["black-and-white", "grayscale", "color"]},
+        "page_width_px": {"type": "integer", "minimum": 1},
+        "page_height_px": {"type": "integer", "minimum": 1}
+      }
+    },
+    "workflow_phase": {"type": "string", "minLength": 1},
+    "operating_mode": {
+      "type": "string",
+      "enum": ["create_new", "import_existing", "diagnose_existing", "repair_existing", "continue_existing", "adapt_existing_to_manga", "continuity_audit", "prepare_visual_production"]
+    },
+    "stage_locks": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["SOURCE_LOCKED", "CANON_APPROVED", "DIAGNOSTIC_APPROVED", "REVISION_PLAN_APPROVED", "MANUSCRIPT_APPROVED", "STORY_LOCKED", "STORYBOARD_APPROVED", "STORYBOARD_LOCKED", "IMAGE_READY"],
+      "properties": {
+        "SOURCE_LOCKED": {"type": "boolean"}, "CANON_APPROVED": {"type": "boolean"},
+        "DIAGNOSTIC_APPROVED": {"type": "boolean"}, "REVISION_PLAN_APPROVED": {"type": "boolean"},
+        "MANUSCRIPT_APPROVED": {"type": "boolean"}, "STORY_LOCKED": {"type": "boolean"},
+        "STORYBOARD_APPROVED": {"type": "boolean"}, "STORYBOARD_LOCKED": {"type": "boolean"},
+        "IMAGE_READY": {"type": "boolean"}
+      }
+    },
+    "image_generation_enabled": {"type": "boolean", "default": false},
+    "active_manuscript_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+    "active_canon_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+    "active_storyboard_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+    "blocking_reasons": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {"relativePath": {"type": "string", "pattern": "^(?!/)(?!~)(?!.*(^|/)\\.\\.(?:/|$)).+"}}
+}

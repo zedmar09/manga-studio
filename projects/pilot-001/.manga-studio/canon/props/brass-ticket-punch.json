@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "prop_id": "brass-ticket-punch",
+  "display_name": "Brass Ticket Punch",
+  "locked_reference_images": [],
+  "visual_identity": {
+    "shape": "small vintage conductor punch with curved handle and round jaw",
+    "surface": "worn brass represented as light gray with black scratches in monochrome",
+    "scale": "fits in one hand"
+  },
+  "state_rules": [
+    "Closed jaws unless a panel explicitly asks for the punch to open.",
+    "Never becomes a weapon; it is a mysterious keepsake."
+  ]
+}

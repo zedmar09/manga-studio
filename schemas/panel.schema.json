@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/panel.schema.json",
+  "title": "Manga Studio Panel",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "panel_id",
+    "source_job_id",
+    "frame",
+    "art_path",
+    "dialogue_safe_zones",
+    "summary"
+  ],
+  "properties": {
+    "panel_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "source_job_id": {
+      "type": "string"
+    },
+    "frame": {
+      "$ref": "#/$defs/box"
+    },
+    "art_path": {
+      "anyOf": [
+        {
+          "$ref": "#/$defs/relativePath"
+        },
+        {
+          "type": "null"
+        }
+      ]
+    },
+    "dialogue_safe_zones": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/box"
+      }
+    },
+    "summary": {
+      "type": "string"
+    }
+  },
+  "$defs": {
+    "box": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+"
+    }
+  }
+}

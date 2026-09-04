@@ -1,0 +1,25 @@
+{
+  "schema_version": "2.0.0",
+  "project_id": "pilot-001",
+  "project_root": ".",
+  "source_roots": [
+    "."
+  ],
+  "files": [
+    {
+      "document_id": "doc-a812025f0d484647ac3a81c09a1055ab",
+      "id_match_status": "new",
+      "id_match_candidates": [],
+      "relative_path": "pilot-story.md",
+      "extension": ".md",
+      "size_bytes": 366,
+      "modified_time_ns": 1788492644780000000,
+      "sha256": "9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88",
+      "classification": "manuscript",
+      "classification_status": "suggested",
+      "adapter": "markdown",
+      "support_status": "supported",
+      "message": null
+    }
+  ]
+}

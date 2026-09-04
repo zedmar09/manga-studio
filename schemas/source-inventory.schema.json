@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/source-inventory.schema.json",
+  "title": "Manga Studio Source Inventory",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project_id", "project_root", "source_roots", "files"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "project_id": {"type": "string"},
+    "project_root": {"const": "."},
+    "source_roots": {"type": "array", "items": {"$ref": "#/$defs/relativePath"}},
+    "files": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["document_id", "id_match_status", "id_match_candidates", "relative_path", "extension", "size_bytes", "modified_time_ns", "sha256", "classification", "classification_status", "adapter", "support_status", "message"],
+        "properties": {
+          "document_id": {"type": ["string", "null"]},
+          "id_match_status": {"type": "string", "enum": ["new", "matched_path", "matched_checksum_after_move", "ambiguous"]},
+          "id_match_candidates": {"type": "array", "items": {"type": "string"}},
+          "relative_path": {"$ref": "#/$defs/relativePath"},
+          "extension": {"type": "string"},
+          "size_bytes": {"type": "integer", "minimum": 0},
+          "modified_time_ns": {"type": "integer", "minimum": 0},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "classification": {"type": "string", "enum": ["manuscript", "outline", "notes", "reference", "unknown"]},
+          "classification_status": {"type": "string", "enum": ["suggested", "approved", "corrected", "rejected"]},
+          "adapter": {"type": ["string", "null"]},
+          "support_status": {"type": "string", "enum": ["supported", "unsupported"]},
+          "message": {"type": ["string", "null"]}
+        }
+      }
+    }
+  },
+  "$defs": {"relativePath": {"type": "string", "pattern": "^(?!/)(?!~)(?!.*(^|/)\\.\\.(?:/|$)).+"}}
+}

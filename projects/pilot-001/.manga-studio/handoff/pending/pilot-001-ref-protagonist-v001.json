@@ -1,0 +1,69 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "pilot-001-ref-protagonist-v001",
+  "job_type": "character_reference",
+  "output_filename": ".manga-studio/handoff/generated/refs/protagonist-mira-reference-v001.png",
+  "required_reference_images": [],
+  "reference_priority": [],
+  "scene_state": {
+    "purpose": "Create a locked visual reference for the protagonist before panel production.",
+    "environment": "neutral white reference background"
+  },
+  "character_state": {
+    "mira": {
+      "role": "protagonist",
+      "age_range": "late teens",
+      "expression": "alert and thoughtful",
+      "wardrobe": "dark hooded rain jacket, pale scarf, ankle boots, narrow shoulder bag",
+      "recurring_details": [
+        "short bob haircut",
+        "small crescent hair clip above left temple"
+      ]
+    }
+  },
+  "composition": {
+    "format": "reference sheet",
+    "views": [
+      "full-body front view",
+      "full-body side view",
+      "three-quarter bust view",
+      "two small expression studies"
+    ],
+    "background": "plain white"
+  },
+  "dialogue_safe_zones": [],
+  "manga_style": {
+    "palette": "black-and-white",
+    "linework": "clean ink linework with restrained screen tones",
+    "genre": "quiet supernatural mystery manga"
+  },
+  "required_elements": [
+    "Mira's crescent hair clip",
+    "hooded rain jacket",
+    "pale scarf",
+    "narrow shoulder bag",
+    "consistent face and hairstyle across all views"
+  ],
+  "prohibited_elements": [
+    "color",
+    "text_labels",
+    "captions",
+    "speech_balloons",
+    "signatures",
+    "watermarks"
+  ],
+  "revision_history": [
+    {
+      "version": "v001",
+      "output_filename": ".manga-studio/handoff/generated/refs/protagonist-mira-reference-v001.png",
+      "supersedes_job_id": null,
+      "supersedes_output_filename": null,
+      "notes": "Initial protagonist reference sheet job."
+    }
+  ],
+  "release_status": "deferred",
+  "blocking_reasons": [
+    "IMAGE_READY is false.",
+    "Image generation is disabled for the pilot fixture."
+  ]
+}

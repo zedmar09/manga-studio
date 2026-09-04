@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "pilot-001-ref-prop-v001",
+  "job_type": "prop_reference",
+  "output_filename": ".manga-studio/handoff/generated/refs/brass-ticket-punch-reference-v001.png",
+  "required_reference_images": [],
+  "reference_priority": [],
+  "scene_state": {
+    "purpose": "Create a locked prop reference for the brass ticket punch.",
+    "environment": "neutral white reference background"
+  },
+  "character_state": {},
+  "composition": {
+    "format": "prop reference sheet",
+    "views": [
+      "top view",
+      "side view",
+      "three-quarter view",
+      "in-hand scale silhouette"
+    ],
+    "background": "plain white"
+  },
+  "dialogue_safe_zones": [],
+  "manga_style": {
+    "palette": "black-and-white",
+    "linework": "precise ink object rendering with fine scratches",
+    "genre": "quiet supernatural mystery manga"
+  },
+  "required_elements": [
+    "small vintage conductor ticket punch",
+    "curved handle",
+    "round jaw",
+    "worn brass represented in monochrome",
+    "fits in one hand"
+  ],
+  "prohibited_elements": [
+    "color",
+    "text_labels",
+    "captions",
+    "signatures",
+    "watermarks"
+  ],
+  "revision_history": [
+    {
+      "version": "v001",
+      "output_filename": ".manga-studio/handoff/generated/refs/brass-ticket-punch-reference-v001.png",
+      "supersedes_job_id": null,
+      "supersedes_output_filename": null,
+      "notes": "Initial important prop reference job."
+    }
+  ],
+  "release_status": "deferred",
+  "blocking_reasons": [
+    "IMAGE_READY is false.",
+    "Image generation is disabled for the pilot fixture."
+  ]
+}

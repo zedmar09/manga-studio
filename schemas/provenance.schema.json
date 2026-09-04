@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/provenance.schema.json",
+  "title": "Manga Studio Source Provenance",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project_id", "records", "import_summary"],
+  "properties": {
+    "schema_version": {"const": "2.0.0"},
+    "project_id": {"type": "string"},
+    "records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["document_id", "original_path", "original_sha256", "snapshot_path", "snapshot_sha256", "normalized_path", "adapter", "classification", "source_modified_time_ns", "source_status"],
+        "properties": {
+          "document_id": {"type": "string"},
+          "original_path": {"$ref": "#/$defs/relativePath"},
+          "original_sha256": {"$ref": "#/$defs/checksum"},
+          "snapshot_path": {"$ref": "#/$defs/relativePath"},
+          "snapshot_sha256": {"$ref": "#/$defs/checksum"},
+          "normalized_path": {"$ref": "#/$defs/relativePath"},
+          "adapter": {"type": "string", "enum": ["plain_text", "markdown"]},
+          "classification": {"type": "string"},
+          "source_modified_time_ns": {"type": "integer", "minimum": 0},
+          "source_status": {"type": "string", "enum": ["active", "superseded"]}
+        }
+      }
+    },
+    "import_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["imported", "skipped"],
+      "properties": {"imported": {"type": "integer", "minimum": 0}, "skipped": {"type": "integer", "minimum": 0}}
+    }
+  },
+  "$defs": {
+    "relativePath": {"type": "string", "pattern": "^(?!/)(?!~)(?!.*(^|/)\\.\\.(?:/|$)).+"},
+    "checksum": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

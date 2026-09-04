@@ -1,0 +1,105 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "pilot-001-panel-page-001-p4-v001",
+  "job_type": "manga_panel",
+  "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-04-v001.png",
+  "required_reference_images": [],
+  "reference_priority": [
+    "rain-platform-reference-v001",
+    "protagonist-mira-reference-v001",
+    "brass-ticket-punch-reference-v001",
+    "supporting-ren-reference-v001"
+  ],
+  "scene_state": {
+    "page_id": "page-001",
+    "panel_id": "p4",
+    "time": "night",
+    "weather": "rain beyond the platform roof",
+    "beat": "Mira points the ticket punch toward the dark tunnel as if answering the bell."
+  },
+  "character_state": {
+    "mira": "Seen from low track-level angle, right arm extended with ticket punch.",
+    "ren": "Behind Mira, watchful and tense."
+  },
+  "composition": {
+    "panel_canvas": {
+      "width": 1400,
+      "height": 2200
+    },
+    "camera": "low track-level vertical shot",
+    "framing": "ticket punch points toward a dark tunnel opening; Mira in foreground, Ren behind",
+    "reading_focus": "ticket punch, Mira, dark tunnel"
+  },
+  "dialogue_safe_zones": [
+    {
+      "x": 170,
+      "y": 120,
+      "width": 980,
+      "height": 340
+    }
+  ],
+  "manga_style": {
+    "palette": "black-and-white",
+    "linework": "dramatic ink perspective with deep blacks",
+    "screen_tones": "rain, tunnel shadow, wet track highlights",
+    "genre": "quiet supernatural mystery manga"
+  },
+  "required_elements": [
+    "Mira's right arm extended",
+    "ticket punch pointed toward the tunnel",
+    "Ren visible behind Mira",
+    "dark tunnel at track end",
+    "rain and wet rail highlights"
+  ],
+  "prohibited_elements": [
+    "dialogue_text",
+    "captions",
+    "speech_balloons",
+    "sound_effect_text",
+    "panel_borders",
+    "page_numbers",
+    "signatures",
+    "watermarks",
+    "color"
+  ],
+  "revision_history": [
+    {
+      "version": "v001",
+      "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-04-v001.png",
+      "supersedes_job_id": null,
+      "supersedes_output_filename": null,
+      "notes": "Initial page 001 panel 4 job."
+    }
+  ],
+  "release_status": "deferred",
+  "blocking_reasons": [
+    "IMAGE_READY is false.",
+    "Image generation is disabled for the pilot fixture."
+  ],
+  "deferred_reference_dependencies": [
+    {
+      "reference_id": "protagonist-mira-reference-v001",
+      "source_job_id": "pilot-001-ref-protagonist-v001",
+      "kind": "character_reference",
+      "usage": "Use for Mira's silhouette, hair clip, rain jacket, and right hand."
+    },
+    {
+      "reference_id": "supporting-ren-reference-v001",
+      "source_job_id": "pilot-001-ref-supporting-character-v001",
+      "kind": "character_reference",
+      "usage": "Use for Ren's background silhouette, glasses, and coat."
+    },
+    {
+      "reference_id": "brass-ticket-punch-reference-v001",
+      "source_job_id": "pilot-001-ref-prop-v001",
+      "kind": "prop_reference",
+      "usage": "Use for the ticket punch shape as Mira points it toward the track."
+    },
+    {
+      "reference_id": "rain-platform-reference-v001",
+      "source_job_id": "pilot-001-ref-location-v001",
+      "kind": "location_reference",
+      "usage": "Use for track-level geometry and dark tunnel placement."
+    }
+  ]
+}

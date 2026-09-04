@@ -1,0 +1,42 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/continuity-state.schema.json",
+  "title": "Manga Studio Continuity State",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "project_id",
+    "current_page",
+    "characters",
+    "locations",
+    "props",
+    "open_questions"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "project_id": {
+      "type": "string"
+    },
+    "current_page": {
+      "type": "string"
+    },
+    "characters": {
+      "type": "object"
+    },
+    "locations": {
+      "type": "object"
+    },
+    "props": {
+      "type": "object"
+    },
+    "open_questions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

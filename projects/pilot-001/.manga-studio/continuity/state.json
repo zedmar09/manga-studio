@@ -1,0 +1,31 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "pilot-001",
+  "current_page": "page-001",
+  "characters": {
+    "mira": {
+      "page_001_state": "Awake, anxious, holding the brass ticket punch in her right hand after panel 3.",
+      "locked_reference_status": "pending_external_generation"
+    },
+    "ren": {
+      "page_001_state": "Calm but concerned, standing beside Mira on the rain-swept platform.",
+      "locked_reference_status": "pending_external_generation"
+    }
+  },
+  "locations": {
+    "rain-platform": {
+      "page_001_state": "Empty rural station platform at night, rain visible beyond the roof edge.",
+      "locked_reference_status": "pending_external_generation"
+    }
+  },
+  "props": {
+    "brass-ticket-punch": {
+      "page_001_state": "Closed in panels 1 and 2, lifted into view in panel 3, pointed toward the track in panel 4.",
+      "locked_reference_status": "pending_external_generation"
+    }
+  },
+  "open_questions": [
+    "Approve external reference images before validating panel jobs strictly.",
+    "Update page-001 panel art_path values after four panel images are approved."
+  ]
+}

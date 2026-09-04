@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/character.schema.json",
+  "title": "Manga Studio Character",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "character_id",
+    "display_name",
+    "role",
+    "locked_reference_images",
+    "visual_identity",
+    "continuity_notes"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "character_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "role": {
+      "type": "string"
+    },
+    "locked_reference_images": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relativePath"
+      }
+    },
+    "visual_identity": {
+      "type": "object"
+    },
+    "continuity_notes": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+"
+    }
+  }
+}

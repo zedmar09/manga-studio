@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0.0",
+  "location_id": "rain-platform",
+  "display_name": "Rain-Swept Rural Platform",
+  "locked_reference_images": [],
+  "spatial_rules": [
+    "Covered platform roof runs horizontally behind the characters.",
+    "Train tracks sit beyond the platform edge.",
+    "A small hanging bell is mounted near the timetable board."
+  ],
+  "continuity_notes": [
+    "Rain falls beyond the roof edge, not through the covered platform.",
+    "The timetable board stays on the wall behind panel 1 and panel 2 staging."
+  ]
+}

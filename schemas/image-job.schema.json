@@ -1,0 +1,300 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/image-job.schema.json",
+  "title": "ChatGPT Image Generation Job",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "job_id",
+    "job_type",
+    "output_filename",
+    "required_reference_images",
+    "reference_priority",
+    "scene_state",
+    "character_state",
+    "composition",
+    "dialogue_safe_zones",
+    "manga_style",
+    "required_elements",
+    "prohibited_elements",
+    "revision_history",
+    "release_status",
+    "blocking_reasons"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "job_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*-v[0-9]{3}$"
+    },
+    "job_type": {
+      "type": "string",
+      "enum": [
+        "character_reference",
+        "location_reference",
+        "prop_reference",
+        "manga_panel",
+        "correction",
+        "cover",
+        "splash_page"
+      ]
+    },
+    "output_filename": {
+      "$ref": "#/$defs/relativePath"
+    },
+    "required_reference_images": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/referenceImage"
+      }
+    },
+    "reference_priority": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "deferred_reference_dependencies": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/deferredReferenceDependency"
+      }
+    },
+    "scene_state": {
+      "type": "object"
+    },
+    "character_state": {
+      "type": "object"
+    },
+    "composition": {
+      "type": "object"
+    },
+    "dialogue_safe_zones": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/box"
+      }
+    },
+    "manga_style": {
+      "type": "object"
+    },
+    "required_elements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "prohibited_elements": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "revision_of_job_id": {
+      "type": "string"
+    },
+    "revision_history": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/revision"
+      }
+    },
+    "release_status": {
+      "type": "string",
+      "enum": [
+        "deferred",
+        "ready",
+        "released",
+        "completed",
+        "superseded"
+      ]
+    },
+    "blocking_reasons": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "job_type": {
+            "const": "manga_panel"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "prohibited_elements": {
+            "allOf": [
+              {
+                "contains": {
+                  "const": "dialogue_text"
+                }
+              },
+              {
+                "contains": {
+                  "const": "captions"
+                }
+              },
+              {
+                "contains": {
+                  "const": "speech_balloons"
+                }
+              },
+              {
+                "contains": {
+                  "const": "sound_effect_text"
+                }
+              },
+              {
+                "contains": {
+                  "const": "panel_borders"
+                }
+              },
+              {
+                "contains": {
+                  "const": "page_numbers"
+                }
+              },
+              {
+                "contains": {
+                  "const": "signatures"
+                }
+              },
+              {
+                "contains": {
+                  "const": "watermarks"
+                }
+              }
+            ]
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+"
+    },
+    "referenceImage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_id",
+        "kind",
+        "path",
+        "locked",
+        "usage"
+      ],
+      "properties": {
+        "reference_id": {
+          "type": "string"
+        },
+        "kind": {
+          "type": "string",
+          "enum": [
+            "character_reference",
+            "location_reference",
+            "prop_reference",
+            "panel_reference"
+          ]
+        },
+        "path": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "locked": {
+          "type": "boolean"
+        },
+        "usage": {
+          "type": "string"
+        }
+      }
+    },
+    "deferredReferenceDependency": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reference_id",
+        "source_job_id",
+        "kind",
+        "usage"
+      ],
+      "properties": {
+        "reference_id": {"type": "string"},
+        "source_job_id": {"type": "string"},
+        "kind": {
+          "type": "string",
+          "enum": ["character_reference", "location_reference", "prop_reference", "panel_reference"]
+        },
+        "usage": {"type": "string"}
+      }
+    },
+    "box": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "x",
+        "y",
+        "width",
+        "height"
+      ],
+      "properties": {
+        "x": {
+          "type": "integer"
+        },
+        "y": {
+          "type": "integer"
+        },
+        "width": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "height": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "revision": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "version",
+        "output_filename",
+        "notes"
+      ],
+      "properties": {
+        "version": {
+          "type": "string",
+          "pattern": "^v[0-9]{3}$"
+        },
+        "output_filename": {
+          "$ref": "#/$defs/relativePath"
+        },
+        "supersedes_job_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "supersedes_output_filename": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

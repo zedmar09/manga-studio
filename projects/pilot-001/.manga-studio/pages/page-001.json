@@ -1,0 +1,155 @@
+{
+  "schema_version": "1.0.0",
+  "page_id": "page-001",
+  "page_number": 1,
+  "status": "draft_waiting_for_art",
+  "reading_order": "right-to-left",
+  "page_size": {
+    "width": 1600,
+    "height": 2400,
+    "unit": "px"
+  },
+  "panels": [
+    {
+      "panel_id": "p1",
+      "source_job_id": "pilot-001-panel-page-001-p1-v001",
+      "frame": {
+        "x": 820,
+        "y": 100,
+        "width": 680,
+        "height": 1080
+      },
+      "art_path": null,
+      "dialogue_safe_zones": [
+        {
+          "x": 920,
+          "y": 160,
+          "width": 480,
+          "height": 190
+        }
+      ],
+      "summary": "Mira and Ren stand beneath the station roof as a small bell trembles in the foreground."
+    },
+    {
+      "panel_id": "p2",
+      "source_job_id": "pilot-001-panel-page-001-p2-v001",
+      "frame": {
+        "x": 100,
+        "y": 100,
+        "width": 680,
+        "height": 1080
+      },
+      "art_path": null,
+      "dialogue_safe_zones": [
+        {
+          "x": 190,
+          "y": 150,
+          "width": 460,
+          "height": 180
+        }
+      ],
+      "summary": "Wide empty view down the platform, rain beyond the roof, no train visible."
+    },
+    {
+      "panel_id": "p3",
+      "source_job_id": "pilot-001-panel-page-001-p3-v001",
+      "frame": {
+        "x": 820,
+        "y": 1220,
+        "width": 680,
+        "height": 1080
+      },
+      "art_path": null,
+      "dialogue_safe_zones": [
+        {
+          "x": 900,
+          "y": 1290,
+          "width": 500,
+          "height": 160
+        }
+      ],
+      "summary": "Close shot of Mira lifting the brass ticket punch as reflected rain streaks cut across the background."
+    },
+    {
+      "panel_id": "p4",
+      "source_job_id": "pilot-001-panel-page-001-p4-v001",
+      "frame": {
+        "x": 100,
+        "y": 1220,
+        "width": 680,
+        "height": 1080
+      },
+      "art_path": null,
+      "dialogue_safe_zones": [
+        {
+          "x": 190,
+          "y": 1290,
+          "width": 500,
+          "height": 190
+        }
+      ],
+      "summary": "Track-level view: Mira points the ticket punch toward a dark tunnel while Ren watches."
+    }
+  ],
+  "lettering": [
+    {
+      "panel_id": "p1",
+      "kind": "speech",
+      "speaker": "Mira",
+      "text": "The bell rang twice. That means someone came back.",
+      "box": {
+        "x": 920,
+        "y": 160,
+        "width": 480,
+        "height": 190
+      },
+      "tail_to": {
+        "x": 1180,
+        "y": 430
+      }
+    },
+    {
+      "panel_id": "p2",
+      "kind": "speech",
+      "speaker": "Ren",
+      "text": "Then why is the platform empty?",
+      "box": {
+        "x": 190,
+        "y": 150,
+        "width": 460,
+        "height": 180
+      },
+      "tail_to": {
+        "x": 520,
+        "y": 470
+      }
+    },
+    {
+      "panel_id": "p3",
+      "kind": "caption",
+      "text": "Mira lifted the old ticket punch.",
+      "box": {
+        "x": 900,
+        "y": 1290,
+        "width": 500,
+        "height": 160
+      }
+    },
+    {
+      "panel_id": "p4",
+      "kind": "speech",
+      "speaker": "Mira",
+      "text": "Because the train has not arrived yet.",
+      "box": {
+        "x": 190,
+        "y": 1290,
+        "width": 500,
+        "height": 190
+      },
+      "tail_to": {
+        "x": 440,
+        "y": 1770
+      }
+    }
+  ]
+}

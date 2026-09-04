@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.DS_Store
+._*
+.pytest_cache/
+/build/
+/exports/
+**/.manga-studio/exports/**
+!**/.manga-studio/exports/.gitkeep
+**/.manga-studio/handoff/generated/**
+!**/.manga-studio/handoff/generated/.gitkeep
+**/.manga-studio/handoff/approved/**
+!**/.manga-studio/handoff/approved/.gitkeep
+**/.manga-studio/handoff/corrections/**
+!**/.manga-studio/handoff/corrections/.gitkeep

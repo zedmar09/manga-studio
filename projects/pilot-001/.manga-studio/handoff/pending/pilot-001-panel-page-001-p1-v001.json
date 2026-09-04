@@ -1,0 +1,98 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "pilot-001-panel-page-001-p1-v001",
+  "job_type": "manga_panel",
+  "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-01-v001.png",
+  "required_reference_images": [],
+  "reference_priority": [
+    "protagonist-mira-reference-v001",
+    "supporting-ren-reference-v001",
+    "rain-platform-reference-v001"
+  ],
+  "scene_state": {
+    "page_id": "page-001",
+    "panel_id": "p1",
+    "time": "night",
+    "weather": "rain beyond the roof",
+    "beat": "The bell trembles after ringing twice."
+  },
+  "character_state": {
+    "mira": "Standing under the roof, anxious, looking toward the bell.",
+    "ren": "Standing beside Mira, watchful, umbrella lowered."
+  },
+  "composition": {
+    "panel_canvas": {
+      "width": 1400,
+      "height": 2200
+    },
+    "camera": "medium vertical shot",
+    "framing": "small hanging bell large in foreground, Mira and Ren behind it under the roof",
+    "reading_focus": "bell first, then Mira, then Ren"
+  },
+  "dialogue_safe_zones": [
+    {
+      "x": 160,
+      "y": 120,
+      "width": 980,
+      "height": 330
+    }
+  ],
+  "manga_style": {
+    "palette": "black-and-white",
+    "linework": "high-contrast ink linework",
+    "screen_tones": "rain and night shadows in restrained tones",
+    "genre": "quiet supernatural mystery manga"
+  },
+  "required_elements": [
+    "hanging bell visibly trembling",
+    "Mira's crescent hair clip",
+    "Ren's round glasses",
+    "rain beyond the station roof",
+    "empty platform atmosphere"
+  ],
+  "prohibited_elements": [
+    "dialogue_text",
+    "captions",
+    "speech_balloons",
+    "sound_effect_text",
+    "panel_borders",
+    "page_numbers",
+    "signatures",
+    "watermarks",
+    "color"
+  ],
+  "revision_history": [
+    {
+      "version": "v001",
+      "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-01-v001.png",
+      "supersedes_job_id": null,
+      "supersedes_output_filename": null,
+      "notes": "Initial page 001 panel 1 job."
+    }
+  ],
+  "release_status": "deferred",
+  "blocking_reasons": [
+    "IMAGE_READY is false.",
+    "Image generation is disabled for the pilot fixture."
+  ],
+  "deferred_reference_dependencies": [
+    {
+      "reference_id": "protagonist-mira-reference-v001",
+      "source_job_id": "pilot-001-ref-protagonist-v001",
+      "kind": "character_reference",
+      "usage": "Use for Mira's face, hair, hair clip, wardrobe, and silhouette."
+    },
+    {
+      "reference_id": "supporting-ren-reference-v001",
+      "source_job_id": "pilot-001-ref-supporting-character-v001",
+      "kind": "character_reference",
+      "usage": "Use for Ren's face, glasses, coat, and posture."
+    },
+    {
+      "reference_id": "rain-platform-reference-v001",
+      "source_job_id": "pilot-001-ref-location-v001",
+      "kind": "location_reference",
+      "usage": "Use for station roof, bell placement, timetable board, and rainy night setting."
+    }
+  ]
+}

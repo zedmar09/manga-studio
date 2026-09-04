@@ -1,0 +1,91 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "pilot-001-panel-page-001-p2-v001",
+  "job_type": "manga_panel",
+  "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-02-v001.png",
+  "required_reference_images": [],
+  "reference_priority": [
+    "rain-platform-reference-v001",
+    "supporting-ren-reference-v001"
+  ],
+  "scene_state": {
+    "page_id": "page-001",
+    "panel_id": "p2",
+    "time": "night",
+    "weather": "rain beyond the roof",
+    "beat": "Ren looks down the empty platform and sees no train."
+  },
+  "character_state": {
+    "ren": "Small figure on the platform, slightly turned toward the tracks.",
+    "mira": "Off panel."
+  },
+  "composition": {
+    "panel_canvas": {
+      "width": 1400,
+      "height": 2200
+    },
+    "camera": "wide vertical platform view",
+    "framing": "deep perspective down the empty platform with Ren near the lower right",
+    "reading_focus": "empty platform depth, then Ren"
+  },
+  "dialogue_safe_zones": [
+    {
+      "x": 170,
+      "y": 120,
+      "width": 920,
+      "height": 320
+    }
+  ],
+  "manga_style": {
+    "palette": "black-and-white",
+    "linework": "clear architectural ink lines",
+    "screen_tones": "wet floor reflections and dark sky",
+    "genre": "quiet supernatural mystery manga"
+  },
+  "required_elements": [
+    "empty platform",
+    "rain beyond the roof",
+    "tracks visible",
+    "Ren's round glasses readable",
+    "no train visible"
+  ],
+  "prohibited_elements": [
+    "dialogue_text",
+    "captions",
+    "speech_balloons",
+    "sound_effect_text",
+    "panel_borders",
+    "page_numbers",
+    "signatures",
+    "watermarks",
+    "color"
+  ],
+  "revision_history": [
+    {
+      "version": "v001",
+      "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-02-v001.png",
+      "supersedes_job_id": null,
+      "supersedes_output_filename": null,
+      "notes": "Initial page 001 panel 2 job."
+    }
+  ],
+  "release_status": "deferred",
+  "blocking_reasons": [
+    "IMAGE_READY is false.",
+    "Image generation is disabled for the pilot fixture."
+  ],
+  "deferred_reference_dependencies": [
+    {
+      "reference_id": "supporting-ren-reference-v001",
+      "source_job_id": "pilot-001-ref-supporting-character-v001",
+      "kind": "character_reference",
+      "usage": "Use for Ren's profile, glasses, coat, and posture."
+    },
+    {
+      "reference_id": "rain-platform-reference-v001",
+      "source_job_id": "pilot-001-ref-location-v001",
+      "kind": "location_reference",
+      "usage": "Use for the empty platform, roof line, track edge, and rain placement."
+    }
+  ]
+}

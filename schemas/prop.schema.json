@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/prop.schema.json",
+  "title": "Manga Studio Prop",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "prop_id",
+    "display_name",
+    "locked_reference_images",
+    "visual_identity",
+    "state_rules"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string"
+    },
+    "prop_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9-]*$"
+    },
+    "display_name": {
+      "type": "string"
+    },
+    "locked_reference_images": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/relativePath"
+      }
+    },
+    "visual_identity": {
+      "type": "object"
+    },
+    "state_rules": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+"
+    }
+  }
+}

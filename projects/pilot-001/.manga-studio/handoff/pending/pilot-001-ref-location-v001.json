@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "pilot-001-ref-location-v001",
+  "job_type": "location_reference",
+  "output_filename": ".manga-studio/handoff/generated/refs/rain-platform-reference-v001.png",
+  "required_reference_images": [],
+  "reference_priority": [],
+  "scene_state": {
+    "purpose": "Create a locked location reference for the page-001 rural train platform.",
+    "time": "night",
+    "weather": "rain"
+  },
+  "character_state": {},
+  "composition": {
+    "format": "location reference sheet",
+    "views": [
+      "wide platform view",
+      "track edge view",
+      "detail view of hanging bell and timetable board"
+    ],
+    "background": "station platform environment only"
+  },
+  "dialogue_safe_zones": [],
+  "manga_style": {
+    "palette": "black-and-white",
+    "linework": "clear architectural ink lines, wet surfaces shown with screen tones",
+    "genre": "quiet supernatural mystery manga"
+  },
+  "required_elements": [
+    "covered rural platform roof",
+    "train tracks beyond platform edge",
+    "small hanging bell",
+    "old timetable board",
+    "rain visible beyond roof edge"
+  ],
+  "prohibited_elements": [
+    "color",
+    "people",
+    "readable text",
+    "signatures",
+    "watermarks"
+  ],
+  "revision_history": [
+    {
+      "version": "v001",
+      "output_filename": ".manga-studio/handoff/generated/refs/rain-platform-reference-v001.png",
+      "supersedes_job_id": null,
+      "supersedes_output_filename": null,
+      "notes": "Initial location reference job."
+    }
+  ],
+  "release_status": "deferred",
+  "blocking_reasons": [
+    "IMAGE_READY is false.",
+    "Image generation is disabled for the pilot fixture."
+  ]
+}

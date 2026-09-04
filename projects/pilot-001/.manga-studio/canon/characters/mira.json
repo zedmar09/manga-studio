@@ -1,0 +1,20 @@
+{
+  "schema_version": "1.0.0",
+  "character_id": "mira",
+  "display_name": "Mira",
+  "role": "protagonist",
+  "locked_reference_images": [],
+  "visual_identity": {
+    "age_range": "late teens",
+    "silhouette": "short bob haircut, practical rain jacket, narrow shoulder bag",
+    "wardrobe": "dark hooded rain jacket, pale scarf, ankle boots",
+    "recurring_details": [
+      "small crescent hair clip above left temple",
+      "right hand usually carries the brass ticket punch when the prop is present"
+    ]
+  },
+  "continuity_notes": [
+    "Hair clip remains visible unless hood covers it.",
+    "Scarf should stay pale against black-and-white tones."
+  ]
+}

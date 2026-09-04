@@ -1,0 +1,70 @@
+{
+  "schema_version": "1.0.0",
+  "job_id": "pilot-001-ref-supporting-character-v001",
+  "job_type": "character_reference",
+  "output_filename": ".manga-studio/handoff/generated/refs/supporting-ren-reference-v001.png",
+  "required_reference_images": [],
+  "reference_priority": [],
+  "scene_state": {
+    "purpose": "Create a locked visual reference for Ren before panel production.",
+    "environment": "neutral white reference background"
+  },
+  "character_state": {
+    "ren": {
+      "role": "supporting character",
+      "age_range": "late teens",
+      "expression": "calm and observant",
+      "wardrobe": "dark long coat, visible white shirt collar, messenger bag strap",
+      "recurring_details": [
+        "round glasses",
+        "side-parted hair",
+        "umbrella handle in left hand"
+      ]
+    }
+  },
+  "composition": {
+    "format": "reference sheet",
+    "views": [
+      "full-body front view",
+      "full-body side view",
+      "three-quarter bust view",
+      "two small expression studies"
+    ],
+    "background": "plain white"
+  },
+  "dialogue_safe_zones": [],
+  "manga_style": {
+    "palette": "black-and-white",
+    "linework": "clean ink linework with restrained screen tones",
+    "genre": "quiet supernatural mystery manga"
+  },
+  "required_elements": [
+    "round glasses",
+    "long coat below the knees",
+    "messenger bag strap",
+    "umbrella handle in left hand",
+    "consistent face and hairstyle across all views"
+  ],
+  "prohibited_elements": [
+    "color",
+    "text_labels",
+    "captions",
+    "speech_balloons",
+    "signatures",
+    "watermarks"
+  ],
+  "revision_history": [
+    {
+      "version": "v001",
+      "output_filename": ".manga-studio/handoff/generated/refs/supporting-ren-reference-v001.png",
+      "supersedes_job_id": null,
+      "supersedes_output_filename": null,
+      "notes": "Initial supporting-character reference sheet job."
+    }
+  ],
+  "release_status": "deferred",
+  "blocking_reasons": [
+    "IMAGE_READY is false.",
+    "Image generation is disabled for the pilot fixture."
+  ]
+}
