@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/voice-guide.schema.json",
+  "title": "Manga Studio Voice Guide", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "voice_guide_id", "character_id", "version", "speech_patterns", "vocabulary", "sentence_rhythm", "formality", "verbal_tics", "avoid", "sample_source_unit_ids", "status", "basis"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "voice_guide_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "character_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "version": {"type": "string"}, "speech_patterns": {"type": "array", "items": {"type": "string"}}, "vocabulary": {"type": "array", "items": {"type": "string"}}, "sentence_rhythm": {"type": "string"}, "formality": {"type": "string"}, "verbal_tics": {"type": "array", "items": {"type": "string"}}, "avoid": {"type": "array", "items": {"type": "string"}},
+    "sample_source_unit_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}}, "status": {"$ref": "story-common.schema.json#/$defs/canonStatus"}, "basis": {"$ref": "story-common.schema.json#/$defs/evidenceOrDecision"}
+  }
+}

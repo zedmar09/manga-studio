@@ -1,0 +1,22 @@
+{
+  "schema_version": "2.0.0",
+  "project_id": "pilot-001",
+  "records": [
+    {
+      "document_id": "doc-a812025f0d484647ac3a81c09a1055ab",
+      "original_path": "pilot-story.md",
+      "original_sha256": "9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88",
+      "snapshot_path": ".manga-studio/source/snapshots/doc-a812025f0d484647ac3a81c09a1055ab/9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88.md",
+      "snapshot_sha256": "9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88",
+      "normalized_path": ".manga-studio/source/normalized/doc-a812025f0d484647ac3a81c09a1055ab/9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88.txt",
+      "adapter": "markdown",
+      "classification": "manuscript",
+      "source_modified_time_ns": 1788492644780000000,
+      "source_status": "active"
+    }
+  ],
+  "import_summary": {
+    "imported": 1,
+    "skipped": 0
+  }
+}

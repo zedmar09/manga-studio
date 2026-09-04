@@ -3,7 +3,7 @@ name: manga-canon-manager
 description: Maintain versioned, approved story canon and persistent entity mappings for characters, locations, organizations, props, timeline events, plot threads, and setups/payoffs.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Canon Manager
@@ -30,6 +30,8 @@ Diagnostics, revision decisions, existing canon versions, and unresolved continu
 
 ## Project Discovery
 
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
+
 Use shared upward discovery. Stop if the project is missing; never initialize, fall back to pilot, or infer canon from sample names.
 
 ## Source Of Truth
@@ -38,7 +40,7 @@ Original evidence establishes provenance; explicit approved decisions may resolv
 
 ## Owned Outputs
 
-Versioned files under `.manga-studio/canon/`, canon decisions under `.manga-studio/decisions/`, and non-source entity entries in `source/id-map.json`.
+Versioned story-canon files under `.manga-studio/canon/`, canon decisions under `.manga-studio/decisions/`, and non-source entity entries in `source/id-map.json`. Visual references remain separate production artifacts.
 
 ## Procedure
 
@@ -47,11 +49,11 @@ Versioned files under `.manga-studio/canon/`, canon decisions under `.manga-stud
 3. Record aliases when names change; require review for ambiguous matches.
 4. Separate facts, constraints, unknowns, timeline events, plot threads, and setup/payoff links.
 5. Write a new canon version and a diff against the active version.
-6. Activate it only after approval; then update `active_canon_version` and relevant locks.
+6. After a separate approval exists, present the explicit active-version and lock commands; never mutate approval or lock state as part of canon creation.
 
 ## Required Schemas
 
-`project.schema.json`, `stable-id-map.schema.json`, `character.schema.json`, `location.schema.json`, `prop.schema.json`, and `continuity-state.schema.json`.
+`canon.schema.json`, `timeline-event.schema.json`, `relationship.schema.json`, `plot-thread.schema.json`, `setup-payoff.schema.json`, `character-state.schema.json`, `voice-guide.schema.json`, provenance, and stable-ID schemas.
 
 ## Next-Skill Handoff
 
@@ -59,7 +61,7 @@ Pass the active canon version and stable IDs to story architecture, writing, con
 
 ## Approval Requirements
 
-Every canon adoption or supersession requires explicit user approval. `CANON_APPROVED` may be true only with an existing active canon version.
+Every fact requires source evidence or an explicit approved decision. Canon adoption or supersession requires a separate hash-bound approval; this skill may not approve or lock its own output.
 
 ## Failure Behavior
 

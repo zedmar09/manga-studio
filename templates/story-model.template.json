@@ -1,0 +1,18 @@
+{
+  "schema_version": "3.0.0",
+  "project_id": "replace-with-project-id",
+  "story_model_id": "story-model-v001",
+  "version": "v001",
+  "title": "Untitled Story",
+  "premise": "",
+  "status": "draft",
+  "primary_document_ids": [],
+  "chapter_ids": [],
+  "story_arc_ids": [],
+  "timeline_event_ids": [],
+  "relationship_ids": [],
+  "plot_thread_ids": [],
+  "setup_payoff_ids": [],
+  "canon_version": null,
+  "source_evidence": []
+}

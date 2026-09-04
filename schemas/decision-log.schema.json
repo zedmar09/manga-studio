@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/decision-log.schema.json",
+  "title": "Manga Studio Decision Log", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "decision_id", "project_id", "decision_type", "subject_ids", "decision", "rationale", "actor", "decided_at", "evidence", "result_artifacts", "supersedes_decision_id"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "decision_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "decision_type": {"enum": ["canon_change", "apply_change_set", "classification", "structure_boundary", "editorial"]}, "subject_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "decision": {"type": "string", "minLength": 1}, "rationale": {"type": "string", "minLength": 1}, "actor": {"type": "string", "minLength": 1}, "decided_at": {"type": "string"},
+    "evidence": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/evidenceLocator"}}, "result_artifacts": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/relativePath"}},
+    "supersedes_decision_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]}
+  }
+}

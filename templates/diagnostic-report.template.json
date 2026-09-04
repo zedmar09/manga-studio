@@ -1,0 +1,14 @@
+{
+  "schema_version": "3.0.0",
+  "project_id": "replace-with-project-id",
+  "report_id": "diagnostic-report",
+  "report_version": "v001",
+  "title": "Story Diagnostic",
+  "scope": "",
+  "status": "draft",
+  "generated_by": "manga-story-diagnostician",
+  "created_at": "",
+  "source_map_checksums": [],
+  "findings": [],
+  "limitations": []
+}

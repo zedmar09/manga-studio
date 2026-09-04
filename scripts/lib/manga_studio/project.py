@@ -9,11 +9,11 @@ from dataclasses import dataclass
 from pathlib import Path, PurePosixPath
 from typing import Any, Dict, Iterable, List, Optional, Sequence, Tuple
 
-from .adapters import adapter_by_name, adapter_for_extension
+from .adapters import NORMALIZATION_PROFILE, PARSER_COMPATIBILITY_VERSION, adapter_by_name, adapter_for_extension
 from .validation import load_json, validate_relative_project_path, write_json
 
 
-SCHEMA_VERSION = "2.0.0"
+SCHEMA_VERSION = "3.0.0"
 WORKSPACE_NAME = ".manga-studio"
 PROJECT_FILE = "project.json"
 INVENTORY_FILE = "source/inventory.json"
@@ -24,10 +24,19 @@ MANAGED_END = "<!-- END MANGA STUDIO MANAGED -->"
 
 WORKSPACE_DIRECTORIES = (
     "source",
+    "source/documents",
+    "source/maps",
+    "story",
     "canon",
     "analysis",
+    "analysis/diagnostics",
     "revisions",
+    "revisions/policies",
+    "revisions/plans",
+    "revisions/change-sets",
+    "revisions/diffs",
     "manuscript",
+    "manuscript/versions",
     "storyboard",
     "continuity",
     "approvals",
@@ -66,7 +75,20 @@ STABLE_ID_NAMESPACES = (
     "timeline_events",
     "plot_threads",
     "setups_payoffs",
+    "source_units",
 )
+
+USAGE_ROLES = (
+    "primary_manuscript",
+    "supplementary_manuscript",
+    "outline",
+    "author_notes",
+    "canon_reference",
+    "research",
+    "excluded",
+)
+
+IMPORTABLE_CLASSIFICATION_STATUSES = {"approved", "corrected"}
 
 OPERATING_MODES = (
     "create_new",
@@ -257,6 +279,7 @@ def default_project_config(project_root: Path, mode: str, title: Optional[str] =
         "workflow_phase": "story_foundation",
         "operating_mode": mode,
         "stage_locks": {gate: False for gate in STAGE_GATES},
+        "stage_lock_records": {gate: None for gate in STAGE_GATES},
         "image_generation_enabled": False,
         "active_manuscript_version": None,
         "active_canon_version": None,
@@ -387,11 +410,11 @@ def classify_candidate(relative_path: str) -> str:
     if "outline" in stem or "outlines" in parts:
         return "outline"
     if any(token in stem for token in ("note", "idea", "todo")) or "notes" in parts:
-        return "notes"
+        return "author_notes"
     if any(token in stem for token in ("reference", "bible", "lore")) or parts.intersection({"references", "reference", "lore"}):
-        return "reference"
+        return "canon_reference"
     if any(token in stem for token in ("chapter", "manuscript", "novel", "story")) or parts.intersection({"chapters", "manuscript"}):
-        return "manuscript"
+        return "primary_manuscript"
     return "unknown"
 
 
@@ -468,12 +491,18 @@ def inventory_sources(context: ProjectContext) -> Dict[str, Any]:
 
     existing_inventory_path = context.workspace_path(INVENTORY_FILE)
     existing_by_path: Dict[str, Dict[str, Any]] = {}
+    existing_by_document: Dict[str, Dict[str, Any]] = {}
     if existing_inventory_path.exists():
         existing = load_json(existing_inventory_path)
         existing_by_path = {
             item.get("relative_path"): item
             for item in existing.get("files", [])
             if isinstance(item, dict) and isinstance(item.get("relative_path"), str)
+        }
+        existing_by_document = {
+            item.get("document_id"): item
+            for item in existing.get("files", [])
+            if isinstance(item, dict) and isinstance(item.get("document_id"), str)
         }
 
     id_map = _load_id_map(context)
@@ -488,10 +517,14 @@ def inventory_sources(context: ProjectContext) -> Dict[str, Any]:
         suffix = path.suffix.lower()
         source_adapter = adapter_for_extension(suffix)
         adapter = source_adapter.name if source_adapter else None
-        previous = existing_by_path.get(relative, {})
+        previous = existing_by_document.get(document_id, existing_by_path.get(relative, {}))
         suggested = classify_candidate(relative)
         classification = previous.get("classification", suggested)
         classification_status = previous.get("classification_status", "suggested")
+        usage_role = previous.get("usage_role")
+        if match_status == "ambiguous":
+            classification_status = "ambiguous"
+            usage_role = None
         support_status = "supported" if adapter else "unsupported"
         message = None
         if not adapter:
@@ -510,6 +543,7 @@ def inventory_sources(context: ProjectContext) -> Dict[str, Any]:
             "sha256": checksum,
             "classification": classification,
             "classification_status": classification_status,
+            "usage_role": usage_role,
             "adapter": adapter,
             "support_status": support_status,
             "message": message,
@@ -540,21 +574,49 @@ def import_sources(context: ProjectContext) -> Dict[str, Any]:
         existing = load_json(existing_provenance_path)
         provenance_records = list(existing.get("records", []))
     by_version = {
-        (record.get("document_id"), record.get("original_sha256")): record
+        (
+            record.get("document_id"),
+            record.get("original_sha256"),
+            record.get("adapter_version", "legacy"),
+            record.get("normalization_profile", "legacy"),
+            record.get("parser_version", "legacy"),
+        ): record
         for record in provenance_records
     }
 
     imported = 0
     skipped = 0
+    blocked: List[Dict[str, str]] = []
     for entry in inventory.get("files", []):
-        if entry.get("support_status") != "supported" or entry.get("classification_status") == "rejected":
+        relative = entry.get("relative_path", "[unknown]")
+        if entry.get("support_status") != "supported":
             skipped += 1
+            continue
+        if entry.get("classification_status") not in IMPORTABLE_CLASSIFICATION_STATUSES:
+            skipped += 1
+            if entry.get("classification_status") != "rejected":
+                blocked.append({
+                    "relative_path": relative,
+                    "reason": f"classification_status is {entry.get('classification_status')!r}; approved or corrected is required",
+                })
+            continue
+        usage_role = entry.get("usage_role")
+        if usage_role not in USAGE_ROLES or usage_role == "excluded":
+            skipped += 1
+            if usage_role != "excluded":
+                blocked.append({
+                    "relative_path": relative,
+                    "reason": "an explicit supported usage_role is required",
+                })
+            continue
+        if entry.get("id_match_status") == "ambiguous" or not entry.get("document_id"):
+            skipped += 1
+            blocked.append({
+                "relative_path": relative,
+                "reason": "stable document match is ambiguous",
+            })
             continue
         document_id = entry.get("document_id")
-        if not document_id:
-            skipped += 1
-            continue
-        relative = entry["relative_path"]
         source = context.project_path(relative)
         current_checksum = sha256_file(source)
         if current_checksum != entry.get("sha256"):
@@ -563,7 +625,12 @@ def import_sources(context: ProjectContext) -> Dict[str, Any]:
             )
         suffix = source.suffix.lower() or ".bin"
         snapshot_rel = f"{WORKSPACE_NAME}/source/snapshots/{document_id}/{current_checksum}{suffix}"
-        normalized_rel = f"{WORKSPACE_NAME}/source/normalized/{document_id}/{current_checksum}.txt"
+        adapter = adapter_by_name(entry["adapter"])
+        adapter_version = adapter.version
+        normalized_rel = (
+            f"{WORKSPACE_NAME}/source/normalized/{document_id}/{current_checksum}/"
+            f"{adapter.name}-v{adapter_version}-{NORMALIZATION_PROFILE}-parser-v{PARSER_COMPATIBILITY_VERSION}.txt"
+        )
         snapshot = context.project_path(snapshot_rel)
         normalized = context.project_path(normalized_rel)
         snapshot.parent.mkdir(parents=True, exist_ok=True)
@@ -575,22 +642,42 @@ def import_sources(context: ProjectContext) -> Dict[str, Any]:
         else:
             snapshot.write_bytes(raw)
         try:
-            normalized_text = adapter_by_name(entry["adapter"]).normalize(raw, source)
+            normalized_text = adapter.normalize(raw, source)
         except ValueError as exc:
             raise ProjectOperationError(str(exc)) from exc
-        normalized.write_text(normalized_text, encoding="utf-8")
-        for (existing_document_id, existing_checksum), existing_record in by_version.items():
-            if existing_document_id == document_id and existing_checksum != current_checksum:
+        normalized_bytes = normalized_text.encode("utf-8")
+        normalized_sha256 = hashlib.sha256(normalized_bytes).hexdigest()
+        if normalized.exists():
+            if sha256_file(normalized) != normalized_sha256:
+                raise ProjectOperationError(
+                    f"Normalized derivative was modified; refusing to overwrite: '{normalized_rel}'"
+                )
+        else:
+            normalized.write_bytes(normalized_bytes)
+        current_version_key = (
+            document_id, current_checksum, adapter_version, NORMALIZATION_PROFILE, PARSER_COMPATIBILITY_VERSION
+        )
+        for version_key, existing_record in by_version.items():
+            existing_document_id = version_key[0]
+            if existing_document_id == document_id and version_key != current_version_key:
                 existing_record["source_status"] = "superseded"
-        by_version[(document_id, current_checksum)] = {
+        by_version[current_version_key] = {
             "document_id": document_id,
             "original_path": relative,
             "original_sha256": current_checksum,
             "snapshot_path": snapshot_rel,
             "snapshot_sha256": current_checksum,
             "normalized_path": normalized_rel,
-            "adapter": entry["adapter"],
+            "normalized_sha256": normalized_sha256,
+            "adapter": adapter.name,
+            "adapter_version": adapter_version,
+            "normalization_profile": NORMALIZATION_PROFILE,
+            "parser_version": PARSER_COMPATIBILITY_VERSION,
+            "source_map_path": None,
+            "source_map_checksum": None,
             "classification": entry["classification"],
+            "classification_status": entry["classification_status"],
+            "usage_role": usage_role,
             "source_modified_time_ns": entry["modified_time_ns"],
             "source_status": "active",
         }
@@ -603,7 +690,7 @@ def import_sources(context: ProjectContext) -> Dict[str, Any]:
             by_version.values(),
             key=lambda item: (item["document_id"], item["source_modified_time_ns"], item["original_sha256"]),
         ),
-        "import_summary": {"imported": imported, "skipped": skipped},
+        "import_summary": {"imported": imported, "skipped": skipped, "blocked": blocked},
     }
     write_json(existing_provenance_path, provenance)
     return provenance
@@ -650,6 +737,21 @@ def provenance_errors(context: ProjectContext) -> List[str]:
             errors.append(f"immutable snapshot checksum changed: {snapshot_rel}")
         if not normalized.exists():
             errors.append(f"normalized derivative is missing: {normalized_rel}")
+        elif sha256_file(normalized) != record.get("normalized_sha256"):
+            errors.append(f"normalized derivative checksum changed: {normalized_rel}")
+        source_map_rel = record.get("source_map_path")
+        source_map_checksum = record.get("source_map_checksum")
+        if source_map_rel is None or source_map_checksum is None:
+            errors.append(f"source map is missing for normalized derivative: {normalized_rel}")
+        else:
+            source_map_errors = validate_relative_project_path(source_map_rel, "provenance.source_map_path")
+            errors.extend(source_map_errors)
+            if not source_map_errors:
+                source_map = context.project_path(source_map_rel)
+                if not source_map.is_file():
+                    errors.append(f"source map is missing: {source_map_rel}")
+                elif sha256_file(source_map) != source_map_checksum:
+                    errors.append(f"source map checksum changed: {source_map_rel}")
     return errors
 
 
@@ -685,7 +787,11 @@ def get_or_create_entity_id(
     return entity_id
 
 
-def image_ready_reasons(context: ProjectContext) -> List[str]:
+def image_ready_reasons(
+    context: ProjectContext,
+    *,
+    ignore_configured_image_ready: bool = False,
+) -> List[str]:
     config = context.config
     locks = config.get("stage_locks", {})
     reasons: List[str] = []
@@ -694,15 +800,25 @@ def image_ready_reasons(context: ProjectContext) -> List[str]:
             reasons.append(f"{gate} is not true")
     if config.get("image_generation_enabled") is not True:
         reasons.append("image_generation_enabled is false")
-    continuity_approval = context.workspace_path("approvals/continuity.json")
-    if not continuity_approval.exists():
-        reasons.append("continuity approval is missing")
-    else:
+    continuity_approved = False
+    for continuity_approval in context.workspace_path("approvals").glob("*.json"):
         try:
-            if load_json(continuity_approval).get("status") != "approved":
-                reasons.append("continuity approval is not approved")
+            approval = load_json(continuity_approval)
+            if approval.get("project_id") != config.get("project_id"):
+                continue
+            if approval.get("artifact_type") != "continuity" or approval.get("status") != "approved":
+                continue
+            target_rel = approval.get("target_relative_path")
+            if not isinstance(target_rel, str):
+                continue
+            target = context.project_path(target_rel)
+            if target.is_file() and sha256_file(target) == approval.get("target_sha256"):
+                continuity_approved = True
+                break
         except (OSError, ValueError, json.JSONDecodeError):
-            reasons.append("continuity approval is unreadable")
+            continue
+    if not continuity_approved:
+        reasons.append("a valid continuity approval is missing")
     reasons.extend(provenance_errors(context))
     return reasons
 

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/timeline-event.schema.json",
+  "title": "Manga Studio Timeline Event", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "timeline_event_id", "name", "sequence_index", "story_time", "chapter_ids", "scene_ids", "character_ids", "location_ids", "preconditions", "consequences", "status", "basis"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "timeline_event_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "name": {"type": "string", "minLength": 1}, "sequence_index": {"type": "integer", "minimum": 0}, "story_time": {"type": ["string", "null"]},
+    "chapter_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}}, "scene_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "character_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}}, "location_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "preconditions": {"type": "array", "items": {"type": "string"}}, "consequences": {"type": "array", "items": {"type": "string"}}, "status": {"$ref": "story-common.schema.json#/$defs/canonStatus"},
+    "basis": {"$ref": "story-common.schema.json#/$defs/evidenceOrDecision"}
+  }
+}

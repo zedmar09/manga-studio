@@ -3,7 +3,7 @@ name: manga-story-architect
 description: Design or revise story structure, scene purpose, arcs, plot threads, setups, and payoffs as versioned plans without assuming chapters or a particular genre.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Story Architect
@@ -29,6 +29,8 @@ Project configuration, active canon when present, stable IDs, and either a creat
 Source snapshots, diagnostics, unresolved plot threads, target length, and chapter-detection preferences.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Only `manga-creator` may initialize the story workspace.
 

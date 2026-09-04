@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/relationship.schema.json",
+  "title": "Manga Studio Relationship", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "relationship_id", "participant_ids", "relationship_type", "current_state", "history", "promises", "secrets", "status", "basis"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "relationship_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "participant_ids": {"type": "array", "minItems": 2, "items": {"$ref": "story-common.schema.json#/$defs/stableId"}, "uniqueItems": true}, "relationship_type": {"type": "string"},
+    "current_state": {"type": "string"}, "history": {"type": "array", "items": {"type": "object"}}, "promises": {"type": "array", "items": {"type": "string"}}, "secrets": {"type": "array", "items": {"type": "string"}},
+    "status": {"$ref": "story-common.schema.json#/$defs/canonStatus"}, "basis": {"$ref": "story-common.schema.json#/$defs/evidenceOrDecision"}
+  }
+}

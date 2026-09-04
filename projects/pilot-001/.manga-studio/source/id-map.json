@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "3.0.0",
   "project_id": "pilot-001",
   "namespaces": {
     "source_documents": [
@@ -10,7 +10,14 @@
         "aliases": []
       }
     ],
-    "chapters": [],
+    "chapters": [
+      {
+        "id": "chapter-27196efb271e4b0cb6eb656a614df243",
+        "external_key": "doc-a812025f0d484647ac3a81c09a1055ab:chapter:0:0",
+        "display_name": "The Last Train Bell",
+        "display_name_aliases": []
+      }
+    ],
     "scenes": [],
     "characters": [],
     "locations": [],
@@ -18,6 +25,20 @@
     "props": [],
     "timeline_events": [],
     "plot_threads": [],
-    "setups_payoffs": []
+    "setups_payoffs": [],
+    "source_units": [
+      {
+        "id": "source-unit-c46f124f2115462192eedf50f98f1c28",
+        "external_key": "doc-a812025f0d484647ac3a81c09a1055ab:source-unit:23:217",
+        "display_name": "Source unit 1",
+        "display_name_aliases": []
+      },
+      {
+        "id": "source-unit-37bf5739d99e439b98f45c08d6c9dc54",
+        "external_key": "doc-a812025f0d484647ac3a81c09a1055ab:source-unit:218:366",
+        "display_name": "Source unit 2",
+        "display_name_aliases": []
+      }
+    ]
   }
 }

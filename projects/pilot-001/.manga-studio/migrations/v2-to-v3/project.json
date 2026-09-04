@@ -1,0 +1,75 @@
+{
+  "schema_version": "2.0.0",
+  "project_id": "pilot-001",
+  "title": "The Last Train Bell",
+  "source_language": "en",
+  "output_language": "en",
+  "project_type": "existing_story",
+  "genre": [
+    "supernatural mystery"
+  ],
+  "source_roots": [
+    "."
+  ],
+  "source_inclusion_patterns": [
+    "pilot-story.md"
+  ],
+  "source_exclusion_patterns": [
+    ".manga-studio/**",
+    ".git/**",
+    "build/**",
+    "dist/**",
+    "__pycache__/**",
+    "._*",
+    "**/._*"
+  ],
+  "chapter_detection_strategy": {
+    "mode": "single_document",
+    "filename_patterns": [],
+    "heading_levels": [
+      1,
+      2
+    ],
+    "require_review_on_ambiguity": true
+  },
+  "existing_structure_preservation": {
+    "preserve_original_paths": true,
+    "preserve_chapter_order": true,
+    "preserve_titles": true,
+    "never_rewrite_originals": true
+  },
+  "revision_mode": "proposal_only",
+  "author_voice_preservation": {
+    "required": true,
+    "notes": []
+  },
+  "reading_direction": "right-to-left",
+  "target_manga_format": {
+    "color_mode": "black-and-white",
+    "page_width_px": 1654,
+    "page_height_px": 2339
+  },
+  "workflow_phase": "story_foundation",
+  "operating_mode": "adapt_existing_to_manga",
+  "stage_locks": {
+    "SOURCE_LOCKED": false,
+    "CANON_APPROVED": false,
+    "DIAGNOSTIC_APPROVED": false,
+    "REVISION_PLAN_APPROVED": false,
+    "MANUSCRIPT_APPROVED": false,
+    "STORY_LOCKED": false,
+    "STORYBOARD_APPROVED": false,
+    "STORYBOARD_LOCKED": false,
+    "IMAGE_READY": false
+  },
+  "image_generation_enabled": false,
+  "active_manuscript_version": null,
+  "active_canon_version": null,
+  "active_storyboard_version": null,
+  "blocking_reasons": [
+    "Pilot story, canon, manuscript, and storyboard approvals are incomplete.",
+    "Story and storyboard locks are not set.",
+    "Image generation is disabled.",
+    "All sample image-generation jobs are deferred examples."
+  ]
+}

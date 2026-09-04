@@ -1,5 +1,5 @@
 {
-  "schema_version": "2.0.0",
+  "schema_version": "3.0.0",
   "project_id": "pilot-001",
   "title": "The Last Train Bell",
   "source_language": "en",
@@ -71,5 +71,16 @@
     "Story and storyboard locks are not set.",
     "Image generation is disabled.",
     "All sample image-generation jobs are deferred examples."
-  ]
+  ],
+  "stage_lock_records": {
+    "SOURCE_LOCKED": null,
+    "CANON_APPROVED": null,
+    "DIAGNOSTIC_APPROVED": null,
+    "REVISION_PLAN_APPROVED": null,
+    "MANUSCRIPT_APPROVED": null,
+    "STORY_LOCKED": null,
+    "STORYBOARD_APPROVED": null,
+    "STORYBOARD_LOCKED": null,
+    "IMAGE_READY": null
+  }
 }

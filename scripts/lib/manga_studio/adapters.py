@@ -7,6 +7,7 @@ from typing import Dict, Optional, Protocol, Tuple
 
 class SourceAdapter(Protocol):
     name: str
+    version: str
     extensions: Tuple[str, ...]
 
     def normalize(self, raw: bytes, source: Path) -> str:
@@ -27,6 +28,7 @@ def _decode_utf8(raw: bytes, source: Path, adapter_name: str) -> str:
 @dataclass(frozen=True)
 class PlainTextAdapter:
     name: str = "plain_text"
+    version: str = "1.0.0"
     extensions: Tuple[str, ...] = (".txt",)
 
     def normalize(self, raw: bytes, source: Path) -> str:
@@ -36,6 +38,7 @@ class PlainTextAdapter:
 @dataclass(frozen=True)
 class MarkdownAdapter:
     name: str = "markdown"
+    version: str = "1.0.0"
     extensions: Tuple[str, ...] = (".md", ".markdown")
 
     def normalize(self, raw: bytes, source: Path) -> str:
@@ -47,6 +50,9 @@ ADAPTERS_BY_NAME: Dict[str, SourceAdapter] = {adapter.name: adapter for adapter 
 ADAPTERS_BY_EXTENSION: Dict[str, SourceAdapter] = {
     extension: adapter for adapter in ADAPTERS for extension in adapter.extensions
 }
+
+NORMALIZATION_PROFILE = "utf8-lf-v1"
+PARSER_COMPATIBILITY_VERSION = "1.0.0"
 
 
 def adapter_for_extension(extension: str) -> Optional[SourceAdapter]:

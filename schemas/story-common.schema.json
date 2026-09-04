@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/story-common.schema.json",
+  "title": "Manga Studio Story Common Definitions",
+  "$defs": {
+    "schemaVersion": {"const": "3.0.0"},
+    "stableId": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9._-]*$"},
+    "relativePath": {"type": "string", "pattern": "^(?!/)(?!~)(?!.*(^|/)\\.\\.(?:/|$)).+"},
+    "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "canonStatus": {"type": "string", "enum": ["confirmed", "provisional", "inferred", "contradictory", "deprecated", "unknown"]},
+    "evidenceLocator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["project_id", "document_id", "chapter_id", "scene_id", "source_unit_id", "source_relative_path", "line_start", "line_end", "byte_start", "byte_end", "content_fingerprint"],
+      "properties": {
+        "project_id": {"$ref": "#/$defs/stableId"},
+        "document_id": {"$ref": "#/$defs/stableId"},
+        "chapter_id": {"anyOf": [{"$ref": "#/$defs/stableId"}, {"type": "null"}]},
+        "scene_id": {"anyOf": [{"$ref": "#/$defs/stableId"}, {"type": "null"}]},
+        "source_unit_id": {"$ref": "#/$defs/stableId"},
+        "source_relative_path": {"$ref": "#/$defs/relativePath"},
+        "line_start": {"type": "integer", "minimum": 1},
+        "line_end": {"type": "integer", "minimum": 1},
+        "byte_start": {"type": "integer", "minimum": 0},
+        "byte_end": {"type": "integer", "minimum": 0},
+        "content_fingerprint": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "decisionReference": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["decision_id", "approval_id"],
+      "properties": {
+        "decision_id": {"$ref": "#/$defs/stableId"},
+        "approval_id": {"$ref": "#/$defs/stableId"}
+      }
+    },
+    "evidenceOrDecision": {
+      "anyOf": [
+        {
+          "type": "object", "additionalProperties": false, "required": ["basis_type", "evidence"],
+          "properties": {
+            "basis_type": {"const": "source_evidence"},
+            "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/evidenceLocator"}}
+          }
+        },
+        {
+          "type": "object", "additionalProperties": false, "required": ["basis_type", "decision"],
+          "properties": {
+            "basis_type": {"const": "approved_decision"},
+            "decision": {"$ref": "#/$defs/decisionReference"}
+          }
+        }
+      ]
+    },
+    "impact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["level", "notes"],
+      "properties": {
+        "level": {"type": "string", "enum": ["none", "low", "medium", "high"]},
+        "notes": {"type": "string"}
+      }
+    }
+  }
+}

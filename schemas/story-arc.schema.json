@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/story-arc.schema.json",
+  "title": "Manga Studio Story Arc", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "arc_id", "name", "arc_type", "status", "goal", "start_state", "end_state", "chapter_ids", "scene_ids", "character_ids", "plot_thread_ids", "evidence"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "arc_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "name": {"type": "string", "minLength": 1}, "arc_type": {"enum": ["story", "character", "relationship", "mystery", "world"]}, "status": {"$ref": "story-common.schema.json#/$defs/canonStatus"},
+    "goal": {"type": "string"}, "start_state": {"type": "string"}, "end_state": {"type": "string"},
+    "chapter_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}}, "scene_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "character_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}}, "plot_thread_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "story-common.schema.json#/$defs/evidenceLocator"}}
+  }
+}

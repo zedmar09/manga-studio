@@ -3,7 +3,7 @@ name: manga-revision-planner
 description: Convert approved diagnostics into versioned, dependency-aware revision proposals while preserving source text, author voice, canon authority, and approval boundaries.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Revision Planner
@@ -30,6 +30,8 @@ Target length, adaptation format, priority constraints, prior revision plans, an
 
 ## Project Discovery
 
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
+
 Use shared discovery and stop if missing. This specialist never initializes or selects the pilot implicitly.
 
 ## Source Of Truth
@@ -38,20 +40,20 @@ Approved canon and source evidence constrain the plan; the approved diagnosis su
 
 ## Owned Outputs
 
-Versioned plans under `.manga-studio/revisions/` and related decision or approval proposals.
+Versioned policies, plans, change sets, and deterministic diffs under `.manga-studio/revisions/`. This skill proposes but does not apply, approve, or lock revisions.
 
 ## Procedure
 
 1. Verify `DIAGNOSTIC_APPROVED` and story-profile validity.
 2. Convert each accepted finding into a scoped revision objective linked to stable IDs.
-3. Record dependencies, affected artifacts, canon risk, voice risk, and acceptance checks.
+3. Record target stable IDs, triggering issue IDs, source evidence, operation, expected result, alternatives, preserved elements, voice/canon/continuity/structural impact, dependencies, and acceptance criteria.
 4. Order work without assuming chapters exist or that the source is already manga.
 5. Produce a deterministic diff plan; do not edit source or manuscript files.
 6. Request approval before activating the plan.
 
 ## Required Schemas
 
-`project.schema.json`, `stable-id-map.schema.json`, `review.schema.json`, and provenance schemas.
+`revision-policy.schema.json`, `revision-plan.schema.json`, `change-set.schema.json`, `approval.schema.json`, and `decision-log.schema.json`.
 
 ## Next-Skill Handoff
 
@@ -59,7 +61,7 @@ Pass an approved plan to `manga-story-architect`, `manga-chapter-writer`, `manga
 
 ## Approval Requirements
 
-The complete plan and material plan revisions require approval before `REVISION_PLAN_APPROVED` changes or implementation begins.
+The plan requires a separate hash-bound approval before its lock changes. Applying prose requires a separately approved change set and creates a new manuscript version, diff, and decision record; canon changes remain separately approved.
 
 ## Failure Behavior
 

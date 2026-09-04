@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/source-map.schema.json",
+  "title": "Manga Studio Source Map",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project_id", "document_id", "source_relative_path", "normalized_path", "normalized_sha256", "parser_name", "parser_version", "boundary_profile_checksum", "structure_status", "ambiguities", "chapters", "scenes", "source_units"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"},
+    "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "document_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "source_relative_path": {"$ref": "story-common.schema.json#/$defs/relativePath"},
+    "normalized_path": {"$ref": "story-common.schema.json#/$defs/relativePath"},
+    "normalized_sha256": {"$ref": "story-common.schema.json#/$defs/sha256"},
+    "parser_name": {"type": "string", "minLength": 1},
+    "parser_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+    "boundary_profile_checksum": {"$ref": "story-common.schema.json#/$defs/sha256"},
+    "structure_status": {"type": "string", "enum": ["parsed", "review_required", "approved"]},
+    "ambiguities": {"type": "array", "items": {"type": "object", "required": ["kind", "title", "line", "reason"], "properties": {"kind": {"enum": ["chapter", "scene"]}, "title": {"type": "string"}, "line": {"type": "integer", "minimum": 1}, "reason": {"type": "string"}}}},
+    "chapters": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/chapterBoundary"}},
+    "scenes": {"type": "array", "items": {"$ref": "#/$defs/sceneBoundary"}},
+    "source_units": {"type": "array", "items": {"$ref": "#/$defs/sourceUnit"}}
+  },
+  "$defs": {
+    "boundary": {
+      "type": "object",
+      "required": ["kind", "title", "origin", "ambiguity_status", "ambiguity_reason", "line_start", "line_end", "byte_start", "byte_end"],
+      "properties": {
+        "kind": {"enum": ["chapter", "scene"]}, "title": {"type": "string"}, "origin": {"type": "string"},
+        "heading_level": {"type": "integer", "minimum": 1, "maximum": 6},
+        "ambiguity_status": {"enum": ["clear", "review_required", "resolved"]},
+        "ambiguity_reason": {"type": ["string", "null"]},
+        "line_start": {"type": "integer", "minimum": 1}, "line_end": {"type": "integer", "minimum": 1},
+        "byte_start": {"type": "integer", "minimum": 0}, "byte_end": {"type": "integer", "minimum": 0},
+        "chapter_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+        "scene_id": {"$ref": "story-common.schema.json#/$defs/stableId"}
+      }
+    },
+    "chapterBoundary": {"type": "object", "additionalProperties": false, "required": ["chapter_id", "display_title", "document_id", "source_order", "boundary"], "properties": {"chapter_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "display_title": {"type": "string"}, "document_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "source_order": {"type": "integer", "minimum": 1}, "boundary": {"$ref": "#/$defs/boundary"}}},
+    "sceneBoundary": {"type": "object", "additionalProperties": false, "required": ["scene_id", "display_title", "document_id", "chapter_id", "source_order", "boundary"], "properties": {"scene_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "display_title": {"type": "string"}, "document_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "chapter_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "source_order": {"type": "integer", "minimum": 1}, "boundary": {"$ref": "#/$defs/boundary"}}},
+    "sourceUnit": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_unit_id", "document_id", "chapter_id", "scene_id", "source_relative_path", "heading_path", "source_order", "unit_type", "line_start", "line_end", "byte_start", "byte_end", "content_fingerprint", "parser_version", "ambiguity_status"],
+      "properties": {
+        "source_unit_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "document_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+        "chapter_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "scene_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]},
+        "source_relative_path": {"$ref": "story-common.schema.json#/$defs/relativePath"}, "heading_path": {"type": "array", "items": {"type": "string"}},
+        "source_order": {"type": "integer", "minimum": 1}, "unit_type": {"enum": ["paragraph", "dialogue"]},
+        "line_start": {"type": "integer", "minimum": 1}, "line_end": {"type": "integer", "minimum": 1},
+        "byte_start": {"type": "integer", "minimum": 0}, "byte_end": {"type": "integer", "minimum": 0},
+        "content_fingerprint": {"$ref": "story-common.schema.json#/$defs/sha256"}, "parser_version": {"type": "string"},
+        "ambiguity_status": {"enum": ["clear", "review_required", "resolved"]}
+      }
+    }
+  }
+}

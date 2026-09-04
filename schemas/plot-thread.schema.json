@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/plot-thread.schema.json",
+  "title": "Manga Studio Plot Thread", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "plot_thread_id", "name", "description", "state", "opened_scene_id", "resolved_scene_id", "related_character_ids", "related_prop_ids", "setup_payoff_ids", "status", "basis"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "plot_thread_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "name": {"type": "string", "minLength": 1}, "description": {"type": "string"}, "state": {"enum": ["unopened", "open", "dormant", "resolved", "abandoned", "unknown"]},
+    "opened_scene_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]}, "resolved_scene_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]},
+    "related_character_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}}, "related_prop_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}}, "setup_payoff_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "status": {"$ref": "story-common.schema.json#/$defs/canonStatus"}, "basis": {"$ref": "story-common.schema.json#/$defs/evidenceOrDecision"}
+  }
+}

@@ -5,8 +5,9 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from helpers import initialize, write_json
+from helpers import approve_inventory, initialize, write_json
 from manga_studio.project import get_or_create_entity_id, import_sources, inventory_sources
+from manga_studio.structure import structure_sources
 
 
 class MultiStoryIsolationTests(unittest.TestCase):
@@ -28,8 +29,12 @@ class MultiStoryIsolationTests(unittest.TestCase):
             second_chapter = get_or_create_entity_id(second, "chapters", "source-doc#heading-1", "Opening")
             inventory_sources(first)
             inventory_sources(second)
+            approve_inventory(first)
+            approve_inventory(second)
             import_sources(first)
             import_sources(second)
+            structure_sources(first)
+            structure_sources(second)
 
             write_json(first.workspace_path("canon/story-v001.json"), {"character_id": first_character, "genre": "drama"})
             write_json(second.workspace_path("canon/story-v001.json"), {"character_id": second_character, "genre": "comedy"})

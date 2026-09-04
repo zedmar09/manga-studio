@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/approval.schema.json",
+  "title": "Manga Studio Approval", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "approval_id", "project_id", "artifact_type", "target_relative_path", "target_version", "target_sha256", "status", "decision", "decided_at", "actor", "notes", "supersedes_approval_id", "superseded_by_approval_id", "invalidated_at", "invalidation_reason"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "approval_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "artifact_type": {"enum": ["source_inventory", "source_structure", "source_map", "story_model", "canon", "diagnostic_report", "revision_policy", "revision_plan", "change_set", "manuscript", "continuity", "storyboard", "page_plan", "panel_plan"]},
+    "target_relative_path": {"$ref": "story-common.schema.json#/$defs/relativePath"}, "target_version": {"type": "string"}, "target_sha256": {"$ref": "story-common.schema.json#/$defs/sha256"},
+    "status": {"enum": ["approved", "rejected", "superseded", "invalidated"]}, "decision": {"enum": ["approved", "rejected"]}, "decided_at": {"type": "string"}, "actor": {"type": "string", "minLength": 1}, "notes": {"type": "string"},
+    "supersedes_approval_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]}, "superseded_by_approval_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]},
+    "invalidated_at": {"type": ["string", "null"]}, "invalidation_reason": {"type": ["string", "null"]}
+  }
+}

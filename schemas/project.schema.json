@@ -10,11 +10,11 @@
     "source_exclusion_patterns", "chapter_detection_strategy",
     "existing_structure_preservation", "revision_mode", "author_voice_preservation",
     "reading_direction", "target_manga_format", "workflow_phase", "operating_mode",
-    "stage_locks", "image_generation_enabled", "active_manuscript_version",
+    "stage_locks", "stage_lock_records", "image_generation_enabled", "active_manuscript_version",
     "active_canon_version", "active_storyboard_version", "blocking_reasons"
   ],
   "properties": {
-    "schema_version": {"const": "2.0.0"},
+    "schema_version": {"const": "3.0.0"},
     "project_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
     "title": {"type": "string", "minLength": 1},
     "source_language": {"type": "string", "minLength": 2},
@@ -81,11 +81,30 @@
         "IMAGE_READY": {"type": "boolean"}
       }
     },
+    "stage_lock_records": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["SOURCE_LOCKED", "CANON_APPROVED", "DIAGNOSTIC_APPROVED", "REVISION_PLAN_APPROVED", "MANUSCRIPT_APPROVED", "STORY_LOCKED", "STORYBOARD_APPROVED", "STORYBOARD_LOCKED", "IMAGE_READY"],
+      "properties": {
+        "SOURCE_LOCKED": {"$ref": "#/$defs/nullableRelativePath"},
+        "CANON_APPROVED": {"$ref": "#/$defs/nullableRelativePath"},
+        "DIAGNOSTIC_APPROVED": {"$ref": "#/$defs/nullableRelativePath"},
+        "REVISION_PLAN_APPROVED": {"$ref": "#/$defs/nullableRelativePath"},
+        "MANUSCRIPT_APPROVED": {"$ref": "#/$defs/nullableRelativePath"},
+        "STORY_LOCKED": {"$ref": "#/$defs/nullableRelativePath"},
+        "STORYBOARD_APPROVED": {"$ref": "#/$defs/nullableRelativePath"},
+        "STORYBOARD_LOCKED": {"$ref": "#/$defs/nullableRelativePath"},
+        "IMAGE_READY": {"$ref": "#/$defs/nullableRelativePath"}
+      }
+    },
     "image_generation_enabled": {"type": "boolean", "default": false},
     "active_manuscript_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
     "active_canon_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
     "active_storyboard_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
     "blocking_reasons": {"type": "array", "items": {"type": "string"}}
   },
-  "$defs": {"relativePath": {"type": "string", "pattern": "^(?!/)(?!~)(?!.*(^|/)\\.\\.(?:/|$)).+"}}
+  "$defs": {
+    "relativePath": {"type": "string", "pattern": "^(?!/)(?!~)(?!.*(^|/)\\.\\.(?:/|$)).+"},
+    "nullableRelativePath": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]}
+  }
 }

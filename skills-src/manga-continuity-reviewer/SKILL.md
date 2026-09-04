@@ -3,7 +3,7 @@ name: manga-continuity-reviewer
 description: Review image jobs, externally generated outputs, approved panels, lettering, composed pages, and exports for production continuity without editing artwork or granting approval automatically.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Continuity Reviewer
@@ -29,6 +29,8 @@ Active canon/storyboard/continuity versions, target job or received output, prov
 Prior output versions, correction history, lettering layer, composed page, and export manifest.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Never initialize or compare against pilot references unless the pilot itself is the discovered project.
 

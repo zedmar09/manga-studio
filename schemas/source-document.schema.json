@@ -1,0 +1,24 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/source-document.schema.json",
+  "title": "Manga Studio Source Document",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "project_id", "document_id", "display_title", "aliases", "source_relative_path", "usage_role", "classification", "classification_status", "source_status", "structure_status", "provenance_original_sha256", "source_map_path", "source_map_checksum"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"},
+    "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "document_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "display_title": {"type": "string", "minLength": 1},
+    "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "source_relative_path": {"$ref": "story-common.schema.json#/$defs/relativePath"},
+    "usage_role": {"type": "string", "enum": ["primary_manuscript", "supplementary_manuscript", "outline", "author_notes", "canon_reference", "research", "excluded"]},
+    "classification": {"type": "string", "minLength": 1},
+    "classification_status": {"type": "string", "enum": ["approved", "corrected"]},
+    "source_status": {"type": "string", "enum": ["active", "superseded"]},
+    "structure_status": {"type": "string", "enum": ["parsed", "review_required", "approved"]},
+    "provenance_original_sha256": {"$ref": "story-common.schema.json#/$defs/sha256"},
+    "source_map_path": {"$ref": "story-common.schema.json#/$defs/relativePath"},
+    "source_map_checksum": {"$ref": "story-common.schema.json#/$defs/sha256"}
+  }
+}

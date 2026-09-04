@@ -1,0 +1,11 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/revision-policy.schema.json",
+  "title": "Manga Studio Revision Policy", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "revision_policy_id", "version", "mode", "description", "allowed_operations", "preserve", "requires_issue_ids", "approval_status"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "revision_policy_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "version": {"type": "string"}, "mode": {"enum": ["conservative", "balanced", "transformative"]}, "description": {"type": "string"},
+    "allowed_operations": {"type": "array", "items": {"enum": ["replace_text", "append_text", "insert_after"]}}, "preserve": {"type": "array", "items": {"type": "string"}},
+    "requires_issue_ids": {"type": "boolean"}, "approval_status": {"enum": ["proposed", "approved", "rejected", "superseded"]}
+  }
+}
