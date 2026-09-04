@@ -3,7 +3,7 @@ name: manga-creator
 description: Orchestrate a portable Manga Studio story workspace, selecting only the specialist skills needed for creation, import, diagnosis, repair, continuation, adaptation, continuity audit, or visual-production preparation.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Creator
@@ -30,7 +30,9 @@ Title, languages, genre labels, source roots, structure-preservation preferences
 
 ## Project Discovery
 
-Run `python3 <install-root>/scripts/manga_studio.py discover --project <path>`. If discovery fails and the operation needs a project, initialize with `manga_studio.py init <story-directory> --mode <mode>`. Never use `projects/pilot-001` as a fallback or infer a project from sample names.
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
+
+Run the launcher described above with `discover --project <path>`. If discovery fails and the operation needs a project, initialize with `init <story-directory> --mode <mode>`. Never use `projects/pilot-001` as a fallback or infer a project from sample names.
 
 ## Source Of Truth
 
@@ -45,7 +47,7 @@ Original files are immutable provenance evidence. Approved canon governs story f
 1. Discover or initialize the project and run `status`.
 2. Select the requested operating mode; do not run every specialist automatically.
 3. For `create_new`, route to story architecture and only the bible or writing skills needed next.
-4. For import, diagnosis, repair, or adaptation, inventory before import, then route to diagnosis or revision planning as requested.
+4. For import, diagnosis, repair, or adaptation, inventory, obtain explicit classification/usage-role decisions, import, and structure before diagnosis or revision planning.
 5. For continuation, load approved canon, unresolved plot threads, and the active manuscript before routing to writing skills.
 6. For continuity audit, choose story consistency review or production continuity review according to the target.
 7. For visual preparation, use storyboard, panel, consistency, and image-job skills only after their prerequisites.
@@ -53,7 +55,7 @@ Original files are immutable provenance evidence. Approved canon governs story f
 
 ## Required Schemas
 
-`project.schema.json`, `source-inventory.schema.json`, `provenance.schema.json`, and `stable-id-map.schema.json`, plus schemas owned by selected specialists.
+`project.schema.json`, source inventory/provenance/map schemas, `stable-id-map.schema.json`, approval/lock schemas, and the contracts owned by selected specialists.
 
 ## Next-Skill Handoff
 

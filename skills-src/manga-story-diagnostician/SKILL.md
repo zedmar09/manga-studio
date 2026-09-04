@@ -3,14 +3,14 @@ name: manga-story-diagnostician
 description: Diagnose imported story structure, character arcs, pacing, causality, continuity, and manga-adaptation risks without revising the source or declaring new canon.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Story Diagnostician
 
 ## Purpose
 
-Produce evidence-linked editorial diagnosis for a story of any genre or structure while separating observed facts, interpretations, uncertainties, and recommendations.
+Produce a schema-valid, evidence-linked diagnostic report for a story of any genre or structure while separating observed facts, interpretations, uncertainties, and alternatives.
 
 ## Activation Conditions
 
@@ -30,6 +30,8 @@ Approved canon, prior diagnostics, reader goals, target demographic, and adaptat
 
 ## Project Discovery
 
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
+
 Use shared discovery from the invocation path. Stop if no `.manga-studio/project.json` is found; never initialize or consult pilot data.
 
 ## Source Of Truth
@@ -38,20 +40,21 @@ Original snapshots support textual evidence. Approved canon outranks inferred fa
 
 ## Owned Outputs
 
-Versioned reports under `.manga-studio/analysis/` and proposed diagnostic approvals under `.manga-studio/approvals/`.
+Versioned JSON reports and optional Markdown companions under `.manga-studio/analysis/diagnostics/`. This skill does not create approvals.
 
 ## Procedure
 
 1. Validate the story profile and provenance.
 2. Scope the diagnosis instead of assuming a full rewrite review.
-3. Cite stable document, chapter, scene, and entity IDs for findings.
-4. Separate contradictions from intentional ambiguity and unresolved questions.
-5. Analyze structure, pacing, causality, arcs, continuity, and adaptation pressure only where evidence supports it.
-6. Write a new versioned report; never modify source or prior reports.
+3. Give every finding a unique issue ID, supported category, severity, confidence, status, description, why-it-matters statement, evidence locators, affected chapter and scene IDs, related entity IDs, alternatives, uncertainty, and adaptation impact.
+4. Make every evidence locator match a source-map unit and byte/line range in this project.
+5. Separate contradictions from intentional ambiguity and unresolved questions.
+6. Analyze structure, pacing, causality, arcs, continuity, voice, setup/payoff, chapter boundaries, and adaptation pressure only where evidence supports it.
+7. Publish with `diagnose`; never modify source, canon, manuscripts, prior reports, approvals, or locks.
 
 ## Required Schemas
 
-`project.schema.json`, `source-inventory.schema.json`, `provenance.schema.json`, `stable-id-map.schema.json`, and `review.schema.json` where structured findings are used.
+`project.schema.json`, `source-map.schema.json`, `story-issue.schema.json`, and `diagnostic-report.schema.json`.
 
 ## Next-Skill Handoff
 
@@ -59,7 +62,7 @@ Pass approved findings and unresolved questions to `manga-revision-planner`; pas
 
 ## Approval Requirements
 
-The user must approve a diagnosis before `DIAGNOSTIC_APPROVED` changes or a revision plan treats findings as accepted.
+The user must create a separate hash-bound approval and explicitly run `set-lock DIAGNOSTIC_APPROVED`; this skill may not approve or lock its own report.
 
 ## Failure Behavior
 

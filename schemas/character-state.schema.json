@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/character-state.schema.json",
+  "title": "Manga Studio Character Story State", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "character_id", "aliases", "role", "goals", "motivations", "personality", "flaws", "voice", "relationships", "knowledge", "secrets", "arc_state", "abilities", "limitations", "injuries", "physical_status", "appearance_facts", "outfit_state", "carried_items", "location_id", "status", "basis"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "character_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "aliases": {"type": "array", "items": {"type": "string"}, "uniqueItems": true}, "role": {"type": "string"},
+    "goals": {"type": "array", "items": {"type": "string"}}, "motivations": {"type": "array", "items": {"type": "string"}}, "personality": {"type": "array", "items": {"type": "string"}}, "flaws": {"type": "array", "items": {"type": "string"}},
+    "voice": {"type": "object"}, "relationships": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "knowledge": {"type": "array", "items": {"type": "object", "required": ["fact", "learned_at_scene_id", "status"], "properties": {"fact": {"type": "string"}, "learned_at_scene_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]}, "status": {"$ref": "story-common.schema.json#/$defs/canonStatus"}}}},
+    "secrets": {"type": "array", "items": {"type": "string"}}, "arc_state": {"type": "string"}, "abilities": {"type": "array", "items": {"type": "string"}}, "limitations": {"type": "array", "items": {"type": "string"}},
+    "injuries": {"type": "array", "items": {"type": "object"}}, "physical_status": {"type": "string"}, "appearance_facts": {"type": "array", "items": {"type": "string"}},
+    "outfit_state": {"type": "array", "items": {"type": "string"}}, "carried_items": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "location_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]}, "status": {"$ref": "story-common.schema.json#/$defs/canonStatus"},
+    "basis": {"$ref": "story-common.schema.json#/$defs/evidenceOrDecision"}
+  }
+}

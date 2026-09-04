@@ -1,0 +1,74 @@
+{
+  "schema_version": "3.0.0",
+  "project_id": "pilot-001",
+  "document_id": "doc-a812025f0d484647ac3a81c09a1055ab",
+  "source_relative_path": "pilot-story.md",
+  "normalized_path": ".manga-studio/source/normalized/doc-a812025f0d484647ac3a81c09a1055ab/9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88.txt",
+  "normalized_sha256": "9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88",
+  "parser_name": "manga_studio_text_structure",
+  "parser_version": "1.0.0",
+  "boundary_profile_checksum": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "structure_status": "parsed",
+  "ambiguities": [],
+  "chapters": [
+    {
+      "chapter_id": "chapter-27196efb271e4b0cb6eb656a614df243",
+      "display_title": "The Last Train Bell",
+      "document_id": "doc-a812025f0d484647ac3a81c09a1055ab",
+      "source_order": 1,
+      "boundary": {
+        "kind": "chapter",
+        "title": "The Last Train Bell",
+        "origin": "implicit_chapterless",
+        "ambiguity_status": "clear",
+        "ambiguity_reason": null,
+        "line_start": 1,
+        "line_end": 1,
+        "byte_start": 0,
+        "byte_end": 0,
+        "chapter_id": "chapter-27196efb271e4b0cb6eb656a614df243"
+      }
+    }
+  ],
+  "scenes": [],
+  "source_units": [
+    {
+      "source_unit_id": "source-unit-c46f124f2115462192eedf50f98f1c28",
+      "document_id": "doc-a812025f0d484647ac3a81c09a1055ab",
+      "chapter_id": "chapter-27196efb271e4b0cb6eb656a614df243",
+      "scene_id": null,
+      "source_relative_path": "pilot-story.md",
+      "heading_path": [
+        "The Last Train Bell"
+      ],
+      "source_order": 1,
+      "unit_type": "paragraph",
+      "line_start": 3,
+      "line_end": 3,
+      "byte_start": 23,
+      "byte_end": 217,
+      "content_fingerprint": "e3ac94969826b184cf6e714352689cec2f13e53e9657b5afcf53d1d9a974cee4",
+      "parser_version": "1.0.0",
+      "ambiguity_status": "clear"
+    },
+    {
+      "source_unit_id": "source-unit-37bf5739d99e439b98f45c08d6c9dc54",
+      "document_id": "doc-a812025f0d484647ac3a81c09a1055ab",
+      "chapter_id": "chapter-27196efb271e4b0cb6eb656a614df243",
+      "scene_id": null,
+      "source_relative_path": "pilot-story.md",
+      "heading_path": [
+        "The Last Train Bell"
+      ],
+      "source_order": 2,
+      "unit_type": "paragraph",
+      "line_start": 5,
+      "line_end": 5,
+      "byte_start": 218,
+      "byte_end": 366,
+      "content_fingerprint": "1c1a14006e15c7040dea09fdd5da10842e5b5064f1704285219ccdf5ec149e51",
+      "parser_version": "1.0.0",
+      "ambiguity_status": "clear"
+    }
+  ]
+}

@@ -3,7 +3,7 @@ name: manga-image-job-builder
 description: Build and validate deferred or gate-approved structured ChatGPT Image Generation Jobs for references, panels, covers, splash pages, and corrections without generating or editing images.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Image Job Builder
@@ -29,6 +29,8 @@ Approved storyboard and panel plan, active canon and continuity, intended output
 Prior job version, correction review, reference priority, style constraints, and dialogue-safe zones.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Never initialize, fall back to pilot, or construct paths from sample entities.
 

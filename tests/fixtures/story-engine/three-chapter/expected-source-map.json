@@ -1,0 +1,42 @@
+{
+  "schema_version": "3.0.0",
+  "project_id": "fixture-story-engine",
+  "document_id": "doc-fixture-story",
+  "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md",
+  "normalized_path": "tests/fixtures/story-engine/three-chapter/source.md",
+  "normalized_sha256": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684",
+  "parser_name": "fixture_contract",
+  "parser_version": "1.0.0",
+  "boundary_profile_checksum": "44136fa355b3678a1146ad16f7e8649e94fb4fc21fe77e8310c060f61caaff8a",
+  "structure_status": "approved",
+  "ambiguities": [],
+  "chapters": [
+    {"chapter_id": "chapter-fixture-01", "display_title": "The Signal", "document_id": "doc-fixture-story", "source_order": 1, "boundary": {"kind": "chapter", "title": "The Signal", "origin": "heading", "heading_level": 1, "ambiguity_status": "clear", "ambiguity_reason": null, "line_start": 1, "line_end": 1, "byte_start": 0, "byte_end": 24, "chapter_id": "chapter-fixture-01"}},
+    {"chapter_id": "chapter-fixture-02", "display_title": "The Same Warning", "document_id": "doc-fixture-story", "source_order": 2, "boundary": {"kind": "chapter", "title": "The Same Warning", "origin": "heading", "heading_level": 1, "ambiguity_status": "clear", "ambiguity_reason": null, "line_start": 13, "line_end": 13, "byte_start": 0, "byte_end": 0, "chapter_id": "chapter-fixture-02"}},
+    {"chapter_id": "chapter-fixture-03", "display_title": "The Closed Gate", "document_id": "doc-fixture-story", "source_order": 3, "boundary": {"kind": "chapter", "title": "The Closed Gate", "origin": "heading", "heading_level": 1, "ambiguity_status": "clear", "ambiguity_reason": null, "line_start": 25, "line_end": 25, "byte_start": 0, "byte_end": 0, "chapter_id": "chapter-fixture-03"}}
+  ],
+  "scenes": [
+    {"scene_id": "scene-fixture-01", "display_title": "The Briefing", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "source_order": 1, "boundary": {"kind": "scene", "title": "The Briefing", "origin": "heading", "heading_level": 2, "ambiguity_status": "clear", "ambiguity_reason": null, "line_start": 3, "line_end": 3, "byte_start": 0, "byte_end": 0, "scene_id": "scene-fixture-01"}},
+    {"scene_id": "scene-fixture-02", "display_title": "The Platform", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-02", "source_order": 2, "boundary": {"kind": "scene", "title": "The Platform", "origin": "heading", "heading_level": 2, "ambiguity_status": "clear", "ambiguity_reason": null, "line_start": 15, "line_end": 15, "byte_start": 0, "byte_end": 0, "scene_id": "scene-fixture-02"}},
+    {"scene_id": "scene-fixture-03", "display_title": "No Answer", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-03", "source_order": 3, "boundary": {"kind": "scene", "title": "No Answer", "origin": "heading", "heading_level": 2, "ambiguity_status": "clear", "ambiguity_reason": null, "line_start": 27, "line_end": 27, "byte_start": 0, "byte_end": 0, "scene_id": "scene-fixture-03"}}
+  ],
+  "source_units": [
+    {
+      "source_unit_id": "source-unit-fixture-all",
+      "document_id": "doc-fixture-story",
+      "chapter_id": "chapter-fixture-01",
+      "scene_id": "scene-fixture-01",
+      "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md",
+      "heading_path": ["The Signal", "The Briefing"],
+      "source_order": 1,
+      "unit_type": "paragraph",
+      "line_start": 1,
+      "line_end": 33,
+      "byte_start": 0,
+      "byte_end": 1198,
+      "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684",
+      "parser_version": "1.0.0",
+      "ambiguity_status": "clear"
+    }
+  ]
+}

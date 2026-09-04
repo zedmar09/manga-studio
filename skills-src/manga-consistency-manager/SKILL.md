@@ -3,7 +3,7 @@ name: manga-consistency-manager
 description: Check source, canon, manuscript, revision, and storyboard artifacts for cross-stage story consistency before approvals or locks; it does not review rendered images.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Consistency Manager
@@ -29,6 +29,8 @@ Active or proposed canon, manuscript, storyboard, stable IDs, provenance, and th
 Diagnostics, revision plan, decision records, dialogue variants, and continuity snapshots.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Keep all comparisons inside one project root.
 

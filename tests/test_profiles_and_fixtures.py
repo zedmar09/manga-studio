@@ -5,9 +5,10 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from helpers import REPO_ROOT, initialize, read_json, write_json
+from helpers import REPO_ROOT, approve_inventory, initialize, read_json, write_json
 from manga_studio.profiles import validate_profile
 from manga_studio.project import discover_project, import_sources, inventory_sources, project_status
+from manga_studio.structure import structure_sources
 
 
 class ProfileAndFixtureTests(unittest.TestCase):
@@ -23,24 +24,19 @@ class ProfileAndFixtureTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temporary:
             story = Path(temporary) / "continuation"
             (story / "chapters").mkdir(parents=True)
-            (story / "chapters" / "chapter-01.md").write_text("# Return\nExisting chapter.\n", encoding="utf-8")
+            (story / "chapters" / "chapter-01.md").write_text("# Chapter 1: Return\nExisting chapter.\n", encoding="utf-8")
             context = initialize(story, mode="continue_existing")
             inventory_sources(context)
+            approve_inventory(context)
             import_sources(context)
-            canon_rel = ".manga-studio/canon/canon-v001.json"
+            structure_sources(context)
             manuscript_rel = ".manga-studio/manuscript/manuscript-v001.md"
-            write_json(story / canon_rel, {"schema_version": "2.0.0", "status": "approved"})
             (story / manuscript_rel).write_text("# Return\nExisting chapter.\n", encoding="utf-8")
             write_json(context.workspace_path("canon/plot-threads.json"), {
                 "threads": [{"plot_thread_id": "plot-thread-local", "status": "unresolved"}]
             })
             config = read_json(context.project_file)
-            config["active_canon_version"] = canon_rel
             config["active_manuscript_version"] = manuscript_rel
-            config["stage_locks"]["SOURCE_LOCKED"] = True
-            config["stage_locks"]["CANON_APPROVED"] = True
-            config["stage_locks"]["MANUSCRIPT_APPROVED"] = True
-            config["stage_locks"]["STORY_LOCKED"] = True
             write_json(context.project_file, config)
             context = discover_project(story)
 

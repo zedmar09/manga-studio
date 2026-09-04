@@ -6,7 +6,7 @@
   "additionalProperties": false,
   "required": ["schema_version", "project_id", "project_root", "source_roots", "files"],
   "properties": {
-    "schema_version": {"const": "2.0.0"},
+    "schema_version": {"const": "3.0.0"},
     "project_id": {"type": "string"},
     "project_root": {"const": "."},
     "source_roots": {"type": "array", "items": {"$ref": "#/$defs/relativePath"}},
@@ -15,7 +15,7 @@
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["document_id", "id_match_status", "id_match_candidates", "relative_path", "extension", "size_bytes", "modified_time_ns", "sha256", "classification", "classification_status", "adapter", "support_status", "message"],
+        "required": ["document_id", "id_match_status", "id_match_candidates", "relative_path", "extension", "size_bytes", "modified_time_ns", "sha256", "classification", "classification_status", "usage_role", "adapter", "support_status", "message"],
         "properties": {
           "document_id": {"type": ["string", "null"]},
           "id_match_status": {"type": "string", "enum": ["new", "matched_path", "matched_checksum_after_move", "ambiguous"]},
@@ -25,8 +25,9 @@
           "size_bytes": {"type": "integer", "minimum": 0},
           "modified_time_ns": {"type": "integer", "minimum": 0},
           "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
-          "classification": {"type": "string", "enum": ["manuscript", "outline", "notes", "reference", "unknown"]},
-          "classification_status": {"type": "string", "enum": ["suggested", "approved", "corrected", "rejected"]},
+          "classification": {"type": "string", "minLength": 1},
+          "classification_status": {"type": "string", "enum": ["suggested", "approved", "corrected", "rejected", "unknown", "ambiguous"]},
+          "usage_role": {"type": ["string", "null"], "enum": ["primary_manuscript", "supplementary_manuscript", "outline", "author_notes", "canon_reference", "research", "excluded", null]},
           "adapter": {"type": ["string", "null"]},
           "support_status": {"type": "string", "enum": ["supported", "unsupported"]},
           "message": {"type": ["string", "null"]}

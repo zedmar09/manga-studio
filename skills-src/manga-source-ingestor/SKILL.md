@@ -3,14 +3,14 @@ name: manga-source-ingestor
 description: Inventory, classify, snapshot, normalize, and record provenance for existing story sources using portable Manga Studio adapters without changing originals.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Source Ingestor
 
 ## Purpose
 
-Build a reviewable source inventory and immutable import record for arbitrary story layouts. Plain text and Markdown are deterministic core adapters; unsupported files are preserved and reported.
+Build a reviewable source inventory, immutable import record, and parser-versioned source map for arbitrary story layouts. Plain text and Markdown are deterministic core adapters; unsupported files are preserved and reported.
 
 ## Activation Conditions
 
@@ -26,9 +26,11 @@ A discoverable project and configured source roots, inclusion patterns, and excl
 
 ## Optional Inputs
 
-User-approved classification corrections, custom source roots, and future format adapters.
+User-approved classifications with an explicit usage role, manual chapter or scene boundaries, custom source roots, and future format adapters.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Run `manga_studio.py discover --project <path>`. Stop with its actionable error if no project exists; this specialist must never initialize or fall back to the pilot.
 
@@ -38,20 +40,21 @@ Original bytes and checksums are provenance authority. The user-reviewed invento
 
 ## Owned Outputs
 
-`.manga-studio/source/inventory.json`, `source/id-map.json` source-document entries, `source/snapshots/`, `source/normalized/`, and `source/provenance.json`.
+`.manga-studio/source/inventory.json`, source-document and stable-ID records, immutable snapshots, versioned normalized derivatives, parser-versioned source maps, the structure index, and provenance.
 
 ## Procedure
 
 1. Run `manga_studio.py inventory --project <project-root>` before import.
-2. Review every `suggested` classification; do not assume text-like means manuscript.
-3. Correct classification and mark it approved, corrected, or rejected when the user decides.
+2. Review every suggested classification; set `classification_status` to `approved`, `corrected`, or `rejected` and select an explicit usage role. Suggested, unknown, ambiguous, rejected, and excluded records cannot import.
+3. Use only `primary_manuscript`, `supplementary_manuscript`, `outline`, `author_notes`, `canon_reference`, `research`, or `excluded` as usage roles.
 4. Report unsupported formats with their recorded message and leave them untouched.
 5. Run `manga_studio.py import --project <project-root>`.
-6. Run story-profile validation and compare original checksums with provenance.
+6. Run `structure`; resolve every review-required boundary with an approved manual boundary before source lock.
+7. Run `validate-source-map` and story-profile validation. Compare original, snapshot, normalized, and source-map checksums with provenance.
 
 ## Required Schemas
 
-`project.schema.json`, `source-inventory.schema.json`, `provenance.schema.json`, and `stable-id-map.schema.json`.
+`project.schema.json`, `source-inventory.schema.json`, `provenance.schema.json`, `stable-id-map.schema.json`, `source-document.schema.json`, and `source-map.schema.json`.
 
 ## Next-Skill Handoff
 

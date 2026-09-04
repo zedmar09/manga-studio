@@ -3,7 +3,7 @@ name: manga-character-bible
 description: Build and maintain versioned character canon, arcs, relationships, voice constraints, and continuity facts without creating visual reference artwork.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Character Bible
@@ -29,6 +29,8 @@ Active canon or canon proposal, source provenance for existing stories, stable c
 Approved diagnostics, story architecture, manuscript scenes, relationship maps, and user decisions.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared upward discovery. Stop if missing; never initialize or resolve characters against another story.
 

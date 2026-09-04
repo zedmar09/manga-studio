@@ -20,11 +20,12 @@ Original story files remain where the author keeps them. Manga Studio writes onl
 |-- AGENTS.md                         optional; unrelated instructions are preserved
 `-- .manga-studio/
     |-- project.json
-    |-- source/                       inventory, stable IDs, snapshots, normalized derivatives, provenance
-    |-- canon/
-    |-- analysis/
-    |-- revisions/
-    |-- manuscript/
+    |-- source/                       inventory, stable IDs, snapshots, normalized versions, source maps, provenance
+    |-- story/                        story models, chapters, scenes, and arcs
+    |-- canon/                        story canon, timelines, relationships, threads, setups/payoffs
+    |-- analysis/diagnostics/         structured reports plus optional Markdown companions
+    |-- revisions/                    policies, plans, change sets, and deterministic diffs
+    |-- manuscript/versions/          non-overwriting manuscript versions
     |-- storyboard/
     |-- continuity/
     |-- approvals/
@@ -63,6 +64,18 @@ python3 scripts/manga_studio.py discover [path]
 python3 scripts/manga_studio.py init [path] --mode import_existing
 python3 scripts/manga_studio.py inventory [path]
 python3 scripts/manga_studio.py import [path]
+python3 scripts/manga_studio.py structure [path]
+python3 scripts/manga_studio.py validate-source-map [path]
+python3 scripts/manga_studio.py show-structure [path]
+python3 scripts/manga_studio.py migrate [path]
+python3 scripts/manga_studio.py diagnose <draft.json> --project <path> [--markdown]
+python3 scripts/manga_studio.py approve <target> --artifact-type <type> --target-version <version> --actor <actor> --project <path>
+python3 scripts/manga_studio.py reject <target> --artifact-type <type> --target-version <version> --actor <actor> --project <path>
+python3 scripts/manga_studio.py validate-approval <approval.json> --project <path>
+python3 scripts/manga_studio.py set-lock <GATE> --approval <approval.json> --actor <actor> --project <path>
+python3 scripts/manga_studio.py clear-lock <GATE> --actor <actor> --project <path>
+python3 scripts/manga_studio.py validate-locks [path]
+python3 scripts/manga_studio.py apply-change-set <change-set.json> --actor <actor> --project <path>
 python3 scripts/manga_studio.py validate [path] --profile story
 python3 scripts/manga_studio.py validate [path] --profile preproduction
 python3 scripts/manga_studio.py validate [path] --profile production
@@ -70,15 +83,31 @@ python3 scripts/manga_studio.py status [path]
 python3 scripts/manga_studio.py doctor
 ```
 
-Additional deterministic helpers provide `hash`, `stable-id`, `version`, `diff`, and `check-locks`. Creative and editorial judgments remain in their owning skills.
+Additional deterministic helpers provide `hash`, `stable-id`, `version`, `diff`, and `check-locks`. Creative and editorial judgments remain in their owning skills; scripts enforce structure, provenance, schema, approval, and versioning contracts.
 
 ## Source Inventory And Import
 
-Run `inventory` before `import`. Inventory records relative path, extension, size, nanosecond modification time, SHA-256 checksum, suggested classification, support status, adapter, and persistent document ID. Classifications are `manuscript`, `outline`, `notes`, `reference`, or `unknown`; a user can mark them `approved`, `corrected`, or `rejected` before import.
+Run `inventory` before `import`. Inventory records relative path, extension, size, nanosecond modification time, SHA-256 checksum, suggested classification, support status, adapter, and persistent document ID. Import is allowed only when `classification_status` is `approved` or `corrected`, `usage_role` is explicit, and the stable document match is unambiguous. Roles are `primary_manuscript`, `supplementary_manuscript`, `outline`, `author_notes`, `canon_reference`, `research`, and `excluded`; excluded, suggested, unknown, ambiguous, and rejected records do not import.
 
-Core adapters are deterministic UTF-8 plain text (`.txt`) and Markdown (`.md`, `.markdown`). Other files remain in place, are inventoried as unsupported, and receive an actionable message. Import creates a byte-identical immutable snapshot and a separate normalized derivative. A changed source checksum blocks import or validation rather than being silently accepted.
+Core adapters are deterministic UTF-8 plain text (`.txt`) and Markdown (`.md`, `.markdown`). Other files remain in place, are inventoried as unsupported, and receive an actionable message. Import creates a byte-identical immutable snapshot and a versioned normalized derivative. Provenance records normalized SHA-256, adapter name/version, normalization profile, parser version, and source-map checksum. Changed sources, snapshots, normalized derivatives, or maps fail validation; an adapter/profile version change creates a distinct derivative path.
 
-Stable mappings are project-local for source documents, chapters, scenes, characters, locations, organizations, props, timeline events, plot threads, and setups/payoffs. Safe moves retain IDs through checksum-plus-path-history matching; ambiguous matches require review.
+Stable mappings are project-local for source documents, chapters, scenes, source units, characters, locations, organizations, props, timeline events, plot threads, and setups/payoffs. Classification follows `document_id` across a safe move. Checksum matches to multiple absent document records are ambiguous and block import.
+
+## Structural Parsing
+
+`structure` parses approved imported UTF-8 Markdown and plain text without changing originals or normalized derivatives. It recognizes explicit chapter/scene headings, file-per-chapter and single-document modes, chapterless stories, explicit markup boundaries, approved manual boundaries, paragraph order, and deterministic dialogue forms. Duplicate display titles are allowed because stable IDs derive from project-local source positions rather than titles.
+
+Each immutable parser-versioned source map records document/chapter/scene/source-unit IDs, relative source path, heading path, source order, inclusive line ranges, half-open UTF-8 byte ranges, content fingerprint, parser version, and ambiguity status. Generic headings and thematic separators are emitted as `review_required`; `validate-source-map` refuses them until a manual boundary decision resolves the ambiguity.
+
+## Story Engine Contracts
+
+Schema v3 adds source documents/maps, story models/arcs, chapters/scenes, story canon, timeline events, relationships, plot threads, setups/payoffs, character state, voice guides, story issues, diagnostic reports, revision policy/plan/change set, approvals, decisions, and stage locks. Story canon is distinct from visual-production references and never requires an image.
+
+Canon represents confirmed, provisional, inferred, contradictory, deprecated, and unknown facts. Every fact needs mapped source evidence or an approved decision. Continuity artifacts can track knowledge, relationships, injuries/physical state, outfits, carried items, locations, prop ownership/condition, world rules, open threads, setups/payoffs, secrets, and promises.
+
+`manga-story-diagnostician` owns editorial judgment and publishes schema-valid reports through `diagnose`. Findings contain unique IDs, category, severity, confidence, status, why-it-matters, mapped evidence, affected chapter/scene IDs, related entity IDs, alternatives, uncertainty, and manga-adaptation impact. Diagnostics never edit source, canon, or manuscripts. Tests validate contracts and expected fixture coverage; they do not claim to measure creative quality.
+
+Revision policies are `conservative`, `balanced`, or `transformative`. Plans and change sets record targets, triggering issues, evidence, operation, expected result, alternatives, preservation requirements, voice/canon/continuity/structural impact, dependencies, acceptance criteria, and approval status. `apply-change-set` accepts only a separately approved, hash-matching change set aimed at a managed manuscript version. It creates a new manuscript version, unified diff, and decision record; it never overwrites source or prior versions and never changes canon implicitly.
 
 ## Stage Gates
 
@@ -96,12 +125,14 @@ STORYBOARD_LOCKED
 IMAGE_READY
 ```
 
-`image_generation_enabled` and `IMAGE_READY` default to `false`. IMAGE_READY can pass only when canon, story, and storyboard prerequisites are approved/locked, image generation is explicitly enabled, continuity is approved, and provenance checks pass. Deferred image-job examples may be validated structurally before then, but no active job may be released.
+`image_generation_enabled` and `IMAGE_READY` default to `false`. Every approval binds project ID, artifact type/path/version, target SHA-256, decision, actor, timestamp, notes, and supersession state. Validation checks that the target exists and still hashes identically. Every active gate has a versioned lock record pointing to valid approvals and prerequisite locks; a loose approval file or boolean cannot satisfy a gate.
+
+IMAGE_READY can pass only when canon, story, and storyboard prerequisites are approved/locked, image generation is explicitly enabled, continuity has a valid hash-bound approval, and provenance checks pass. Deferred image-job examples may be validated structurally before then, but no active job may be released. Skills may propose artifacts but may not approve or lock their own output.
 
 Validation profiles are cumulative:
 
-- `story` validates configuration, source inventory, snapshots, provenance, active story versions, approvals, and locks without requiring images.
-- `preproduction` adds storyboards, page/panel plans, continuity structures, and deferred image-job validation without requiring generated files.
+- `story` validates inventory approval, snapshots, normalized hashes, source maps and stable IDs, present story/canon/continuity/editorial artifacts, manuscript versions and decisions, approvals, diffs, and stage locks without requiring images.
+- `preproduction` additionally validates present storyboard versions, page/panel plans, continuity snapshots, and deferred image jobs without requiring generated files.
 - `production` additionally requires all image gates, approved references and panels, composed pages, lettering, and export dependencies.
 
 ## Codex-To-ChatGPT Handoff
@@ -122,15 +153,22 @@ Panel jobs prohibit dialogue text, captions, speech balloons, sound-effect text,
 
 `skills-src/` is the canonical source for one master skill and sixteen specialists. `manifests/manga-skills.json` lists exactly those 17 names and versions. Repository-scoped entries in `.agents/skills/` point to the canonical source.
 
-Installation supports user scope plus symlink or copy mode. It validates every skill, reports create/replace/preserve/reject decisions, refuses non-Manga collisions, and backs up managed replacements for rollback. It only targets `$HOME/.agents/skills/` in normal use.
+Installation supports user scope plus symlink or copy mode. Both modes install a self-contained shared runtime under `$HOME/.agents/skills/.manga-studio-runtime/versions/3.0.0/` and a stable launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py`. The runtime contains scripts, schemas, templates, manifests, and `VERSION`; `.manga-studio-install.json` records custom destinations. Installation is staged and transactional, refuses non-Manga collisions and broken replacements, backs up prior managed files, and automatically restores them after a partial failure.
 
 This readiness pass does not perform a real user installation. Preview it with:
 
 ```bash
 python3 scripts/install_skills.py --scope user --mode symlink --dry-run
 python3 scripts/uninstall_skills.py --scope user --dry-run
+python3 scripts/rollback_install.py --scope user
 python3 scripts/doctor.py
 ```
+
+`doctor.py --mode repository` validates development links, runtime/schema/template availability, manifest/version agreement, Python compilation, skill frontmatter, and invocation from an unrelated directory. `--mode installed` additionally validates the registry, symlink or copy semantics, broken links, duplicate personal skill identities, installed runtime payload, and installed launcher. This completion pass runs temporary installation tests and dry runs only; it does not install user-scoped skills.
+
+## Schema Migration
+
+New workspaces use schema `3.0.0`. `migrate` upgrades a v2 project in place only after copying its managed metadata to `.manga-studio/migrations/v2-to-v3/`. It adds stage-lock record pointers, usage-role fields, normalized provenance metadata, and source-unit IDs without changing original story files or inventing classification approvals. Legacy suggested classifications remain blocked until reviewed, and migrated imports require `structure` to add source-map checksums.
 
 ## Pilot Fixture
 
@@ -156,4 +194,10 @@ find . -name '*.json' -not -path './.git/*' -print0 | xargs -0 -n1 python3 -m js
 python3 -m compileall -q scripts tests
 ```
 
-The temporary fixtures cover single-file stories, nested chapter files, existing AGENTS instructions, unusual/unsupported layouts, new stories, continuations, simultaneous stories, nested discovery, pilot isolation, original-file safety, installer rollback, and uninstall isolation.
+The temporary fixtures cover classification gating, safe moves and ambiguous IDs, single-file/chapterless/file-per-chapter/multi-chapter structures, manual ambiguity behavior, provenance tamper detection, diagnostics evidence, malformed editorial artifacts, versioned revision application, approval invalidation, lock prerequisites, simultaneous-story isolation, installer rollback, copy/symlink runtime use, and uninstall isolation.
+
+CI lives at `.github/workflows/ci.yml` and runs unit tests, JSON parsing, pilot schema/profile validation, Python compilation, skill frontmatter/repository doctor checks, installer dry-run, and a disposable multi-story smoke test.
+
+## Current Limitations
+
+Core source adapters intentionally support only UTF-8 Markdown and plain text. Generic headings and separator lines require human boundary review. The deterministic revision executor currently supports exact `replace_text`, `append_text`, and `insert_after` operations; higher-level prose generation remains owned by the writing skills. Diagnostics are structured editorial outputs, not automatic proof of story quality. Image generation stays disabled by default and all artwork remains external to Codex.

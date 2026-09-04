@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/story-model.schema.json",
+  "title": "Manga Studio Story Model",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "story_model_id", "version", "title", "premise", "status", "primary_document_ids", "chapter_ids", "story_arc_ids", "timeline_event_ids", "relationship_ids", "plot_thread_ids", "setup_payoff_ids", "canon_version", "source_evidence"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "story_model_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "version": {"type": "string"}, "title": {"type": "string", "minLength": 1},
+    "premise": {"type": "string"}, "status": {"enum": ["draft", "proposed", "approved", "superseded"]},
+    "primary_document_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "chapter_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "story_arc_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "timeline_event_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "relationship_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "plot_thread_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "setup_payoff_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "canon_version": {"type": ["string", "null"]}, "source_evidence": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/evidenceLocator"}}
+  }
+}

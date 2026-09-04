@@ -3,7 +3,7 @@ name: manga-dialogue-writer
 description: Draft and refine versioned dialogue for story manuscripts or manga scripts using approved character voices, scene intent, language, and lettering constraints.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Dialogue Writer
@@ -29,6 +29,8 @@ Scene intent, active canon, character voice records, configured output language,
 Panel or page word budgets, localization constraints, prior dialogue variants, and approved revision findings.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. This skill cannot initialize or borrow dialogue context from the pilot.
 

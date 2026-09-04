@@ -38,7 +38,10 @@ class ManifestAndSchemaTests(unittest.TestCase):
         self.assertEqual(set(names), EXPECTED_SKILLS)
 
     def test_all_json_and_schema_documents_parse(self) -> None:
-        json_files = sorted(path for path in REPO_ROOT.rglob("*.json") if ".git" not in path.parts)
+        json_files = sorted(
+            path for path in REPO_ROOT.rglob("*.json")
+            if ".git" not in path.parts and not path.name.startswith("._")
+        )
         self.assertGreater(len(json_files), 0)
         for path in json_files:
             with self.subTest(path=path):

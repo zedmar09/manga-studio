@@ -3,7 +3,7 @@ name: manga-lettering
 description: Prepare and apply versioned dialogue, caption, thought, and balloon geometry to composed manga pages after approved production dependencies exist, without changing artwork.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Lettering
@@ -29,6 +29,8 @@ Discoverable project, `IMAGE_READY`, approved panel dependencies, composed page 
 Typography settings, localization variants, balloon-tail coordinates, and prior lettering version.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Never initialize or resolve a page from the pilot implicitly.
 

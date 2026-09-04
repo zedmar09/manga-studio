@@ -3,7 +3,7 @@ name: manga-panel-director
 description: Turn approved storyboard beats into structured panel plans with staging, camera, continuity, required elements, and dialogue-safe zones without creating artwork.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Panel Director
@@ -29,6 +29,8 @@ Active approved storyboard, page beat, approved canon, continuity state, reading
 Approved visual-reference metadata, dialogue draft, prior panel plans, and page-level composition constraints.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Never initialize or infer the project from character names or sample pages.
 

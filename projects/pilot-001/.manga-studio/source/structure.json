@@ -1,0 +1,23 @@
+{
+  "schema_version": "3.0.0",
+  "project_id": "pilot-001",
+  "parser_name": "manga_studio_text_structure",
+  "parser_version": "1.0.0",
+  "documents": [
+    {
+      "document_id": "doc-a812025f0d484647ac3a81c09a1055ab",
+      "source_relative_path": "pilot-story.md",
+      "source_map_path": ".manga-studio/source/maps/doc-a812025f0d484647ac3a81c09a1055ab/9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88-manga_studio_text_structure-v1.0.0-boundaries-44136fa355b3678a.json",
+      "source_map_checksum": "a0ea443a9df9e38905d9fe142426e7096dd6f647b801beeb51ea2a033e872db7",
+      "structure_status": "parsed",
+      "chapter_ids": [
+        "chapter-27196efb271e4b0cb6eb656a614df243"
+      ],
+      "scene_ids": [],
+      "source_unit_ids": [
+        "source-unit-c46f124f2115462192eedf50f98f1c28",
+        "source-unit-37bf5739d99e439b98f45c08d6c9dc54"
+      ]
+    }
+  ]
+}

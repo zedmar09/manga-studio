@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/diagnostic-report.schema.json",
+  "title": "Manga Studio Diagnostic Report", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "project_id", "report_id", "report_version", "title", "scope", "status", "generated_by", "created_at", "source_map_checksums", "findings", "limitations"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "report_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "report_version": {"type": "string", "pattern": "^v[0-9]{3}$"}, "title": {"type": "string", "minLength": 1}, "scope": {"type": "string", "minLength": 1},
+    "status": {"enum": ["draft", "proposed", "approved", "rejected", "superseded"]}, "generated_by": {"type": "string"}, "created_at": {"type": "string"},
+    "source_map_checksums": {"type": "array", "minItems": 1, "items": {"$ref": "story-common.schema.json#/$defs/sha256"}},
+    "findings": {"type": "array", "items": {"$ref": "story-issue.schema.json"}}, "limitations": {"type": "array", "items": {"type": "string"}}
+  }
+}

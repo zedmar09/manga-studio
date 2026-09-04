@@ -6,14 +6,14 @@
   "additionalProperties": false,
   "required": ["schema_version", "project_id", "records", "import_summary"],
   "properties": {
-    "schema_version": {"const": "2.0.0"},
+    "schema_version": {"const": "3.0.0"},
     "project_id": {"type": "string"},
     "records": {
       "type": "array",
       "items": {
         "type": "object",
         "additionalProperties": false,
-        "required": ["document_id", "original_path", "original_sha256", "snapshot_path", "snapshot_sha256", "normalized_path", "adapter", "classification", "source_modified_time_ns", "source_status"],
+        "required": ["document_id", "original_path", "original_sha256", "snapshot_path", "snapshot_sha256", "normalized_path", "normalized_sha256", "adapter", "adapter_version", "normalization_profile", "parser_version", "source_map_path", "source_map_checksum", "classification", "classification_status", "usage_role", "source_modified_time_ns", "source_status"],
         "properties": {
           "document_id": {"type": "string"},
           "original_path": {"$ref": "#/$defs/relativePath"},
@@ -21,8 +21,16 @@
           "snapshot_path": {"$ref": "#/$defs/relativePath"},
           "snapshot_sha256": {"$ref": "#/$defs/checksum"},
           "normalized_path": {"$ref": "#/$defs/relativePath"},
+          "normalized_sha256": {"$ref": "#/$defs/checksum"},
           "adapter": {"type": "string", "enum": ["plain_text", "markdown"]},
+          "adapter_version": {"type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"},
+          "normalization_profile": {"type": "string", "minLength": 1},
+          "parser_version": {"type": ["string", "null"]},
+          "source_map_path": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+          "source_map_checksum": {"anyOf": [{"$ref": "#/$defs/checksum"}, {"type": "null"}]},
           "classification": {"type": "string"},
+          "classification_status": {"type": "string", "enum": ["suggested", "approved", "corrected", "rejected", "unknown", "ambiguous"]},
+          "usage_role": {"type": ["string", "null"], "enum": ["primary_manuscript", "supplementary_manuscript", "outline", "author_notes", "canon_reference", "research", null]},
           "source_modified_time_ns": {"type": "integer", "minimum": 0},
           "source_status": {"type": "string", "enum": ["active", "superseded"]}
         }
@@ -31,8 +39,12 @@
     "import_summary": {
       "type": "object",
       "additionalProperties": false,
-      "required": ["imported", "skipped"],
-      "properties": {"imported": {"type": "integer", "minimum": 0}, "skipped": {"type": "integer", "minimum": 0}}
+      "required": ["imported", "skipped", "blocked"],
+      "properties": {
+        "imported": {"type": "integer", "minimum": 0},
+        "skipped": {"type": "integer", "minimum": 0},
+        "blocked": {"type": "array", "items": {"type": "object", "required": ["relative_path", "reason"], "properties": {"relative_path": {"type": "string"}, "reason": {"type": "string"}}}}
+      }
     }
   },
   "$defs": {

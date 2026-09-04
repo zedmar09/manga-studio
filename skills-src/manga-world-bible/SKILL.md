@@ -3,7 +3,7 @@ name: manga-world-bible
 description: Build and maintain versioned world canon for locations, organizations, props, rules, cultures, and timelines without imposing genre-specific concepts.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga World Bible
@@ -29,6 +29,8 @@ Project configuration, active canon or source evidence, and stable IDs for affec
 Story architecture, manuscript scenes, diagnostics, research supplied by the user, and unresolved world questions.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Never initialize or import pilot locations, props, or rules.
 

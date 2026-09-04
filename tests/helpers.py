@@ -24,3 +24,14 @@ def initialize(root: Path, mode: str = "import_existing", title: str | None = No
 
 def read_json(path: Path) -> Dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def approve_inventory(context: ProjectContext, role: str = "primary_manuscript") -> Dict[str, Any]:
+    path = context.workspace_path("source/inventory.json")
+    inventory = read_json(path)
+    for entry in inventory.get("files", []):
+        if entry.get("support_status") == "supported":
+            entry["classification_status"] = "approved"
+            entry["usage_role"] = role
+    write_json(path, inventory)
+    return inventory

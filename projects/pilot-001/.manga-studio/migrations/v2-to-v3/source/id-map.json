@@ -1,0 +1,23 @@
+{
+  "schema_version": "2.0.0",
+  "project_id": "pilot-001",
+  "namespaces": {
+    "source_documents": [
+      {
+        "id": "doc-a812025f0d484647ac3a81c09a1055ab",
+        "path": "pilot-story.md",
+        "checksum": "9598390a498126a127077a42d001b87f3d0dceb9dd2450aa3cf3822905c7be88",
+        "aliases": []
+      }
+    ],
+    "chapters": [],
+    "scenes": [],
+    "characters": [],
+    "locations": [],
+    "organizations": [],
+    "props": [],
+    "timeline_events": [],
+    "plot_threads": [],
+    "setups_payoffs": []
+  }
+}

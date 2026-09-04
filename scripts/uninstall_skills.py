@@ -7,7 +7,7 @@ import shutil
 from pathlib import Path
 from typing import List
 
-from install_skills import is_managed_manga_skill, load_manifest
+from install_skills import REGISTRY_NAME, RUNTIME_DIRECTORY, is_managed_manga_skill, load_manifest
 
 
 def main(argv: List[str] | None = None) -> int:
@@ -44,10 +44,13 @@ def main(argv: List[str] | None = None) -> int:
             target.unlink()
         else:
             shutil.rmtree(target)
-    registry = destination_root / ".manga-studio-install.json"
+    registry = destination_root / REGISTRY_NAME
     if registry.exists():
         data = json.loads(registry.read_text(encoding="utf-8"))
         if data.get("namespace") == "manga-studio":
+            runtime = destination_root / RUNTIME_DIRECTORY
+            if runtime.is_dir():
+                shutil.rmtree(runtime)
             registry.unlink()
     print(f"Removed {len(targets)} Manga Studio skill(s). Story workspaces were not touched.")
     return 0

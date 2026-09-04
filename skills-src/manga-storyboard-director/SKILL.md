@@ -3,7 +3,7 @@ name: manga-storyboard-director
 description: Convert an approved locked story into versioned manga page and beat plans with reading flow, pacing, page turns, and panel allocation, without producing artwork.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Storyboard Director
@@ -29,6 +29,8 @@ Use after an approved manuscript and story lock when page-level manga adaptation
 Page budget, prior storyboard version, dialogue constraints, and intended print or screen presentation.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Never initialize or select the pilot storyboard implicitly.
 

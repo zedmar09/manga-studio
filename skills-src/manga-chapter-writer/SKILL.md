@@ -3,7 +3,7 @@ name: manga-chapter-writer
 description: Draft or revise versioned story manuscript units from approved architecture and canon, supporting chapterless stories and preserving author voice and source immutability.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Chapter Writer
@@ -29,6 +29,8 @@ Approved architecture or revision scope, active canon, stable IDs, author-voice 
 Source snapshots, target length, scene constraints, dialogue draft, and unresolved plot threads.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Never initialize or assume a pilot chapter.
 

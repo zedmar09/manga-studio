@@ -3,7 +3,7 @@ name: manga-page-compositor
 description: Deterministically place only approved panel images into planned page frames and produce versioned composed pages without retouching or regenerating artwork.
 metadata:
   namespace: manga-studio
-  version: "2.0.0"
+  version: "3.0.0"
 ---
 
 # Manga Page Compositor
@@ -29,6 +29,8 @@ Approved page specification, valid frames, approved panel files under `.manga-st
 Explicit output path and a prior composed-page version for comparison.
 
 ## Project Discovery
+
+Use the versioned launcher at `$HOME/.agents/skills/.manga-studio-runtime/manga-studio.py` for a normal user-scope installation. In repository development mode, use `scripts/manga_studio.py`; `.manga-studio-install.json` records any custom destination and launcher path.
 
 Use shared discovery and stop if missing. Never initialize, use generated/correction files directly, or fall back to a sample page.
 

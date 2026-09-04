@@ -11,10 +11,14 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR / "lib"))
 
 from manga_studio.profiles import VALIDATION_PROFILES, validate_profile
+from manga_studio.approvals import clear_lock, invalidate_stale_approvals, record_approval, set_lock, validate_approval, validate_locks
+from manga_studio.diagnostics import publish_diagnostic_report
+from manga_studio.migration import migrate_project
 from manga_studio.project import (
     OPERATING_MODES,
     ProjectDiscoveryError,
     ProjectOperationError,
+    STAGE_GATES,
     VERSION_AREAS,
     create_version,
     discover_project,
@@ -26,6 +30,8 @@ from manga_studio.project import (
     project_status,
     sha256_file,
 )
+from manga_studio.revisions import apply_change_set
+from manga_studio.structure import show_structure, structure_sources, validate_source_maps
 
 
 def _project_argument(parser: argparse.ArgumentParser, *, init: bool = False) -> None:
@@ -38,6 +44,10 @@ def _project_argument(parser: argparse.ArgumentParser, *, init: bool = False) ->
 
 def _selected_path(args: argparse.Namespace) -> Path | None:
     return args.project if getattr(args, "project", None) is not None else getattr(args, "path", None)
+
+
+def _project_input(context, value: Path) -> Path:
+    return value.expanduser().resolve() if value.is_absolute() else context.project_path(value.as_posix())
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -55,6 +65,18 @@ def build_parser() -> argparse.ArgumentParser:
 
     import_parser = subparsers.add_parser("import", help="Snapshot and normalize supported inventoried sources.")
     _project_argument(import_parser)
+
+    migrate = subparsers.add_parser("migrate", help="Migrate a v2 story workspace to schema v3 without changing sources.")
+    _project_argument(migrate)
+
+    structure = subparsers.add_parser("structure", help="Create immutable structural source maps.")
+    _project_argument(structure)
+
+    validate_map = subparsers.add_parser("validate-source-map", help="Validate source-map checksums, ranges, and IDs.")
+    _project_argument(validate_map)
+
+    show = subparsers.add_parser("show-structure", help="Print the active structure index.")
+    _project_argument(show)
 
     validate = subparsers.add_parser("validate", help="Validate a story, preproduction, or production profile.")
     _project_argument(validate)
@@ -83,6 +105,46 @@ def build_parser() -> argparse.ArgumentParser:
 
     locks = subparsers.add_parser("check-locks", help="Check stage-lock and IMAGE_READY prerequisites.")
     _project_argument(locks)
+
+    for command, decision in (("approve", "approved"), ("reject", "rejected")):
+        approval = subparsers.add_parser(command, help=f"Record an explicit {decision} artifact decision.")
+        approval.add_argument("target", type=Path)
+        approval.add_argument("--artifact-type", required=True)
+        approval.add_argument("--target-version", required=True)
+        approval.add_argument("--actor", required=True)
+        approval.add_argument("--notes", default="")
+        approval.add_argument("--supersedes")
+        approval.add_argument("--project", type=Path)
+
+    approval_validation = subparsers.add_parser("validate-approval", help="Validate an approval target and checksum.")
+    approval_validation.add_argument("approval", type=Path)
+    approval_validation.add_argument("--project", type=Path)
+
+    set_lock_parser = subparsers.add_parser("set-lock", help="Set a stage lock using valid prerequisite approvals.")
+    set_lock_parser.add_argument("gate", choices=STAGE_GATES)
+    set_lock_parser.add_argument("--approval", action="append", type=Path, default=[])
+    set_lock_parser.add_argument("--actor", required=True)
+    set_lock_parser.add_argument("--notes", default="")
+    set_lock_parser.add_argument("--project", type=Path)
+
+    clear_lock_parser = subparsers.add_parser("clear-lock", help="Clear a stage lock while preserving lock history.")
+    clear_lock_parser.add_argument("gate", choices=STAGE_GATES)
+    clear_lock_parser.add_argument("--actor", required=True)
+    clear_lock_parser.add_argument("--notes", default="")
+    clear_lock_parser.add_argument("--project", type=Path)
+
+    validate_locks_parser = subparsers.add_parser("validate-locks", help="Validate active lock records and approvals.")
+    _project_argument(validate_locks_parser)
+
+    apply_parser = subparsers.add_parser("apply-change-set", help="Apply an approved change set as a new manuscript version.")
+    apply_parser.add_argument("change_set", type=Path)
+    apply_parser.add_argument("--actor", required=True)
+    apply_parser.add_argument("--project", type=Path)
+
+    diagnose_parser = subparsers.add_parser("diagnose", help="Validate and publish a structured diagnostic draft.")
+    diagnose_parser.add_argument("draft", type=Path)
+    diagnose_parser.add_argument("--markdown", action="store_true")
+    diagnose_parser.add_argument("--project", type=Path)
 
     subparsers.add_parser("doctor", help="Run toolkit installation-readiness checks.")
     return parser
@@ -135,7 +197,31 @@ def main(argv: list[str] | None = None) -> int:
             result = import_sources(context)
             summary = result["import_summary"]
             print(f"Imported {summary['imported']} source(s); skipped: {summary['skipped']}")
+            for blocked in summary.get("blocked", []):
+                print(f"- BLOCKED {blocked['relative_path']}: {blocked['reason']}")
             print(context.workspace_path("source/provenance.json"))
+            return 0
+        if args.command == "migrate":
+            for action in migrate_project(context):
+                print(f"- {action}")
+            return 0
+        if args.command == "structure":
+            result = structure_sources(context)
+            review_count = sum(item["structure_status"] == "review_required" for item in result["documents"])
+            print(f"Structured {len(result['documents'])} document(s); review required: {review_count}")
+            print(context.workspace_path("source/structure.json"))
+            return 1 if review_count else 0
+        if args.command == "validate-source-map":
+            errors = validate_source_maps(context)
+            if errors:
+                print("Source-map validation failed:")
+                for error in errors:
+                    print(f"- {error}")
+                return 1
+            print("Source-map validation passed.")
+            return 0
+        if args.command == "show-structure":
+            print(json.dumps(show_structure(context), indent=2))
             return 0
         if args.command == "validate":
             errors = validate_profile(context, args.profile)
@@ -164,6 +250,65 @@ def main(argv: list[str] | None = None) -> int:
                     print(f"- {reason}")
                 return 1
             print("IMAGE_READY prerequisites pass.")
+            return 0
+        if args.command in {"approve", "reject"}:
+            approval_path = record_approval(
+                context,
+                _project_input(context, args.target),
+                artifact_type=args.artifact_type,
+                target_version=args.target_version,
+                actor=args.actor,
+                decision="approved" if args.command == "approve" else "rejected",
+                notes=args.notes,
+                supersedes_approval_id=args.supersedes,
+            )
+            print(approval_path)
+            return 0
+        if args.command == "validate-approval":
+            invalidate_stale_approvals(context)
+            errors = validate_approval(context, _project_input(context, args.approval))
+            if errors:
+                print("Approval validation failed:")
+                for error in errors:
+                    print(f"- {error}")
+                return 1
+            print("Approval validation passed.")
+            return 0
+        if args.command == "set-lock":
+            path = set_lock(
+                context,
+                args.gate,
+                approval_paths=[_project_input(context, item) for item in args.approval],
+                actor=args.actor,
+                notes=args.notes,
+            )
+            print(path)
+            return 0
+        if args.command == "clear-lock":
+            print(clear_lock(context, args.gate, actor=args.actor, notes=args.notes))
+            return 0
+        if args.command == "validate-locks":
+            errors = validate_locks(context)
+            if errors:
+                print("Stage-lock validation failed:")
+                for error in errors:
+                    print(f"- {error}")
+                return 1
+            print("Stage-lock validation passed.")
+            return 0
+        if args.command == "apply-change-set":
+            print(json.dumps(apply_change_set(
+                context,
+                _project_input(context, args.change_set),
+                actor=args.actor,
+            ), indent=2))
+            return 0
+        if args.command == "diagnose":
+            print(json.dumps(publish_diagnostic_report(
+                context,
+                _project_input(context, args.draft),
+                markdown_companion=args.markdown,
+            ), indent=2))
             return 0
     except (ProjectDiscoveryError, ProjectOperationError, OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"Manga Studio error: {exc}", file=sys.stderr)

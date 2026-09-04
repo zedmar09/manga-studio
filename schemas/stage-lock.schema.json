@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema", "$id": "https://manga-studio.local/schemas/stage-lock.schema.json",
+  "title": "Manga Studio Stage Lock", "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "lock_id", "project_id", "gate", "status", "lock_version", "recorded_at", "actor", "notes", "prerequisite_gates", "approval_ids", "target_hashes", "supersedes_lock_id"],
+  "properties": {
+    "schema_version": {"$ref": "story-common.schema.json#/$defs/schemaVersion"}, "lock_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "gate": {"enum": ["SOURCE_LOCKED", "CANON_APPROVED", "DIAGNOSTIC_APPROVED", "REVISION_PLAN_APPROVED", "MANUSCRIPT_APPROVED", "STORY_LOCKED", "STORYBOARD_APPROVED", "STORYBOARD_LOCKED", "IMAGE_READY"]},
+    "status": {"enum": ["locked", "cleared"]}, "lock_version": {"type": "string", "pattern": "^v[0-9]{3}$"}, "recorded_at": {"type": "string"}, "actor": {"type": "string", "minLength": 1}, "notes": {"type": "string"},
+    "prerequisite_gates": {"type": "array", "items": {"type": "string"}}, "approval_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+    "target_hashes": {"type": "array", "items": {"type": "object", "additionalProperties": false, "required": ["relative_path", "sha256"], "properties": {"relative_path": {"$ref": "story-common.schema.json#/$defs/relativePath"}, "sha256": {"$ref": "story-common.schema.json#/$defs/sha256"}}}},
+    "supersedes_lock_id": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/stableId"}, {"type": "null"}]}
+  }
+}

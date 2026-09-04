@@ -1,0 +1,95 @@
+{
+  "schema_version": "3.0.0",
+  "project_id": "fixture-story-engine",
+  "report_id": "diagnostic-fixture-story",
+  "report_version": "v001",
+  "title": "Three-Chapter Contract Fixture Diagnostic",
+  "scope": "Deliberate continuity and editorial contradictions used to test evidence traceability.",
+  "status": "proposed",
+  "generated_by": "manga-story-diagnostician",
+  "created_at": "2026-09-04T00:00:00Z",
+  "source_map_checksums": ["44a9d0e44f979f86cc067d6f4a3374f3b9d4f0315ba50fd5223013b19e69d7c0"],
+  "findings": [
+    {
+      "issue_id": "issue-fixture-timeline", "category": "timeline", "severity": "high", "confidence": 1,
+      "status": "open", "description": "The train is placed on Tuesday at noon and Monday evening without a time shift.", "why_it_matters": "The event order cannot support reliable causality or adaptation timing.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-01", "chapter-fixture-02"], "affected_scene_ids": ["scene-fixture-01", "scene-fixture-02"],
+      "related_ids": {"character_ids": ["character-mara"], "location_ids": [], "prop_ids": [], "timeline_event_ids": ["timeline-train-arrival"], "plot_thread_ids": []},
+      "alternatives": ["Confirm one arrival time or establish an explicit flashback."], "uncertainty": "The fixture supplies no time-shift marker.", "adaptation_impact": "Panel captions and scene order would otherwise contradict each other."
+    },
+    {
+      "issue_id": "issue-fixture-knowledge", "category": "character_knowledge", "severity": "high", "confidence": 1,
+      "status": "open", "description": "Mara uses the vault code before discovery and later claims not to know it.", "why_it_matters": "Her available knowledge changes without an event.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-01", "chapter-fixture-02"], "affected_scene_ids": ["scene-fixture-01", "scene-fixture-02"],
+      "related_ids": {"character_ids": ["character-mara"], "location_ids": [], "prop_ids": [], "timeline_event_ids": [], "plot_thread_ids": ["plot-vault-code"]},
+      "alternatives": ["Move code discovery earlier or make the first use an intentional secret."], "uncertainty": "No hidden-knowledge decision is recorded.", "adaptation_impact": "A close-up of code entry would make the contradiction especially visible."
+    },
+    {
+      "issue_id": "issue-fixture-injury", "category": "injury_physical_state_continuity", "severity": "high", "confidence": 1,
+      "status": "open", "description": "A badly sprained wrist disappears by the next chapter.", "why_it_matters": "Physical capability lacks a healing event or accommodation.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-01", "chapter-fixture-02"], "affected_scene_ids": ["scene-fixture-01", "scene-fixture-02"],
+      "related_ids": {"character_ids": ["character-mara"], "location_ids": [], "prop_ids": [], "timeline_event_ids": [], "plot_thread_ids": []},
+      "alternatives": ["Carry the injury forward or establish elapsed recovery time."], "uncertainty": "Elapsed time is already contradictory.", "adaptation_impact": "Body posing must preserve the injured wrist state."
+    },
+    {
+      "issue_id": "issue-fixture-prop", "category": "prop_continuity", "severity": "medium", "confidence": 1,
+      "status": "open", "description": "The same brass key changes from circular to square.", "why_it_matters": "The important prop has no replacement or transformation event.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-01", "chapter-fixture-02"], "affected_scene_ids": ["scene-fixture-01", "scene-fixture-02"],
+      "related_ids": {"character_ids": ["character-mara", "character-ivo"], "location_ids": [], "prop_ids": ["prop-brass-key"], "timeline_event_ids": [], "plot_thread_ids": []},
+      "alternatives": ["Choose one shape or add an explicit key swap."], "uncertainty": "The text identifies both as the same key.", "adaptation_impact": "Repeated prop depictions require one approved canonical description."
+    },
+    {
+      "issue_id": "issue-fixture-relationship", "category": "relationship_continuity", "severity": "high", "confidence": 1,
+      "status": "open", "description": "Mara's stated trust in Ivo reverses with no relationship event.", "why_it_matters": "The emotional turn lacks a cause.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-01", "chapter-fixture-02"], "affected_scene_ids": ["scene-fixture-01", "scene-fixture-02"],
+      "related_ids": {"character_ids": ["character-mara", "character-ivo"], "location_ids": [], "prop_ids": [], "timeline_event_ids": [], "plot_thread_ids": []},
+      "alternatives": ["Add the betrayal event or soften one declaration."], "uncertainty": "No off-page decision is recorded.", "adaptation_impact": "Facial acting cannot supply missing causal information alone."
+    },
+    {
+      "issue_id": "issue-fixture-setup", "category": "setup_payoff", "severity": "high", "confidence": 1,
+      "status": "open", "description": "The promised blue signal never appears and the gate opens anyway.", "why_it_matters": "A concrete setup has neither fulfillment nor intentional subversion.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-01", "chapter-fixture-03"], "affected_scene_ids": ["scene-fixture-01", "scene-fixture-03"],
+      "related_ids": {"character_ids": [], "location_ids": [], "prop_ids": ["prop-blue-lamp"], "timeline_event_ids": [], "plot_thread_ids": ["plot-blue-signal"]},
+      "alternatives": ["Pay off the signal or explicitly reveal why it failed."], "uncertainty": "The omission is deliberate in this fixture.", "adaptation_impact": "A visual setup creates a strong audience expectation requiring closure."
+    },
+    {
+      "issue_id": "issue-fixture-thread", "category": "unresolved_plot_thread", "severity": "medium", "confidence": 1,
+      "status": "open", "description": "The warning mechanism remains unresolved at the story end.", "why_it_matters": "The story closes while a foregrounded causal thread remains open.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-03"], "affected_scene_ids": ["scene-fixture-03"],
+      "related_ids": {"character_ids": [], "location_ids": [], "prop_ids": ["prop-blue-lamp"], "timeline_event_ids": [], "plot_thread_ids": ["plot-blue-signal"]},
+      "alternatives": ["Resolve the warning thread or mark it as an intentional sequel hook."], "uncertainty": "No continuation is declared.", "adaptation_impact": "The final page would emphasize the absent resolution."
+    },
+    {
+      "issue_id": "issue-fixture-duplicate", "category": "duplicated_scene_purpose", "severity": "medium", "confidence": 1,
+      "status": "open", "description": "Two scenes deliver the same complete mission briefing.", "why_it_matters": "The second scene repeats function without advancing the situation.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-01", "chapter-fixture-02"], "affected_scene_ids": ["scene-fixture-01", "scene-fixture-02"],
+      "related_ids": {"character_ids": [], "location_ids": ["location-station-office", "location-platform"], "prop_ids": [], "timeline_event_ids": [], "plot_thread_ids": []},
+      "alternatives": ["Condense the second briefing into new conflict or remove it."], "uncertainty": "No purposeful echo is indicated.", "adaptation_impact": "Repeated exposition would consume limited page space."
+    },
+    {
+      "issue_id": "issue-fixture-ending", "category": "chapter_ending", "severity": "medium", "confidence": 1,
+      "status": "open", "description": "Chapter two ends with everyone simply going home.", "why_it_matters": "The ending supplies no turn, decision, question, or pressure into chapter three.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-02"], "affected_scene_ids": ["scene-fixture-02"],
+      "related_ids": {"character_ids": [], "location_ids": [], "prop_ids": [], "timeline_event_ids": [], "plot_thread_ids": []},
+      "alternatives": ["End on the contradiction, a decision, or the failed signal."], "uncertainty": "Weakness is an expected fixture label, not an objective quality proof.", "adaptation_impact": "The page turn lacks a motivating beat."
+    },
+    {
+      "issue_id": "issue-fixture-voice", "category": "dialogue_voice", "severity": "medium", "confidence": 1,
+      "status": "open", "description": "Mara switches from direct contractions to unexplained formal procedural diction.", "why_it_matters": "The voice shift lacks a role, context, or character-state cause.",
+      "evidence": [{"project_id": "fixture-story-engine", "document_id": "doc-fixture-story", "chapter_id": "chapter-fixture-01", "scene_id": "scene-fixture-01", "source_unit_id": "source-unit-fixture-all", "source_relative_path": "tests/fixtures/story-engine/three-chapter/source.md", "line_start": 1, "line_end": 33, "byte_start": 0, "byte_end": 1198, "content_fingerprint": "73f335b557aff189e70945b334d8d2bd0fb0decb46a87b1a1ec03cc4743f3684"}],
+      "affected_chapter_ids": ["chapter-fixture-01", "chapter-fixture-03"], "affected_scene_ids": ["scene-fixture-01", "scene-fixture-03"],
+      "related_ids": {"character_ids": ["character-mara"], "location_ids": [], "prop_ids": [], "timeline_event_ids": [], "plot_thread_ids": []},
+      "alternatives": ["Restore her established diction or motivate the formal register."], "uncertainty": "No performance or disguise context is supplied.", "adaptation_impact": "Condensed balloon text would make the register change more prominent."
+    }
+  ],
+  "limitations": ["This expected report tests schema, evidence, category coverage, and gating contracts; it does not prove creative quality."]
+}

@@ -10,6 +10,7 @@ from .project import (
     PROJECT_FILE,
     SCHEMA_VERSION,
     STAGE_GATES,
+    USAGE_ROLES,
     WORKSPACE_DIRECTORIES,
     ProjectContext,
     image_ready_reasons,
@@ -23,6 +24,7 @@ from .validation import (
     validate_page_spec,
     validate_relative_project_path,
 )
+from .story import validate_story_artifacts
 
 
 VALIDATION_PROFILES = ("story", "preproduction", "production")
@@ -48,6 +50,7 @@ PROJECT_REQUIRED_FIELDS = (
     "workflow_phase",
     "operating_mode",
     "stage_locks",
+    "stage_lock_records",
     "image_generation_enabled",
     "active_manuscript_version",
     "active_canon_version",
@@ -131,6 +134,19 @@ def _validate_project_config(context: ProjectContext) -> List[str]:
         for gate in STAGE_GATES:
             if gate in locks and not isinstance(locks[gate], bool):
                 errors.append(f"stage_locks.{gate} must be true or false")
+    lock_records = config.get("stage_lock_records")
+    if not isinstance(lock_records, dict):
+        errors.append("stage_lock_records must be an object")
+    else:
+        missing = [gate for gate in STAGE_GATES if gate not in lock_records]
+        extra = sorted(set(lock_records) - set(STAGE_GATES))
+        if missing:
+            errors.append(f"stage_lock_records is missing: {', '.join(missing)}")
+        if extra:
+            errors.append(f"stage_lock_records contains unknown gates: {', '.join(extra)}")
+        for gate, value in lock_records.items():
+            if value is not None:
+                errors.extend(validate_relative_project_path(value, f"stage_lock_records.{gate}"))
 
     for field in ("active_manuscript_version", "active_canon_version", "active_storyboard_version"):
         value = config.get(field)
@@ -191,6 +207,7 @@ def _validate_inventory(context: ProjectContext) -> List[str]:
         errors.extend(require_fields(entry, [
             "document_id", "relative_path", "extension", "size_bytes", "modified_time_ns",
             "sha256", "classification", "classification_status", "adapter", "support_status",
+            "usage_role",
         ], prefix))
         relative = entry.get("relative_path")
         path_errors = validate_relative_project_path(relative, f"{prefix}.relative_path")
@@ -204,6 +221,8 @@ def _validate_inventory(context: ProjectContext) -> List[str]:
             seen_ids.add(document_id)
         if entry.get("id_match_status") == "ambiguous" and not entry.get("id_match_candidates"):
             errors.append(f"{prefix} ambiguous match must list candidates for review")
+        if entry.get("usage_role") is not None and entry.get("usage_role") not in USAGE_ROLES:
+            errors.append(f"{prefix}.usage_role has unsupported value: {entry.get('usage_role')}")
         if entry.get("support_status") == "unsupported" and not entry.get("message"):
             errors.append(f"{prefix} unsupported source must include an actionable message")
     return errors
@@ -212,14 +231,6 @@ def _validate_inventory(context: ProjectContext) -> List[str]:
 def _validate_gate_artifacts(context: ProjectContext) -> List[str]:
     locks = context.config.get("stage_locks", {})
     errors: List[str] = []
-    requirements = {
-        "DIAGNOSTIC_APPROVED": "approvals/diagnostic.json",
-        "REVISION_PLAN_APPROVED": "approvals/revision-plan.json",
-        "STORYBOARD_APPROVED": "approvals/storyboard.json",
-    }
-    for gate, path in requirements.items():
-        if locks.get(gate) and not context.workspace_path(path).is_file():
-            errors.append(f"{gate} requires .manga-studio/{path}")
     if locks.get("CANON_APPROVED") and not context.config.get("active_canon_version"):
         errors.append("CANON_APPROVED requires active_canon_version")
     if locks.get("MANUSCRIPT_APPROVED") and not context.config.get("active_manuscript_version"):
@@ -240,6 +251,33 @@ def _validate_preproduction(context: ProjectContext) -> List[str]:
             f"{page_path.relative_to(context.project_root)}: {message}"
             for message in validate_page_spec(page_path, context.project_root)
         )
+
+    for panel_pattern in ("panels/*.json", "panels/plans/*.json"):
+        for panel_path in sorted(context.workspace_path(".").glob(panel_pattern)):
+            if not panel_path.name.startswith("._"):
+                errors.extend(_schema_errors(panel_path, schemas / "panel.schema.json", context.project_root))
+
+    for snapshot_path in sorted(context.workspace_path("continuity/snapshots").glob("*.json")):
+        if not snapshot_path.name.startswith("._"):
+            errors.extend(_schema_errors(snapshot_path, schemas / "continuity-state.schema.json", context.project_root))
+
+    for storyboard_pattern in ("storyboard/*.json", "storyboard/versions/*.json"):
+        for storyboard_path in sorted(context.workspace_path(".").glob(storyboard_pattern)):
+            if storyboard_path.name.startswith("._"):
+                continue
+            try:
+                storyboard = load_json(storyboard_path)
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                errors.append(f"failed to load storyboard version '{storyboard_path}': {exc}")
+                continue
+            errors.extend(
+                f"{storyboard_path.relative_to(context.project_root)}: {message}"
+                for message in require_fields(
+                    storyboard, ["schema_version", "project_id", "storyboard_id", "version", "status", "page_plan_paths"], "storyboard"
+                )
+            )
+            if storyboard.get("project_id") != context.config.get("project_id"):
+                errors.append(f"{storyboard_path.relative_to(context.project_root)}: project_id does not match project.json")
 
     seen_job_ids = set()
     for job_path in sorted(context.workspace_path("handoff/pending").glob("*.json")):
@@ -311,6 +349,7 @@ def validate_profile(context: ProjectContext, profile: str) -> List[str]:
     errors.extend(_validate_workspace(context))
     errors.extend(_validate_inventory(context))
     errors.extend(provenance_errors(context))
+    errors.extend(validate_story_artifacts(context))
     errors.extend(_validate_gate_artifacts(context))
     if profile in {"preproduction", "production"}:
         errors.extend(_validate_preproduction(context))
