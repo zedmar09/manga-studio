@@ -40,7 +40,7 @@ Approved canon and storyboard govern content; approved reference files govern ap
 
 ## Owned Outputs
 
-Job JSON under `.manga-studio/handoff/pending/`. External systems own image generation; generated, approved, and correction directories hold received versions without overwrite.
+Job JSON and deterministic paste-ready Markdown companions under `.manga-studio/handoff/pending/`. JSON remains authoritative. External systems own image generation; generated, approved, and correction directories hold received versions without overwrite.
 
 ## Procedure
 
@@ -50,7 +50,8 @@ Job JSON under `.manga-studio/handoff/pending/`. External systems own image gene
 4. Never release an active job unless `STORY_LOCKED`, `STORYBOARD_LOCKED`, canon/continuity checks, image enablement, and `IMAGE_READY` pass.
 5. For panel jobs, prohibit dialogue text, captions, speech balloons, sound-effect text, panel borders, page numbers, signatures, and watermarks.
 6. Validate structurally while deferred and strictly before external handoff.
-7. Create corrections as new job/output versions and preserve locked references.
+7. For a `ready` or `released` job, run `export-chatgpt-handoff <job.json>` to create a same-name Markdown packet. Give the user that complete packet and its ordered attachment checklist; never hand-author a competing prompt.
+8. Create corrections as new job/output versions and preserve locked references.
 
 ## Required Schemas
 
@@ -58,7 +59,7 @@ Job JSON under `.manga-studio/handoff/pending/`. External systems own image gene
 
 ## Next-Skill Handoff
 
-Hand released JSON to external ChatGPT Image Generation. After return, route received files to `manga-continuity-reviewer`; do not approve them automatically.
+Hand the exported Markdown and exactly its approved attachments to external ChatGPT Image Generation. The Markdown embeds the canonical JSON, attachment hashes, reference priority, and requested output filename. After return, route received files to `manga-continuity-reviewer`; do not approve them automatically.
 
 ## Approval Requirements
 
@@ -66,7 +67,7 @@ Image enablement, job release, reference replacement, and generated-image approv
 
 ## Failure Behavior
 
-Fail clearly on missing references, invented or absolute paths, changed locked references, reused output filenames, unmet gates, or malformed revision history.
+Fail clearly on deferred release status, missing or unlocked references, invented or absolute paths, changed locked references, reused output filenames, unmet gates, malformed revision history, or an attempt to overwrite a different Markdown packet.
 
 ## Non-Destructive Constraints
 
@@ -82,4 +83,4 @@ Example: a panel job may be saved as deferred with a known reference job depende
 
 ## Acceptance Criteria
 
-The job is schema-valid, versioned, project-relative, gate-compliant, explicit about blockers, free of embedded lettering instructions, and ready for external execution only when approved.
+The job is schema-valid, versioned, project-relative, gate-compliant, explicit about blockers, free of embedded lettering instructions, and accompanied by one deterministic paste-ready packet only when approved for external execution.

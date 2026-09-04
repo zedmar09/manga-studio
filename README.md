@@ -69,6 +69,7 @@ python3 scripts/manga_studio.py validate-source-map [path]
 python3 scripts/manga_studio.py show-structure [path]
 python3 scripts/manga_studio.py migrate [path]
 python3 scripts/manga_studio.py diagnose <draft.json> --project <path> [--markdown]
+python3 scripts/manga_studio.py export-chatgpt-handoff <job.json> --project <path>
 python3 scripts/manga_studio.py approve <target> --artifact-type <type> --target-version <version> --actor <actor> --project <path>
 python3 scripts/manga_studio.py reject <target> --artifact-type <type> --target-version <version> --actor <actor> --project <path>
 python3 scripts/manga_studio.py validate-approval <approval.json> --project <path>
@@ -140,12 +141,21 @@ Validation profiles are cumulative:
 1. Codex creates a versioned JSON job under `.manga-studio/handoff/pending/`.
 2. The job remains `deferred` with explicit blockers until IMAGE_READY passes.
 3. Before release, Codex validates the job strictly. Every required reference path must name a real file under `.manga-studio/handoff/approved/`; locked references cannot change silently.
-4. The user submits the released job to ChatGPT Image Generation outside Codex.
-5. The returned file is stored at the job's new versioned path under `handoff/generated/`. Older files are never overwritten.
-6. Codex validates intake and creates a structured continuity review. Approval is explicit; accepted copies/records are linked under `handoff/approved/`.
-7. Corrections are new jobs and outputs under `handoff/corrections/`, with revision lineage and a distinct filename.
-8. The page compositor accepts only approved panel files. Lettering is added as a separate vector layer after composition.
-9. Final continuity review precedes export.
+4. Codex runs `export-chatgpt-handoff` for a `ready` or `released` job. The deterministic same-name Markdown embeds the canonical JSON, requested output filename, instructions, and an ordered checklist of real approved attachments with SHA-256 hashes.
+5. The user attaches exactly the listed files, pastes the entire Markdown into ChatGPT Image Generation, and requests the image. Deferred jobs, missing or unlocked attachments, failed gates, and cross-project paths block export.
+6. The returned file is stored at the job's new versioned path under `handoff/generated/`. Older files are never overwritten.
+7. Codex validates intake and creates a structured continuity review. Approval is explicit; accepted copies/records are linked under `handoff/approved/`.
+8. Corrections are new jobs, Markdown packets, and outputs under `handoff/corrections/`, with revision lineage and a distinct filename.
+9. The page compositor accepts only approved panel files. Lettering is added as a separate vector layer after composition.
+10. Final continuity review precedes export.
+
+The canonical job remains JSON. The Markdown is a deterministic transport packet, not a second editable source of truth. By default it is written beside the job with the same basename; `--stdout` prints it for direct copying, and `--output` selects another project-relative `.md` path under `handoff/pending/`. An existing different Markdown file is never overwritten.
+
+```bash
+python3 scripts/manga_studio.py export-chatgpt-handoff \
+  .manga-studio/handoff/pending/<job-id>.json \
+  --project <story-directory>
+```
 
 Panel jobs prohibit dialogue text, captions, speech balloons, sound-effect text, panel borders, page numbers, signatures, and watermarks. Covers, splash pages, references, panels, and corrections follow the same external-generation boundary.
 

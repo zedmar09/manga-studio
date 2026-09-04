@@ -50,7 +50,7 @@ Original files are immutable provenance evidence. Approved canon governs story f
 4. For import, diagnosis, repair, or adaptation, inventory, obtain explicit classification/usage-role decisions, import, and structure before diagnosis or revision planning.
 5. For continuation, load approved canon, unresolved plot threads, and the active manuscript before routing to writing skills.
 6. For continuity audit, choose story consistency review or production continuity review according to the target.
-7. For visual preparation, use storyboard, panel, consistency, and image-job skills only after their prerequisites.
+7. For visual preparation, use storyboard, panel, consistency, and image-job skills only after their prerequisites. For each ready job, provide the deterministic exported ChatGPT Markdown and its exact attachment checklist rather than asking the user to reconstruct a prompt.
 8. Run the appropriate validation profile and report blockers without bypassing gates.
 
 ## Required Schemas

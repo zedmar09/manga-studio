@@ -13,6 +13,7 @@ sys.path.insert(0, str(SCRIPT_DIR / "lib"))
 from manga_studio.profiles import VALIDATION_PROFILES, validate_profile
 from manga_studio.approvals import clear_lock, invalidate_stale_approvals, record_approval, set_lock, validate_approval, validate_locks
 from manga_studio.diagnostics import publish_diagnostic_report
+from manga_studio.handoff import export_chatgpt_handoff, prepare_chatgpt_handoff
 from manga_studio.migration import migrate_project
 from manga_studio.project import (
     OPERATING_MODES,
@@ -145,6 +146,20 @@ def build_parser() -> argparse.ArgumentParser:
     diagnose_parser.add_argument("draft", type=Path)
     diagnose_parser.add_argument("--markdown", action="store_true")
     diagnose_parser.add_argument("--project", type=Path)
+
+    handoff_parser = subparsers.add_parser(
+        "export-chatgpt-handoff",
+        help="Export a validated image job as paste-ready ChatGPT Markdown.",
+    )
+    handoff_parser.add_argument("job", type=Path, help="Image-job JSON under .manga-studio/handoff/pending/.")
+    handoff_parser.add_argument("--project", type=Path, help="Explicit story directory or nested project path.")
+    handoff_destination = handoff_parser.add_mutually_exclusive_group()
+    handoff_destination.add_argument(
+        "--output", type=Path, help="Project-relative .md destination under handoff/pending/."
+    )
+    handoff_destination.add_argument(
+        "--stdout", action="store_true", help="Print the Markdown instead of writing a file."
+    )
 
     subparsers.add_parser("doctor", help="Run toolkit installation-readiness checks.")
     return parser
@@ -309,6 +324,14 @@ def main(argv: list[str] | None = None) -> int:
                 _project_input(context, args.draft),
                 markdown_companion=args.markdown,
             ), indent=2))
+            return 0
+        if args.command == "export-chatgpt-handoff":
+            job_path = _project_input(context, args.job)
+            if args.stdout:
+                print(prepare_chatgpt_handoff(context, job_path), end="")
+            else:
+                output_path = _project_input(context, args.output) if args.output else None
+                print(export_chatgpt_handoff(context, job_path, output_path))
             return 0
     except (ProjectDiscoveryError, ProjectOperationError, OSError, ValueError, json.JSONDecodeError) as exc:
         print(f"Manga Studio error: {exc}", file=sys.stderr)
