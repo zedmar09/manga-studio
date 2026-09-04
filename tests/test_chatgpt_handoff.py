@@ -20,6 +20,7 @@ PANEL_PROHIBITIONS = [
     "page_numbers",
     "signatures",
     "watermarks",
+    "color",
 ]
 
 
@@ -37,10 +38,20 @@ class ChatGPTHandoffTests(unittest.TestCase):
 
     def panel_job(self) -> dict:
         return {
-            "schema_version": "1.0.0",
+            "schema_version": "1.3.0",
             "job_id": "test-page-001-panel-01-v001",
             "job_type": "manga_panel",
             "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-01-v001.png",
+            "output_spec": {
+                "format": "png", "width": 1400, "height": 2200,
+                "color_mode": "grayscale", "alpha_allowed": False,
+            },
+            "content_constraints": {
+                "age_band": "teen and older", "content_rating": "teen",
+                "content_boundaries": ["No graphic injury"],
+                "sensitivity_requirements": ["Treat fear seriously"],
+                "accessibility_goals": ["Clear event order"],
+            },
             "required_reference_images": [
                 {
                     "reference_id": "character-v001",
@@ -60,9 +71,41 @@ class ChatGPTHandoffTests(unittest.TestCase):
             "reference_priority": ["location-v001", "character-v001"],
             "scene_state": {"page_id": "page-001", "panel_id": "p1", "time": "afternoon"},
             "character_state": {"hero": "Holding a key in the right hand."},
-            "composition": {"camera": "medium vertical shot", "reading_focus": "hero, then doorway"},
-            "dialogue_safe_zones": [{"x": 20, "y": 20, "width": 300, "height": 160}],
-            "manga_style": {"palette": "black-and-white", "linework": "clean ink"},
+            "composition": {
+                "camera": "medium vertical shot",
+                "framing": "Hero and doorway remain visible in one vertical frame.",
+                "reading_focus": "hero, then doorway",
+                "event_direction": {
+                    "event_type": "reaction", "intensity": 3, "importance": 3,
+                    "shot_size": "medium", "camera_angle": "eye_level",
+                    "camera_motion": "push_in", "action_direction": "right_to_left",
+                    "emotional_beat": "The key makes the doorway newly threatening.",
+                    "pose_and_expression": "The hero freezes with the key held forward.",
+                    "show_dont_tell_cue": "The held breath and rigid key hand reveal alarm.",
+                },
+                "background_priority": "story_critical",
+            },
+            "safe_zone_coordinate_system": "source_normalized",
+            "dialogue_safe_zones": [{"x": 0.05, "y": 0.05, "width": 0.35, "height": 0.2}],
+            "manga_style": {
+                "palette": "black-and-white",
+                "linework": "clean ink",
+                "line_weight_strategy": "Heavy silhouettes, medium contours, fine details.",
+                "solid_black_strategy": "Use black to frame the doorway threat.",
+                "screen_tones": "Restrained tones separate corridor planes.",
+                "contrast_plan": "Keep hero and key readable against the doorway.",
+                "depth_plan": "Separate key, hero, and corridor with value and line weight.",
+                "motion_language": "Use pose direction and perspective pull.",
+                "genre": "mystery manga",
+            },
+            "quality_profile": {
+                "tier": "high",
+                "goals": ["event clarity", "strict continuity", "professional manga finish"],
+                "variation_policy": "event_driven",
+                "continuity_strictness": "locked",
+                "detail_budget": "high",
+                "self_check_required": True,
+            },
             "required_elements": ["hero", "antique key", "empty corridor"],
             "prohibited_elements": PANEL_PROHIBITIONS,
             "revision_history": [
@@ -95,6 +138,10 @@ class ChatGPTHandoffTests(unittest.TestCase):
         self.assertIn("SHA-256", text)
         self.assertLess(text.index("location-v001.png"), text.index("character-v001.png"))
         self.assertIn("dialogue_text", text)
+        self.assertIn("high-quality production profile", text)
+        self.assertIn("Quality Profile", text)
+        self.assertIn("Audience And Content Constraints", text)
+        self.assertIn("No graphic injury", text)
         self.assertIn('"job_id": "test-page-001-panel-01-v001"', text)
 
     @patch("manga_studio.handoff._image_generation_gate_errors", return_value=[])

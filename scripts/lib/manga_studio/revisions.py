@@ -31,6 +31,8 @@ def _approved_change_set(context: ProjectContext, change_set_path: Path) -> Dict
     relative = change_set_path.resolve().relative_to(context.project_root).as_posix()
     matching = []
     for approval_path in context.workspace_path("approvals").glob("*.json"):
+        if approval_path.name.startswith("._"):
+            continue
         try:
             approval = load_json(approval_path)
         except Exception:

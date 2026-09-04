@@ -41,6 +41,27 @@
       "items": {
         "type": "string"
       }
+    },
+    "dramatic_profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "external_goal", "internal_need", "core_fear", "stakes", "flaw",
+        "contradiction", "moral_limits", "arc_direction", "voice_principles",
+        "relationship_drivers"
+      ],
+      "properties": {
+        "external_goal": {"type": "string", "minLength": 1},
+        "internal_need": {"type": "string", "minLength": 1},
+        "core_fear": {"type": "string", "minLength": 1},
+        "stakes": {"type": "string", "minLength": 1},
+        "flaw": {"type": "string", "minLength": 1},
+        "contradiction": {"type": "string", "minLength": 1},
+        "moral_limits": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "arc_direction": {"type": "string", "minLength": 1},
+        "voice_principles": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "relationship_drivers": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
     }
   },
   "$defs": {

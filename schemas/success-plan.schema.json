@@ -1,0 +1,367 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/success-plan.schema.json",
+  "title": "Manga Studio Success Plan",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "project_id", "plan_id", "version", "status",
+    "creative_brief_path", "creative_brief_sha256", "success_definition",
+    "audience_and_positioning", "creative_execution", "publishing_strategy",
+    "collaboration_and_sustainability", "measurement_and_iteration", "risks",
+    "assumptions", "basis"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "plan_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "version": {"type": "string", "pattern": "^v[0-9]{3}$"},
+    "status": {"enum": ["draft", "proposed", "approved", "superseded"]},
+    "creative_brief_path": {"$ref": "story-common.schema.json#/$defs/relativePath"},
+    "creative_brief_sha256": {"$ref": "story-common.schema.json#/$defs/sha256"},
+    "success_definition": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["statement", "primary_outcomes", "time_horizon", "non_goals", "success_is_not_guaranteed"],
+      "properties": {
+        "statement": {"type": "string", "minLength": 1},
+        "primary_outcomes": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "creative_completion", "reader_impact", "portfolio", "editorial_acceptance",
+              "audience_growth", "sustainable_revenue", "community", "custom"
+            ]
+          }
+        },
+        "time_horizon": {"type": "string", "minLength": 1},
+        "non_goals": {"type": "array", "items": {"type": "string"}},
+        "success_is_not_guaranteed": {"const": true}
+      }
+    },
+    "audience_and_positioning": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "intended_readers", "reader_need", "genre_demographic_format_promises",
+        "market_hypotheses", "comparables", "differentiators", "cultural_translation_notes"
+      ],
+      "properties": {
+        "intended_readers": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "reader_need": {"type": "string", "minLength": 1},
+        "genre_demographic_format_promises": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "market_hypotheses": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["statement", "evidence_status", "evidence_source_ids", "validation_method"],
+            "properties": {
+              "statement": {"type": "string", "minLength": 1},
+              "evidence_status": {"enum": ["user_provided", "researched", "feedback_supported", "analytics_supported", "unvalidated"]},
+              "evidence_source_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+              "validation_method": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "comparables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["title", "relevance", "transferable_lesson", "imitation_boundaries"],
+            "properties": {
+              "title": {"type": "string", "minLength": 1},
+              "relevance": {"type": "string", "minLength": 1},
+              "transferable_lesson": {"type": "string", "minLength": 1},
+              "imitation_boundaries": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+            }
+          }
+        },
+        "differentiators": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "cultural_translation_notes": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "creative_execution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "one_line_logline", "protagonist_drive", "emotional_core", "early_hook",
+        "escalation_and_reset", "serialized_unit_design", "readability_checks", "repeatable_identity"
+      ],
+      "properties": {
+        "one_line_logline": {"type": "string", "minLength": 1},
+        "protagonist_drive": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["want", "need", "stakes"],
+          "properties": {
+            "want": {"type": "string", "minLength": 1},
+            "need": {"type": "string", "minLength": 1},
+            "stakes": {"type": "string", "minLength": 1}
+          }
+        },
+        "emotional_core": {"type": "string", "minLength": 1},
+        "early_hook": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["question_or_disruption", "deadline_unit", "latest_unit", "payoff_signal"],
+          "properties": {
+            "question_or_disruption": {"type": "string", "minLength": 1},
+            "deadline_unit": {"enum": ["page", "chapter", "episode", "scene", "not_applicable"]},
+            "latest_unit": {"anyOf": [{"type": "integer", "minimum": 1}, {"type": "null"}]},
+            "payoff_signal": {"type": "string", "minLength": 1}
+          }
+        },
+        "escalation_and_reset": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "serialized_unit_design": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["opening_beats", "movement_requirements", "ending_beats", "arc_ranges_are_story_specific"],
+          "properties": {
+            "opening_beats": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "movement_requirements": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "ending_beats": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+            "arc_ranges_are_story_specific": {"const": true}
+          }
+        },
+        "readability_checks": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "repeatable_identity": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "publishing_strategy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status", "release_unit", "target_channels", "cadence", "buffer",
+        "format_requirements", "monetization_hypotheses", "discoverability_deliverables",
+        "community_strategy", "rights_and_contract_checks", "visual_assets_remain_external_to_codex"
+      ],
+      "properties": {
+        "status": {"enum": ["planned", "research_required", "not_applicable"]},
+        "release_unit": {"enum": ["page", "chapter", "episode", "volume", "complete_work", "not_applicable"]},
+        "target_channels": {"type": "array", "items": {"type": "string"}},
+        "cadence": {"type": "string", "minLength": 1},
+        "buffer": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["target", "unit", "rationale"],
+          "properties": {
+            "target": {"type": "integer", "minimum": 0},
+            "unit": {"enum": ["pages", "chapters", "episodes", "weeks", "not_applicable"]},
+            "rationale": {"type": "string", "minLength": 1}
+          }
+        },
+        "format_requirements": {"type": "array", "items": {"type": "string"}},
+        "monetization_hypotheses": {"type": "array", "items": {"type": "string"}},
+        "discoverability_deliverables": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["deliverable", "owner", "status", "requirement", "image_job_path"],
+            "properties": {
+              "deliverable": {"enum": ["pitch", "metadata", "thumbnail", "cover", "promo_strip", "character_sheet", "key_image", "trailer", "custom"]},
+              "owner": {"enum": ["codex_text", "chatgpt_image_generation", "external_media_tool", "human"]},
+              "status": {"enum": ["planned", "ready", "completed", "not_applicable"]},
+              "requirement": {"type": "string", "minLength": 1},
+              "image_job_path": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/relativePath"}, {"type": "null"}]}
+            }
+          }
+        },
+        "community_strategy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status", "channels", "engagement_principles", "moderation_and_safety"],
+          "properties": {
+            "status": {"enum": ["planned", "research_required", "not_applicable"]},
+            "channels": {"type": "array", "items": {"type": "string"}},
+            "engagement_principles": {"type": "array", "items": {"type": "string"}},
+            "moderation_and_safety": {"type": "array", "items": {"type": "string"}}
+          }
+        },
+        "rights_and_contract_checks": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["check", "status", "verification_owner"],
+            "properties": {
+              "check": {"type": "string", "minLength": 1},
+              "status": {"enum": ["open", "verified", "not_applicable"]},
+              "verification_owner": {"enum": ["human", "qualified_professional"]}
+            }
+          }
+        },
+        "visual_assets_remain_external_to_codex": {"const": true}
+      }
+    },
+    "collaboration_and_sustainability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "roles", "agreement_requirements", "outsourcing_triggers", "capacity_limit", "rest_policy", "backup_policy",
+        "financial_constraints", "efficiency_practices", "quality_floor", "scope_reduction_order"
+      ],
+      "properties": {
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["role", "owner", "scope", "agreement_status"],
+            "properties": {
+              "role": {"type": "string", "minLength": 1},
+              "owner": {"type": "string", "minLength": 1},
+              "scope": {"type": "string", "minLength": 1},
+              "agreement_status": {"enum": ["documented", "pending", "not_applicable"]}
+            }
+          }
+        },
+        "agreement_requirements": {"type": "array", "items": {"type": "string"}},
+        "outsourcing_triggers": {"type": "array", "items": {"type": "string"}},
+        "capacity_limit": {"type": "string", "minLength": 1},
+        "rest_policy": {"type": "string", "minLength": 1},
+        "backup_policy": {"type": "string", "minLength": 1},
+        "financial_constraints": {"type": "array", "items": {"type": "string"}},
+        "efficiency_practices": {"type": "array", "items": {"type": "string"}},
+        "quality_floor": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "scope_reduction_order": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "measurement_and_iteration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["feedback_checkpoints", "primary_metrics", "observations", "experiments", "pivot_rules", "protected_elements"],
+      "properties": {
+        "feedback_checkpoints": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["stage", "reader_profile", "questions", "decision_scope"],
+            "properties": {
+              "stage": {"type": "string", "minLength": 1},
+              "reader_profile": {"type": "string", "minLength": 1},
+              "questions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+              "decision_scope": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "primary_metrics": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 3,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "kind", "definition", "target", "review_point", "data_source", "interpretation_limit"],
+            "properties": {
+              "name": {"type": "string", "minLength": 1},
+              "kind": {"enum": ["leading", "lagging", "qualitative"]},
+              "definition": {"type": "string", "minLength": 1},
+              "target": {"type": "string", "minLength": 1},
+              "review_point": {"type": "string", "minLength": 1},
+              "data_source": {"type": "string", "minLength": 1},
+              "interpretation_limit": {"type": "string", "minLength": 1}
+            }
+          }
+        },
+        "observations": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "observation_id", "metric_name", "observed_at", "sample_description",
+              "value", "evidence_source_ids", "interpretation", "confidence", "decision"
+            ],
+            "properties": {
+              "observation_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+              "metric_name": {"type": "string", "minLength": 1},
+              "observed_at": {"type": "string", "minLength": 1},
+              "sample_description": {"type": "string", "minLength": 1},
+              "value": {"type": "string", "minLength": 1},
+              "evidence_source_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+              "interpretation": {"type": "string", "minLength": 1},
+              "confidence": {"enum": ["low", "medium", "high"]},
+              "decision": {"enum": ["no_change", "research_more", "propose_experiment", "propose_revision", "propose_distribution_change"]}
+            }
+          }
+        },
+        "experiments": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["hypothesis", "single_variable", "success_signal", "guardrails"],
+            "properties": {
+              "hypothesis": {"type": "string", "minLength": 1},
+              "single_variable": {"const": true},
+              "success_signal": {"type": "string", "minLength": 1},
+              "guardrails": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+            }
+          }
+        },
+        "pivot_rules": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["trigger", "minimum_evidence", "allowed_changes", "protected_elements"],
+            "properties": {
+              "trigger": {"type": "string", "minLength": 1},
+              "minimum_evidence": {"type": "string", "minLength": 1},
+              "allowed_changes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+              "protected_elements": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+            }
+          }
+        },
+        "protected_elements": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "risks": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["risk", "likelihood", "impact", "mitigation", "owner"],
+        "properties": {
+          "risk": {"type": "string", "minLength": 1},
+          "likelihood": {"enum": ["low", "medium", "high", "unknown"]},
+          "impact": {"enum": ["low", "medium", "high", "unknown"]},
+          "mitigation": {"type": "string", "minLength": 1},
+          "owner": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "assumptions": {"type": "array", "items": {"type": "string"}},
+    "basis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_evidence", "decision_ids", "research_sources"],
+      "properties": {
+        "source_evidence": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/evidenceLocator"}},
+        "decision_ids": {"type": "array", "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+        "research_sources": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_id", "kind", "citation", "accessed_on", "notes"],
+            "properties": {
+              "source_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+              "kind": {"enum": ["user_input", "reader_feedback", "market_research", "platform_documentation", "analytics", "legal_advice"]},
+              "citation": {"type": "string", "minLength": 1},
+              "accessed_on": {"type": ["string", "null"]},
+              "notes": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

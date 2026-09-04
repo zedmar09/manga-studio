@@ -3,7 +3,7 @@ name: manga-storyboard-director
 description: Convert an approved locked story into versioned manga page and beat plans with reading flow, pacing, page turns, and panel allocation, without producing artwork.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Storyboard Director
@@ -22,11 +22,11 @@ Use after an approved manuscript and story lock when page-level manga adaptation
 
 ## Required Inputs
 
-`STORY_LOCKED`, active approved manuscript and canon, reading direction, target format, stable scene IDs, and adaptation scope.
+`STORY_LOCKED`, approved creative brief, active approved manuscript and canon, reading direction, target format, stable scene IDs, and adaptation scope.
 
 ## Optional Inputs
 
-Page budget, prior storyboard version, dialogue constraints, and intended print or screen presentation.
+Page budget, prior storyboard version, dialogue constraints, intended print or screen presentation, and active success-plan readability or feedback checkpoints.
 
 ## Project Discovery
 
@@ -40,20 +40,25 @@ The active locked manuscript and approved canon govern content. User decisions g
 
 ## Owned Outputs
 
-Versioned page maps, beat sheets, page-turn plans, and storyboard metadata under `.manga-studio/storyboard/`.
+Versioned page maps, beat sheets, page-turn plans, storyboard metadata, and structured geometry-only nemu bundles under `.manga-studio/storyboard/nemu/`.
 
 ## Procedure
 
 1. Validate story profile and require `STORY_LOCKED`.
 2. Resolve source beats through stable scene and plot-thread IDs.
-3. Allocate beats to pages and panels according to story rhythm, not a fixed panel count.
-4. Specify reading order, page turns, dialogue load, establishing needs, and continuity handoffs.
-5. Record omissions or rearrangements as explicit adaptation decisions.
-6. Write a new storyboard version and request approval before locking.
+3. Give each page a purpose, pacing mode, reader effect, emotional curve, dominant event, and page-turn setup. Allocate beats according to story rhythm, not a fixed panel count; fewer/larger panels slow and emphasize, while denser sequences accelerate only when clarity survives.
+4. Give every panel one dominant event with intensity and importance. Select `dialogue`, `cinematic`, `action`, `reveal`, `montage`, `suspense`, `comedy`, or `custom` layout intent because it serves those events, not merely to make the page look busy.
+5. Specify an explicit reading sequence, dialogue load, establishing needs, SFX beats, and continuity handoffs. Reserve larger or more disruptive geometry for the page's most important beat.
+6. Vary shot size and camera angle with narrative motivation; preserve screen direction across action unless a deliberate, marked axis break reorients the reader.
+7. Create a structured nemu with normalized panel blocks, reading sequence, balloon placeholders, visual focus, page-turn intent, and per-page checklist. This nemu is planning geometry, not artwork.
+8. When a hand-drawn visual thumbnail is needed, represent it as a `storyboard_thumbnail` ChatGPT Image Generation Job; never draw or edit it in Codex.
+9. When a success plan is active, preserve its hook deadline, unit movement, readability floor, and protected elements, then define what a first-time reader should be able to recount at the planned feedback checkpoint. Do not optimize panel density or page turns for an assumed platform without evidence.
+10. Record omissions or rearrangements as explicit adaptation decisions.
+11. Write new storyboard and nemu versions and request approval before locking or creating panel jobs.
 
 ## Required Schemas
 
-`project.schema.json`, `stable-id-map.schema.json`, `page.schema.json`, and relevant canon/continuity schemas.
+`project.schema.json`, `creative-brief.schema.json`, `success-plan.schema.json` when active, `stable-id-map.schema.json`, `nemu.schema.json`, `page.schema.json`, and relevant canon/continuity schemas.
 
 ## Next-Skill Handoff
 
@@ -81,4 +86,4 @@ Example: adapt a chapterless short story into a four-panel page plan while retai
 
 ## Acceptance Criteria
 
-Every page beat traces to locked story material, reading flow is explicit, adaptation changes are reviewable, and no visual asset is created.
+Every page beat traces to locked story material, page intent and reading flow are explicit, panel scale follows event importance, the nemu is structured and approved, adaptation changes are reviewable, and no visual asset is created.

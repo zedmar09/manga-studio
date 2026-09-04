@@ -16,5 +16,17 @@
   "continuity_notes": [
     "Glasses must remain round and readable in close shots.",
     "Coat length should fall below the knees."
-  ]
+  ],
+  "dramatic_profile": {
+    "external_goal": "Determine whether the bell has a physical cause before Mira enters danger.",
+    "internal_need": "Accept that care for Mira sometimes requires acting before certainty is available.",
+    "core_fear": "That skepticism will become an excuse for failing to protect someone.",
+    "stakes": "If he dismisses the event, Mira may face the tunnel threat alone.",
+    "flaw": "He delays emotional decisions by asking increasingly precise questions.",
+    "contradiction": "His cautious language accompanies the immediate choice to remain beside Mira.",
+    "moral_limits": ["He will not abandon Mira to investigate alone."],
+    "arc_direction": "Move from detached verification toward deliberate shared risk.",
+    "voice_principles": ["Practical questions", "Understated concern", "No unexplained mystical certainty"],
+    "relationship_drivers": ["Challenges Mira's assumptions without mocking her", "Uses observation as a form of care"]
+  }
 }

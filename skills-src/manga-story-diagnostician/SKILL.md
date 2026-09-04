@@ -3,7 +3,7 @@ name: manga-story-diagnostician
 description: Diagnose imported story structure, character arcs, pacing, causality, continuity, and manga-adaptation risks without revising the source or declaring new canon.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Story Diagnostician
@@ -26,7 +26,7 @@ Source inventory, provenance, normalized derivatives, stable source IDs, and the
 
 ## Optional Inputs
 
-Approved canon, prior diagnostics, reader goals, target demographic, and adaptation constraints.
+Approved creative brief/canon, active success plan, prior diagnostics, reader goals, target audience and content boundaries, feedback or analytics supplied by the user, and adaptation constraints.
 
 ## Project Discovery
 
@@ -46,15 +46,16 @@ Versioned JSON reports and optional Markdown companions under `.manga-studio/ana
 
 1. Validate the story profile and provenance.
 2. Scope the diagnosis instead of assuming a full rewrite review.
-3. Give every finding a unique issue ID, supported category, severity, confidence, status, description, why-it-matters statement, evidence locators, affected chapter and scene IDs, related entity IDs, alternatives, uncertainty, and adaptation impact.
+3. Give every finding a unique issue ID, supported category, severity, confidence, status, description, why-it-matters statement, evidence locators, affected chapter and scene IDs, related entity IDs, relevant external evidence IDs, alternatives, uncertainty, and adaptation impact.
 4. Make every evidence locator match a source-map unit and byte/line range in this project.
 5. Separate contradictions from intentional ambiguity and unresolved questions.
-6. Analyze structure, pacing, causality, arcs, continuity, voice, setup/payoff, chapter boundaries, and adaptation pressure only where evidence supports it.
-7. Publish with `diagnose`; never modify source, canon, manuscripts, prior reports, approvals, or locks.
+6. Analyze hook timing, promise/payoff, structure, pacing, causality, character desire/fear/limits, arcs, continuity, voice, setup/payoff, chapter boundaries, show-don't-tell opportunities, audience/content fit, originality risk, and adaptation pressure only where evidence supports it.
+7. When a success plan is active, test its craft goals against source evidence and its reader or market hypotheses only against supplied research, feedback, or analytics. Record new external results as source-linked observations in a new success-plan version; diagnostics may reference those observation or evidence IDs but must keep at least one manuscript evidence locator for the story element being assessed. Separate observed retention/readability signals from causal claims, sample bias, platform effects, and taste; never diagnose a story as commercially successful from generic conventions.
+8. Publish source-grounded findings with `diagnose`; never modify source, canon, manuscripts, prior reports, approvals, or locks.
 
 ## Required Schemas
 
-`project.schema.json`, `source-map.schema.json`, `story-issue.schema.json`, and `diagnostic-report.schema.json`.
+`project.schema.json`, `creative-brief.schema.json` when active, `success-plan.schema.json` when active, `source-map.schema.json`, `story-issue.schema.json`, and `diagnostic-report.schema.json`.
 
 ## Next-Skill Handoff
 

@@ -3,7 +3,7 @@ name: manga-panel-director
 description: Turn approved storyboard beats into structured panel plans with staging, camera, continuity, required elements, and dialogue-safe zones without creating artwork.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Panel Director
@@ -45,11 +45,13 @@ Versioned panel plans under `.manga-studio/storyboard/` and page specifications 
 ## Procedure
 
 1. Validate preproduction prerequisites and load the target page by stable ID.
-2. Define intent, shot size, camera, staging, location state, character state, props, and continuity hooks.
-3. Define panel frame and dialogue-safe zones with page coordinates.
-4. List required and prohibited visual elements; prohibit embedded text, balloons, borders, numbers, signatures, and watermarks in panel artwork.
-5. Check reading flow and neighboring-panel continuity.
-6. Save a versioned plan for consistency review.
+2. Define exactly one dominant event with type, intensity, importance, action, emotional beat, shot size, camera angle/motion, action direction, transition, show-don't-tell cue, and entering/exiting continuity anchors.
+3. Stage characters with readable silhouettes, expressions, eyelines, handedness, prop interaction, and motivated depth. Avoid repeating a shot unless repetition is an intentional rhythm device.
+4. Define the rectangular art frame plus an optional non-self-intersecting `clip_polygon`, focus point, fit, z-index, inset/bleed state, border, and explicit overlap permission. Geometry must serve the event and reading flow.
+5. Declare the intended source-image canvas and define dialogue-safe zones as normalized source-image boxes (`source_normalized`). Verify how each zone projects through cover/contain fit and focus before accepting the page placement. Keep critical faces, hands, props, action paths, and reveal information outside those zones.
+6. List required and prohibited visual elements; prohibit embedded dialogue, captions, balloons, SFX, panel borders, page numbers, signatures, watermarks, and color in black-and-white panel artwork.
+7. Check neighboring screen direction, eyelines, spatial anchors, state continuity, and the page's explicit reading sequence.
+8. Save a versioned plan for consistency review.
 
 ## Required Schemas
 
@@ -77,8 +79,8 @@ Page-level beat allocation, image generation, lettering execution, and final com
 
 ## Representative Example
 
-Example: define a close-up with one upper-left safe zone using project-specific entities, without embedding dialogue or assuming any sample cast.
+Example: define a close-up with a 1400x2200 source canvas and one normalized upper-left safe zone, then prove the page crop preserves that zone without embedding dialogue or assuming any sample cast.
 
 ## Acceptance Criteria
 
-Each panel traces to an approved beat, has valid geometry and states, preserves continuity, and is ready for structured job construction without containing artwork.
+Each panel traces to an approved beat and nemu block, communicates one readable event through staging, has valid dynamic geometry and camera direction, preserves continuity, protects normalized lettering space after crop projection, and is ready for job construction without containing artwork.

@@ -3,7 +3,7 @@ name: manga-continuity-reviewer
 description: Review image jobs, externally generated outputs, approved panels, lettering, composed pages, and exports for production continuity without editing artwork or granting approval automatically.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Continuity Reviewer
@@ -40,19 +40,21 @@ Approved canon and storyboard govern content; locked approved references govern 
 
 ## Owned Outputs
 
-Versioned review records under `.manga-studio/continuity/` and `.manga-studio/approvals/`; correction recommendations may be handed to the image-job builder.
+Versioned technical intake records under `.manga-studio/continuity/intake/`, visual review records under `.manga-studio/continuity/`, and approval records under `.manga-studio/approvals/`; correction recommendations may be handed to the image-job builder.
 
 ## Procedure
 
 1. Validate the relevant profile and identify targets by project-local stable IDs.
-2. Review required/prohibited elements, reference adherence, character/location/prop state, panel-to-panel continuity, safe zones, lettering, page flow, and export completeness.
-3. Record evidence and severity without modifying the target.
-4. Recommend approval, blocking, or a new correction job; never overwrite an old output.
-5. After explicit approval, ensure the approved file path and review record are linked.
+2. For every externally returned file, run `validate-generated-image <job> <image> --project <root>`. Treat format, dimensions, alpha, hash, and container mode as technical facts, not artistic ratings.
+3. Inspect the actual image separately and complete a `generated_image` review with `metric_scope: human_visual_assessment`: story clarity, event readability, locked-reference adherence, character acting, composition, monochrome finish, continuity, reserved lettering usability, audience/content compliance, required/prohibited-element checks, and visible artifacts. Do not recommend approval unless every score is at least 4/5, all binary checks pass, and no error finding remains.
+4. Review required/prohibited elements, character/location/prop state, handedness, eyelines, screen direction, camera progression, panel-to-panel continuity, safe zones, lettering/SFX, page flow, and export completeness.
+5. Run `review-page <page-spec> --project <project-root>` for deterministic geometry, collision, reading-order, text-fit, shot-variety, continuity, pacing, and page-impact planning indicators. Never present those scores as judgments of the rendered drawing.
+6. Record evidence and severity without modifying the target. Recommend approval, blocking, or a new review-bound correction job; never overwrite an old output.
+7. Approve only a visual review whose target intake is non-blocked and hash-current. Then copy the exact reviewed bytes into a new approved path; production verifies the hash chain before composition.
 
 ## Required Schemas
 
-`review.schema.json`, `image-job.schema.json`, `continuity-state.schema.json`, `page.schema.json`, `panel.schema.json`, and relevant canon schemas.
+`review.schema.json`, `generated-image.schema.json`, `image-job.schema.json`, `continuity-state.schema.json`, `page.schema.json`, `panel.schema.json`, and relevant canon schemas.
 
 ## Next-Skill Handoff
 
@@ -80,4 +82,4 @@ Example: flag a changed prop state in an externally generated panel and request 
 
 ## Acceptance Criteria
 
-The review is evidence-based, project-isolated, references exact versions, distinguishes blockers from warnings, and leaves every visual asset untouched.
+The review is evidence-based, project-isolated, hash-bound to exact versions, keeps technical intake, planning indicators, and human visual judgment distinct, distinguishes blockers from warnings, never auto-approves, and leaves every visual asset untouched.

@@ -1,7 +1,9 @@
 from __future__ import annotations
 
 import json
+import tempfile
 import unittest
+from pathlib import Path
 
 from helpers import REPO_ROOT
 from doctor import run_doctor
@@ -61,15 +63,80 @@ class ManifestAndSchemaTests(unittest.TestCase):
             (pilot / "source" / "inventory.json", schema_root / "source-inventory.schema.json"),
             (pilot / "source" / "provenance.json", schema_root / "provenance.schema.json"),
             (pilot / "source" / "id-map.json", schema_root / "stable-id-map.schema.json"),
+            (pilot / "story" / "success-plans" / "pilot-001-success-plan-v001.json", schema_root / "success-plan.schema.json"),
             (pilot / "pages" / "page-001.json", schema_root / "page.schema.json"),
         ]
         cases.extend(
             (path, schema_root / "image-job.schema.json")
             for path in sorted((pilot / "handoff" / "pending").glob("*.json"))
+            if not path.name.startswith("._")
         )
         for instance, schema in cases:
             with self.subTest(instance=instance.name, schema=schema.name):
                 self.assertEqual(validate_json_file(instance, schema), [])
+
+    def test_success_plan_schema_limits_primary_outcomes_and_metrics(self) -> None:
+        source = (
+            REPO_ROOT
+            / "projects"
+            / "pilot-001"
+            / ".manga-studio"
+            / "story"
+            / "success-plans"
+            / "pilot-001-success-plan-v001.json"
+        )
+        plan = json.loads(source.read_text(encoding="utf-8"))
+        plan["success_definition"]["primary_outcomes"] = [
+            "creative_completion", "reader_impact", "portfolio", "community"
+        ]
+        plan["measurement_and_iteration"]["primary_metrics"].extend([
+            {
+                "name": "third metric",
+                "kind": "leading",
+                "definition": "A third planning signal.",
+                "target": "Defined target.",
+                "review_point": "Defined checkpoint.",
+                "data_source": "Defined source.",
+                "interpretation_limit": "Does not predict commercial results."
+            },
+            {
+                "name": "fourth metric",
+                "kind": "lagging",
+                "definition": "A fourth outcome signal.",
+                "target": "Defined target.",
+                "review_point": "Defined checkpoint.",
+                "data_source": "Defined source.",
+                "interpretation_limit": "Does not prove causation."
+            }
+        ])
+        with tempfile.TemporaryDirectory() as temporary:
+            candidate = Path(temporary) / "success-plan.json"
+            candidate.write_text(json.dumps(plan), encoding="utf-8")
+            errors = validate_json_file(candidate, REPO_ROOT / "schemas" / "success-plan.schema.json")
+
+        self.assertTrue(any("primary_outcomes" in error and "at most 3" in error for error in errors))
+        self.assertTrue(any("primary_metrics" in error and "at most 3" in error for error in errors))
+
+    def test_story_issue_schema_supports_success_evidence_references(self) -> None:
+        report = json.loads(
+            (
+                REPO_ROOT
+                / "tests"
+                / "fixtures"
+                / "story-engine"
+                / "three-chapter"
+                / "expected-diagnostic-report.json"
+            ).read_text(encoding="utf-8")
+        )
+        issue = report["findings"][0]
+        issue["category"] = "market_hypothesis"
+        issue["external_evidence_ids"] = ["reader-feedback-round-one"]
+        with tempfile.TemporaryDirectory() as temporary:
+            candidate = Path(temporary) / "story-issue.json"
+            candidate.write_text(json.dumps(issue), encoding="utf-8")
+            errors = validate_json_file(candidate, REPO_ROOT / "schemas" / "story-issue.schema.json")
+
+        self.assertEqual(errors, [])
 
 
 if __name__ == "__main__":

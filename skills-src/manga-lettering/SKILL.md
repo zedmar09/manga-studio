@@ -1,16 +1,16 @@
 ---
 name: manga-lettering
-description: Prepare and apply versioned dialogue, caption, thought, and balloon geometry to composed manga pages after approved production dependencies exist, without changing artwork.
+description: Prepare and apply versioned dialogue, captions, thoughts, structured SFX, and professional balloon geometry to composed manga pages without changing artwork.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Lettering
 
 ## Purpose
 
-Turn approved page text and safe-zone data into deterministic lettering layers after panel art has been externally generated, reviewed, approved, and composed.
+Turn approved page text, sound intent, and safe-zone data into deterministic professional vector lettering after panel art has been externally generated, reviewed, approved, and composed.
 
 ## Activation Conditions
 
@@ -26,7 +26,7 @@ Discoverable project, `IMAGE_READY`, approved panel dependencies, composed page 
 
 ## Optional Inputs
 
-Typography settings, localization variants, balloon-tail coordinates, and prior lettering version.
+Project-relative TTF/OTF font file, embedding policy, language/script and line-break profile, ruby/furigana, localization variants, balloon-tail coordinates, SFX source/meaning/translation, writing direction, and prior lettering version.
 
 ## Project Discovery
 
@@ -45,10 +45,13 @@ Versioned lettering layers and lettered page SVG files under `.manga-studio/lett
 ## Procedure
 
 1. Run production validation and confirm approved dependencies.
-2. Verify each lettering item targets a real panel and fits an approved safe zone.
-3. Use `scripts/add_lettering.py <page-spec> --project <project-root>` for deterministic placement.
-4. Check reading order, speaker attribution, clipping, overflow, and page geometry.
-5. Save a new lettering version; route visual/content issues to the owning skill.
+2. Give every item a stable ID and unique reading order. Use speech, caption, thought, whisper, shout, radio, narration, or SFX according to meaning rather than visual novelty.
+3. For SFX, record the real source, reader-facing meaning, intensity, language, and translation/romanization when relevant. Keep SFX out of generated artwork and add it only in this vector layer.
+4. Choose ellipse, rounded, rectangle, cloud, burst, jagged, or no-balloon treatment; set typography, rotation, horizontal/vertical writing, ruby, and tails deliberately.
+5. Use a project-relative TTF/OTF when reproducible font metrics matter. Select Latin or Japanese line breaking explicitly, apply kinsoku punctuation constraints for Japanese, and retain a documented Unicode-width fallback only when no font file is available.
+6. Verify boxes and tails remain inside safe zones after source-to-page crop projection, text fits at the minimum readable size, and unapproved collisions/cross-panel placements do not occur.
+7. Use the shared launcher command `add-lettering <page-spec> --project <project-root>` for deterministic, non-overwriting placement.
+8. Run the shared launcher command `review-page <page-spec> --project <project-root>` and route dialogue clarity, composition, or art defects to their owning skills.
 
 ## Required Schemas
 
@@ -80,4 +83,4 @@ Example: place approved speech and caption text in two safe zones on a composed 
 
 ## Acceptance Criteria
 
-Lettering is readable, correctly ordered, traceable to approved text, contained by page geometry, versioned, and separable from artwork.
+Lettering and sounds are readable in the configured language/script, use reproducible metrics when a font is supplied, obey applicable line-breaking rules, are semantically clear and correctly ordered, remain collision-free unless explicitly layered, and stay separable from artwork.

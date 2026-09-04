@@ -27,6 +27,8 @@ WORKSPACE_DIRECTORIES = (
     "source/documents",
     "source/maps",
     "story",
+    "story/briefs",
+    "story/success-plans",
     "canon",
     "analysis",
     "analysis/diagnostics",
@@ -38,7 +40,9 @@ WORKSPACE_DIRECTORIES = (
     "manuscript",
     "manuscript/versions",
     "storyboard",
+    "storyboard/nemu",
     "continuity",
+    "continuity/intake",
     "approvals",
     "decisions",
     "locks",
@@ -50,6 +54,8 @@ WORKSPACE_DIRECTORIES = (
     "lettering",
     "pages",
     "exports",
+    "production/preflight",
+    "fonts",
 )
 
 STAGE_GATES = (
@@ -144,6 +150,7 @@ AGENTS_MANAGED_SECTION = f"""{MANAGED_START}
 - Require explicit approval before adopting revisions or changing approved canon.
 - Approved canon is authoritative over analysis, drafts, storyboards, and production notes; original sources remain the provenance authority.
 - Image generation is disabled by default and may be enabled only after the story and storyboard gates are locked.
+- Visual production also requires an approved structured nemu, an approved creative brief, and explicit audience/content boundaries.
 - Codex must never generate or edit artwork. Character, location, prop, panel, cover, splash-page, and correction art must be represented by structured ChatGPT Image Generation Jobs.
 - ChatGPT Image Generation is reserved for eventual external image production; Codex may validate, organize, letter, compose, review, and export approved outputs.
 {MANAGED_END}"""
@@ -275,6 +282,8 @@ def default_project_config(project_root: Path, mode: str, title: Optional[str] =
             "color_mode": "black-and-white",
             "page_width_px": 1654,
             "page_height_px": 2339,
+            "output_intent": "screen",
+            "print_profile": None,
         },
         "workflow_phase": "story_foundation",
         "operating_mode": mode,
@@ -284,6 +293,9 @@ def default_project_config(project_root: Path, mode: str, title: Optional[str] =
         "active_manuscript_version": None,
         "active_canon_version": None,
         "active_storyboard_version": None,
+        "active_creative_brief_version": None,
+        "active_success_plan_version": None,
+        "active_nemu_version": None,
         "blocking_reasons": [
             "Story and storyboard approvals are incomplete.",
             "Image generation is disabled by default.",
@@ -800,25 +812,38 @@ def image_ready_reasons(
             reasons.append(f"{gate} is not true")
     if config.get("image_generation_enabled") is not True:
         reasons.append("image_generation_enabled is false")
-    continuity_approved = False
-    for continuity_approval in context.workspace_path("approvals").glob("*.json"):
-        try:
-            approval = load_json(continuity_approval)
-            if approval.get("project_id") != config.get("project_id"):
+
+    def has_current_approval(artifact_type: str, target_rel: str | None = None) -> bool:
+        for approval_path in context.workspace_path("approvals").glob("*.json"):
+            if approval_path.name.startswith("._"):
                 continue
-            if approval.get("artifact_type") != "continuity" or approval.get("status") != "approved":
+            try:
+                approval = load_json(approval_path)
+                if approval.get("project_id") != config.get("project_id"):
+                    continue
+                if approval.get("artifact_type") != artifact_type or approval.get("status") != "approved":
+                    continue
+                approved_target = approval.get("target_relative_path")
+                if not isinstance(approved_target, str) or (target_rel is not None and approved_target != target_rel):
+                    continue
+                target = context.project_path(approved_target)
+                if target.is_file() and sha256_file(target) == approval.get("target_sha256"):
+                    return True
+            except (OSError, ValueError, json.JSONDecodeError):
                 continue
-            target_rel = approval.get("target_relative_path")
-            if not isinstance(target_rel, str):
-                continue
-            target = context.project_path(target_rel)
-            if target.is_file() and sha256_file(target) == approval.get("target_sha256"):
-                continuity_approved = True
-                break
-        except (OSError, ValueError, json.JSONDecodeError):
-            continue
+        return False
+
+    continuity_approved = has_current_approval("continuity", ".manga-studio/continuity/state.json")
     if not continuity_approved:
         reasons.append("a valid continuity approval is missing")
+
+    creative_brief = config.get("active_creative_brief_version")
+    if not isinstance(creative_brief, str) or not has_current_approval("creative_brief", creative_brief):
+        reasons.append("a valid approval for active_creative_brief_version is missing")
+
+    nemu = config.get("active_nemu_version")
+    if not isinstance(nemu, str) or not has_current_approval("nemu", nemu):
+        reasons.append("a valid approval for active_nemu_version is missing")
     reasons.extend(provenance_errors(context))
     return reasons
 

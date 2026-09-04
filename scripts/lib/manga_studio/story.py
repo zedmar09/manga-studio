@@ -8,7 +8,7 @@ from .approvals import validate_approval, validate_locks
 from .json_schema import validate_json_file
 from .project import IMPORTABLE_CLASSIFICATION_STATUSES, INVENTORY_FILE, PROVENANCE_FILE, USAGE_ROLES, ProjectContext
 from .structure import STRUCTURE_INDEX_FILE, validate_source_maps
-from .validation import load_json
+from .validation import load_json, validate_project_path_containment
 
 
 ARTIFACT_PATTERNS: Tuple[Tuple[str, str], ...] = (
@@ -109,6 +109,36 @@ def _validate_diagnostic_links(context: ProjectContext) -> List[str]:
         if record.get("source_status") == "active" and isinstance(record.get("source_map_checksum"), str)
     }
     errors: List[str] = []
+    external_evidence_ids: Set[str] = set()
+    success_plan_rel = context.config.get("active_success_plan_version")
+    if (
+        isinstance(success_plan_rel, str)
+        and success_plan_rel.startswith(".manga-studio/story/success-plans/")
+        and not validate_project_path_containment(
+            context.project_root, success_plan_rel, "active_success_plan_version"
+        )
+    ):
+        success_plan_path = context.project_path(success_plan_rel)
+        if success_plan_path.is_file():
+            try:
+                success_plan = load_json(success_plan_path)
+                basis = success_plan.get("basis", {})
+                if isinstance(basis, dict):
+                    external_evidence_ids.update(
+                        source["source_id"]
+                        for source in basis.get("research_sources", [])
+                        if isinstance(source, dict) and isinstance(source.get("source_id"), str)
+                    )
+                measurement = success_plan.get("measurement_and_iteration", {})
+                if isinstance(measurement, dict):
+                    external_evidence_ids.update(
+                        observation["observation_id"]
+                        for observation in measurement.get("observations", [])
+                        if isinstance(observation, dict)
+                        and isinstance(observation.get("observation_id"), str)
+                    )
+            except (OSError, ValueError, json.JSONDecodeError):
+                pass
     seen_issues: Set[str] = set()
     for path in context.workspace_path("analysis/diagnostics").glob("*.json"):
         if path.name.startswith("._"):
@@ -131,6 +161,9 @@ def _validate_diagnostic_links(context: ProjectContext) -> List[str]:
             for scene_id in finding.get("affected_scene_ids", []):
                 if scene_id not in scenes:
                     errors.append(f"{issue_id}: unknown affected scene ID {scene_id}")
+            for evidence_id in finding.get("external_evidence_ids", []):
+                if evidence_id not in external_evidence_ids:
+                    errors.append(f"{issue_id}: unknown external evidence ID {evidence_id}")
             for evidence in finding.get("evidence", []):
                 if not isinstance(evidence, dict):
                     errors.append(f"{issue_id}: evidence locator must be an object")
@@ -183,6 +216,8 @@ def _validate_all_evidence(context: ProjectContext) -> List[str]:
     decision_ids = set()
     approval_ids = set()
     for path in context.workspace_path("decisions").glob("*.json"):
+        if path.name.startswith("._"):
+            continue
         try:
             decision = load_json(path)
             if decision.get("project_id") == context.config.get("project_id"):
@@ -190,6 +225,8 @@ def _validate_all_evidence(context: ProjectContext) -> List[str]:
         except Exception:
             continue
     for path in context.workspace_path("approvals").glob("*.json"):
+        if path.name.startswith("._"):
+            continue
         try:
             approval = load_json(path)
             if (

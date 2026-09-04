@@ -98,14 +98,26 @@ def render_chatgpt_handoff(job: Dict[str, Any], project_root: Path) -> str:
         f"Return only the generated image and use the filename `{output_basename}`.",
         f"The repository destination for that new file is `{output_filename}`.",
         "Do not substitute, omit, or reinterpret locked reference details.",
+        "Use the high-quality production profile: prioritize event clarity, expressive acting, readable staging,",
+        "professional black-and-white manga finish, and strict visual continuity over decorative detail.",
     ]
     if job_type == "manga_panel":
         lines.extend([
+            "Generate one borderless panel image, not a full manga page or collage. Let the specified event,",
+            "intensity, shot size, camera angle, action direction, and emotional beat control the composition.",
             "Keep every dialogue-safe zone visually quiet, but do not draw dialogue, captions, balloons,",
-            "sound-effect text, panel borders, page numbers, signatures, or watermarks.",
+            "sound-effect text, panel borders, page numbers, signatures, watermarks, or color.",
+        ])
+    elif job_type == "storyboard_thumbnail":
+        lines.extend([
+            "Generate only a rough planning thumbnail, not final manga artwork.",
+            "Honor panel blocks, reading order, balloon placeholders, and visual focus without lettering text.",
         ])
     elif job_type == "correction":
-        lines.append("Create a new corrected version; never overwrite or edit the earlier image file.")
+        lines.extend([
+            "Create a new corrected version; never overwrite or edit the earlier image file.",
+            "Change only the requested correction scope and preserve every listed locked element.",
+        ])
     lines.append("")
 
     lines.extend(["## Attachment Checklist", ""])
@@ -130,11 +142,18 @@ def render_chatgpt_handoff(job: Dict[str, Any], project_root: Path) -> str:
             "",
         ])
 
+    lines.extend(_json_section("Output Specification", job["output_spec"]))
+    lines.extend(_json_section("Audience And Content Constraints", job["content_constraints"]))
     lines.extend(_json_section("Scene State", job["scene_state"]))
     lines.extend(_json_section("Character State", job["character_state"]))
     lines.extend(_json_section("Composition", job["composition"]))
-    lines.extend(_json_section("Dialogue-Safe Zones", job["dialogue_safe_zones"]))
+    lines.extend(_json_section(
+        f"Dialogue-Safe Zones ({job['safe_zone_coordinate_system']})", job["dialogue_safe_zones"]
+    ))
     lines.extend(_json_section("Manga Style", job["manga_style"]))
+    lines.extend(_json_section("Quality Profile", job["quality_profile"]))
+    if job_type == "correction":
+        lines.extend(_json_section("Correction Requirements", job["correction_requirements"]))
 
     lines.extend(["## Required Elements", ""])
     required_elements = job.get("required_elements", [])
@@ -154,8 +173,10 @@ def render_chatgpt_handoff(job: Dict[str, Any], project_root: Path) -> str:
         "## Completion Check",
         "",
         f"Before returning the image, confirm internally that the output satisfies job `{job['job_id']}`,",
-        "uses every required attachment in priority order, contains every required element, contains no",
-        "prohibited element, and is a new image version. Return the image without an explanatory essay.",
+        "uses every required attachment in priority order, reads clearly at thumbnail size, preserves character,",
+        "location, prop, costume, handedness, and screen-direction continuity, contains every required element,",
+        "contains no prohibited element, matches the exact output dimensions/mode, and is a new image version. ",
+        "Return the image without an explanatory essay.",
         "",
     ])
     lines.extend(_json_section("Canonical Job", job))

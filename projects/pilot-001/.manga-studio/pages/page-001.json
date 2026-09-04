@@ -1,31 +1,102 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.1.0",
   "page_id": "page-001",
   "page_number": 1,
   "status": "draft_waiting_for_art",
   "reading_order": "right-to-left",
+  "reading_sequence": [
+    "p1",
+    "p2",
+    "p3",
+    "p4"
+  ],
   "page_size": {
     "width": 1600,
     "height": 2400,
     "unit": "px"
+  },
+  "page_intent": {
+    "purpose": "Build a quiet supernatural question, then end on Mira's deliberate challenge to the tunnel.",
+    "pacing": "impact",
+    "layout_profile": "suspense",
+    "dominant_event": "The empty platform turns the bell's warning into a threat from the tunnel.",
+    "reader_effect": "Curiosity becomes controlled dread across four distinct beats.",
+    "emotional_curve": [
+      2,
+      3,
+      4,
+      5
+    ],
+    "page_turn": {
+      "kind": "threat",
+      "setup": "Mira points the ticket punch at the dark tunnel before the unseen train arrives.",
+      "payoff_next_page": true
+    }
+  },
+  "layout": {
+    "margin": 100,
+    "gutter": 30,
+    "background": "#fff",
+    "spread_role": "single",
+    "allow_panel_overlap": false,
+    "default_border": {
+      "visible": true,
+      "color": "#000",
+      "width": 6,
+      "line_join": "miter"
+    },
+    "safe_area": {
+      "x": 80,
+      "y": 80,
+      "width": 1440,
+      "height": 2240
+    }
   },
   "panels": [
     {
       "panel_id": "p1",
       "source_job_id": "pilot-001-panel-page-001-p1-v001",
       "frame": {
-        "x": 820,
+        "x": 780,
         "y": 100,
-        "width": 680,
+        "width": 720,
         "height": 1080
+      },
+      "clip_polygon": [
+        {"x": 850, "y": 100},
+        {"x": 1500, "y": 100},
+        {"x": 1500, "y": 1180},
+        {"x": 780, "y": 1180}
+      ],
+      "z_index": 1,
+      "fit": "cover",
+      "focus": {"x": 0.42, "y": 0.45},
+      "source_canvas": {"width": 1400, "height": 2200},
+      "safe_zone_coordinate_system": "source_normalized",
+      "event": {
+        "event_id": "page-001-event-bell",
+        "event_type": "establishing",
+        "intensity": 2,
+        "importance": 3,
+        "dominant_action": "The hanging bell trembles after ringing twice.",
+        "emotional_beat": "Mira recognizes a warning while Ren studies her reaction.",
+        "shot_size": "medium",
+        "camera_angle": "low_angle",
+        "camera_motion": "push_in",
+        "action_direction": "static",
+        "show_dont_tell_cue": "The bell's vibration, Mira's arrested posture, and Ren's redirected gaze reveal the warning without explaining it.",
+        "axis_break": false,
+        "transition": "reaction",
+        "continuity_in": ["rainy-night-platform"],
+        "continuity_out": ["empty-platform", "mira-right-of-ren"]
       },
       "art_path": null,
       "dialogue_safe_zones": [
         {
-          "x": 920,
-          "y": 160,
-          "width": 480,
-          "height": 190
+          "x": 0.18,
+          "y": 0.06,
+          "width": 0.7,
+          "height": 0.2
         }
       ],
       "summary": "Mira and Ren stand beneath the station roof as a small bell trembles in the foreground."
@@ -36,16 +107,44 @@
       "frame": {
         "x": 100,
         "y": 100,
-        "width": 680,
+        "width": 720,
         "height": 1080
+      },
+      "clip_polygon": [
+        {"x": 100, "y": 100},
+        {"x": 820, "y": 100},
+        {"x": 750, "y": 1180},
+        {"x": 100, "y": 1180}
+      ],
+      "z_index": 1,
+      "fit": "cover",
+      "focus": {"x": 0.5, "y": 0.56},
+      "source_canvas": {"width": 1400, "height": 2200},
+      "safe_zone_coordinate_system": "source_normalized",
+      "event": {
+        "event_id": "page-001-event-empty-platform",
+        "event_type": "reveal",
+        "intensity": 3,
+        "importance": 3,
+        "dominant_action": "The view opens onto an impossibly empty platform.",
+        "emotional_beat": "Ren's practical question makes the absence unsettling.",
+        "shot_size": "extreme_wide",
+        "camera_angle": "birds_eye",
+        "camera_motion": "pull_out",
+        "action_direction": "away_from_camera",
+        "show_dont_tell_cue": "Ren's small silhouette and searching posture let the empty station dominate the reveal.",
+        "axis_break": false,
+        "transition": "reveal",
+        "continuity_in": ["empty-platform"],
+        "continuity_out": ["mira-holds-punch"]
       },
       "art_path": null,
       "dialogue_safe_zones": [
         {
-          "x": 190,
-          "y": 150,
-          "width": 460,
-          "height": 180
+          "x": 0.11,
+          "y": 0.05,
+          "width": 0.68,
+          "height": 0.19
         }
       ],
       "summary": "Wide empty view down the platform, rain beyond the roof, no train visible."
@@ -59,13 +158,41 @@
         "width": 680,
         "height": 1080
       },
+      "clip_polygon": [
+        {"x": 820, "y": 1220},
+        {"x": 1500, "y": 1220},
+        {"x": 1500, "y": 2300},
+        {"x": 900, "y": 2300}
+      ],
+      "z_index": 1,
+      "fit": "cover",
+      "focus": {"x": 0.45, "y": 0.36},
+      "source_canvas": {"width": 1400, "height": 2200},
+      "safe_zone_coordinate_system": "source_normalized",
+      "event": {
+        "event_id": "page-001-event-ticket-punch",
+        "event_type": "reaction",
+        "intensity": 4,
+        "importance": 4,
+        "dominant_action": "Mira raises the old ticket punch with deliberate precision.",
+        "emotional_beat": "Fear resolves into prepared resolve.",
+        "shot_size": "detail",
+        "camera_angle": "eye_level",
+        "camera_motion": "push_in",
+        "action_direction": "toward_camera",
+        "show_dont_tell_cue": "Mira's steady grip and sharpened gaze replace a spoken declaration of resolve.",
+        "axis_break": false,
+        "transition": "action_match",
+        "continuity_in": ["mira-holds-punch"],
+        "continuity_out": ["tunnel-threat"]
+      },
       "art_path": null,
       "dialogue_safe_zones": [
         {
-          "x": 900,
-          "y": 1290,
-          "width": 500,
-          "height": 160
+          "x": 0.11,
+          "y": 0.05,
+          "width": 0.76,
+          "height": 0.18
         }
       ],
       "summary": "Close shot of Mira lifting the brass ticket punch as reflected rain streaks cut across the background."
@@ -76,24 +203,95 @@
       "frame": {
         "x": 100,
         "y": 1220,
-        "width": 680,
+        "width": 800,
         "height": 1080
+      },
+      "clip_polygon": [
+        {"x": 100, "y": 1220},
+        {"x": 780, "y": 1220},
+        {"x": 860, "y": 2300},
+        {"x": 100, "y": 2300}
+      ],
+      "z_index": 1,
+      "fit": "cover",
+      "focus": {"x": 0.58, "y": 0.62},
+      "source_canvas": {"width": 1400, "height": 2200},
+      "safe_zone_coordinate_system": "source_normalized",
+      "event": {
+        "event_id": "page-001-event-tunnel-challenge",
+        "event_type": "action",
+        "intensity": 5,
+        "importance": 5,
+        "dominant_action": "Mira aims the ticket punch into the dark tunnel while Ren watches.",
+        "emotional_beat": "The pair choose to face what has not arrived yet.",
+        "shot_size": "full",
+        "camera_angle": "worms_eye",
+        "camera_motion": "tracking",
+        "action_direction": "right_to_left",
+        "show_dont_tell_cue": "Mira's leading arm line and Ren's braced stance show their shared decision to confront the tunnel.",
+        "axis_break": false,
+        "transition": "smash_cut",
+        "continuity_in": ["tunnel-threat"],
+        "continuity_out": ["train-not-yet-visible"]
       },
       "art_path": null,
       "dialogue_safe_zones": [
         {
-          "x": 190,
-          "y": 1290,
-          "width": 500,
-          "height": 190
+          "x": 0.1,
+          "y": 0.11,
+          "width": 0.68,
+          "height": 0.19
         }
       ],
       "summary": "Track-level view: Mira points the ticket punch toward a dark tunnel while Ren watches."
     }
   ],
+  "lettering_style": {
+    "font_family": "Noto Sans, Arial, sans-serif",
+    "font_size": 34,
+    "min_font_size": 16,
+    "font_weight": 700,
+    "line_height": 1.18,
+    "fill": "#fff",
+    "stroke": "#000",
+    "stroke_width": 4,
+    "text_color": "#000",
+    "padding": 20,
+    "embed_font": false,
+    "line_break_profile": "latin"
+  },
   "lettering": [
     {
+      "lettering_id": "page-001-sfx-bell",
       "panel_id": "p1",
+      "reading_order": 1,
+      "kind": "sfx",
+      "text": "CHIME",
+      "box": {
+        "x": 850,
+        "y": 850,
+        "width": 220,
+        "height": 160
+      },
+      "shape": "none",
+      "rotation": -8,
+      "font_size": 52,
+      "font_weight": 900,
+      "text_color": "#fff",
+      "stroke": "#000",
+      "stroke_width": 5,
+      "sound": {
+        "source": "small brass station bell",
+        "meaning": "a clear metallic warning ring",
+        "intensity": 2,
+        "language": "English",
+        "translation": "A bell rings once in the present panel."
+      }
+    },
+    {
+      "lettering_id": "page-001-balloon-mira-01",
+      "panel_id": "p1",
+      "reading_order": 2,
       "kind": "speech",
       "speaker": "Mira",
       "text": "The bell rang twice. That means someone came back.",
@@ -103,13 +301,16 @@
         "width": 480,
         "height": 190
       },
+      "shape": "ellipse",
       "tail_to": {
         "x": 1180,
         "y": 430
       }
     },
     {
+      "lettering_id": "page-001-balloon-ren-01",
       "panel_id": "p2",
+      "reading_order": 3,
       "kind": "speech",
       "speaker": "Ren",
       "text": "Then why is the platform empty?",
@@ -119,13 +320,16 @@
         "width": 460,
         "height": 180
       },
+      "shape": "ellipse",
       "tail_to": {
         "x": 520,
         "y": 470
       }
     },
     {
+      "lettering_id": "page-001-caption-01",
       "panel_id": "p3",
+      "reading_order": 4,
       "kind": "caption",
       "text": "Mira lifted the old ticket punch.",
       "box": {
@@ -133,10 +337,13 @@
         "y": 1290,
         "width": 500,
         "height": 160
-      }
+      },
+      "shape": "rectangle"
     },
     {
+      "lettering_id": "page-001-balloon-mira-02",
       "panel_id": "p4",
+      "reading_order": 5,
       "kind": "speech",
       "speaker": "Mira",
       "text": "Because the train has not arrived yet.",
@@ -146,6 +353,7 @@
         "width": 500,
         "height": 190
       },
+      "shape": "ellipse",
       "tail_to": {
         "x": 440,
         "y": 1770

@@ -5,295 +5,256 @@
   "type": "object",
   "additionalProperties": false,
   "required": [
-    "schema_version",
-    "job_id",
-    "job_type",
-    "output_filename",
-    "required_reference_images",
-    "reference_priority",
-    "scene_state",
-    "character_state",
-    "composition",
-    "dialogue_safe_zones",
-    "manga_style",
-    "required_elements",
-    "prohibited_elements",
-    "revision_history",
-    "release_status",
-    "blocking_reasons"
+    "schema_version", "job_id", "job_type", "output_filename", "output_spec", "content_constraints",
+    "required_reference_images", "reference_priority", "scene_state", "character_state",
+    "composition", "safe_zone_coordinate_system", "dialogue_safe_zones", "manga_style",
+    "quality_profile", "required_elements", "prohibited_elements", "revision_history",
+    "release_status", "blocking_reasons"
   ],
   "properties": {
-    "schema_version": {
-      "type": "string"
-    },
-    "job_id": {
-      "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9-]*-v[0-9]{3}$"
-    },
+    "schema_version": {"const": "1.3.0"},
+    "job_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*-v[0-9]{3}$"},
     "job_type": {
-      "type": "string",
       "enum": [
-        "character_reference",
-        "location_reference",
-        "prop_reference",
-        "manga_panel",
-        "correction",
-        "cover",
-        "splash_page"
+        "character_reference", "location_reference", "prop_reference", "storyboard_thumbnail",
+        "manga_panel", "correction", "cover", "splash_page"
       ]
     },
-    "output_filename": {
-      "$ref": "#/$defs/relativePath"
-    },
-    "required_reference_images": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/referenceImage"
-      }
-    },
-    "reference_priority": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "deferred_reference_dependencies": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/deferredReferenceDependency"
-      }
-    },
-    "scene_state": {
-      "type": "object"
-    },
-    "character_state": {
-      "type": "object"
-    },
-    "composition": {
-      "type": "object"
-    },
-    "dialogue_safe_zones": {
-      "type": "array",
-      "items": {
-        "$ref": "#/$defs/box"
-      }
-    },
-    "manga_style": {
-      "type": "object"
-    },
-    "required_elements": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "prohibited_elements": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    },
-    "revision_of_job_id": {
-      "type": "string"
-    },
-    "revision_history": {
-      "type": "array",
-      "minItems": 1,
-      "items": {
-        "$ref": "#/$defs/revision"
-      }
-    },
-    "release_status": {
-      "type": "string",
-      "enum": [
-        "deferred",
-        "ready",
-        "released",
-        "completed",
-        "superseded"
-      ]
-    },
-    "blocking_reasons": {
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    }
+    "output_filename": {"$ref": "#/$defs/relativePath"},
+    "output_spec": {"$ref": "#/$defs/outputSpec"},
+    "content_constraints": {"$ref": "#/$defs/contentConstraints"},
+    "required_reference_images": {"type": "array", "items": {"$ref": "#/$defs/referenceImage"}},
+    "reference_priority": {"type": "array", "items": {"type": "string"}},
+    "deferred_reference_dependencies": {"type": "array", "items": {"$ref": "#/$defs/deferredReferenceDependency"}},
+    "scene_state": {"type": "object"},
+    "character_state": {"type": "object"},
+    "composition": {"type": "object"},
+    "safe_zone_coordinate_system": {"const": "source_normalized"},
+    "dialogue_safe_zones": {"type": "array", "items": {"$ref": "#/$defs/normalizedBox"}},
+    "manga_style": {"$ref": "#/$defs/mangaStyle"},
+    "quality_profile": {"$ref": "#/$defs/qualityProfile"},
+    "required_elements": {"type": "array", "items": {"type": "string"}},
+    "prohibited_elements": {"type": "array", "items": {"type": "string"}},
+    "revision_of_job_id": {"type": "string"},
+    "correction_requirements": {"$ref": "#/$defs/correctionRequirements"},
+    "revision_history": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/revision"}},
+    "release_status": {"enum": ["deferred", "ready", "released", "completed", "superseded"]},
+    "blocking_reasons": {"type": "array", "items": {"type": "string"}}
   },
   "allOf": [
     {
-      "if": {
-        "properties": {
-          "job_type": {
-            "const": "manga_panel"
-          }
-        }
-      },
+      "if": {"required": ["job_type"], "properties": {"job_type": {"const": "manga_panel"}}},
       "then": {
         "properties": {
+          "composition": {"$ref": "#/$defs/panelComposition"},
           "prohibited_elements": {
             "allOf": [
-              {
-                "contains": {
-                  "const": "dialogue_text"
-                }
-              },
-              {
-                "contains": {
-                  "const": "captions"
-                }
-              },
-              {
-                "contains": {
-                  "const": "speech_balloons"
-                }
-              },
-              {
-                "contains": {
-                  "const": "sound_effect_text"
-                }
-              },
-              {
-                "contains": {
-                  "const": "panel_borders"
-                }
-              },
-              {
-                "contains": {
-                  "const": "page_numbers"
-                }
-              },
-              {
-                "contains": {
-                  "const": "signatures"
-                }
-              },
-              {
-                "contains": {
-                  "const": "watermarks"
-                }
-              }
+              {"contains": {"const": "dialogue_text"}}, {"contains": {"const": "captions"}},
+              {"contains": {"const": "speech_balloons"}}, {"contains": {"const": "sound_effect_text"}},
+              {"contains": {"const": "panel_borders"}}, {"contains": {"const": "page_numbers"}},
+              {"contains": {"const": "signatures"}}, {"contains": {"const": "watermarks"}},
+              {"contains": {"const": "color"}}
             ]
           }
         }
       }
+    },
+    {
+      "if": {"required": ["job_type"], "properties": {"job_type": {"const": "character_reference"}}},
+      "then": {"properties": {"composition": {"$ref": "#/$defs/characterReferenceComposition"}}}
+    },
+    {
+      "if": {"required": ["job_type"], "properties": {"job_type": {"const": "location_reference"}}},
+      "then": {"properties": {"composition": {"$ref": "#/$defs/locationReferenceComposition"}}}
+    },
+    {
+      "if": {"required": ["job_type"], "properties": {"job_type": {"const": "prop_reference"}}},
+      "then": {"properties": {"composition": {"$ref": "#/$defs/propReferenceComposition"}}}
+    },
+    {
+      "if": {"required": ["job_type"], "properties": {"job_type": {"const": "storyboard_thumbnail"}}},
+      "then": {
+        "properties": {
+          "composition": {"$ref": "#/$defs/thumbnailComposition"},
+          "prohibited_elements": {
+            "allOf": [
+              {"contains": {"const": "final_artwork"}}, {"contains": {"const": "dialogue_text"}},
+              {"contains": {"const": "sound_effect_text"}}, {"contains": {"const": "signatures"}},
+              {"contains": {"const": "watermarks"}}, {"contains": {"const": "color"}}
+            ]
+          }
+        }
+      }
+    },
+    {
+      "if": {"required": ["job_type"], "properties": {"job_type": {"const": "correction"}}},
+      "then": {"required": ["revision_of_job_id", "correction_requirements"]}
     }
   ],
   "$defs": {
-    "relativePath": {
-      "type": "string",
-      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+"
+    "relativePath": {"type": "string", "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+"},
+    "outputSpec": {
+      "type": "object", "additionalProperties": false,
+      "required": ["format", "width", "height", "color_mode", "alpha_allowed"],
+      "properties": {
+        "format": {"enum": ["png", "jpeg", "webp", "tiff"]},
+        "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1},
+        "color_mode": {"enum": ["bilevel", "grayscale", "rgb", "rgba"]},
+        "alpha_allowed": {"type": "boolean"}
+      }
+    },
+    "contentConstraints": {
+      "type": "object", "additionalProperties": false,
+      "required": ["age_band", "content_rating", "content_boundaries", "sensitivity_requirements", "accessibility_goals"],
+      "properties": {
+        "age_band": {"type": "string", "minLength": 1},
+        "content_rating": {"enum": ["all_ages", "teen", "older_teen", "mature", "unrated_pending_review"]},
+        "content_boundaries": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+        "sensitivity_requirements": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "accessibility_goals": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+      }
     },
     "referenceImage": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "reference_id",
-        "kind",
-        "path",
-        "locked",
-        "usage"
-      ],
+      "type": "object", "additionalProperties": false,
+      "required": ["reference_id", "kind", "path", "locked", "usage"],
       "properties": {
-        "reference_id": {
-          "type": "string"
-        },
-        "kind": {
-          "type": "string",
-          "enum": [
-            "character_reference",
-            "location_reference",
-            "prop_reference",
-            "panel_reference"
-          ]
-        },
-        "path": {
-          "$ref": "#/$defs/relativePath"
-        },
-        "locked": {
-          "type": "boolean"
-        },
-        "usage": {
-          "type": "string"
-        }
+        "reference_id": {"type": "string"},
+        "kind": {"enum": ["character_reference", "location_reference", "prop_reference", "panel_reference", "storyboard_thumbnail"]},
+        "path": {"$ref": "#/$defs/relativePath"}, "locked": {"type": "boolean"}, "usage": {"type": "string"}
       }
     },
     "deferredReferenceDependency": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "reference_id",
-        "source_job_id",
-        "kind",
-        "usage"
-      ],
+      "type": "object", "additionalProperties": false,
+      "required": ["reference_id", "source_job_id", "kind", "usage"],
       "properties": {
-        "reference_id": {"type": "string"},
-        "source_job_id": {"type": "string"},
-        "kind": {
-          "type": "string",
-          "enum": ["character_reference", "location_reference", "prop_reference", "panel_reference"]
-        },
+        "reference_id": {"type": "string"}, "source_job_id": {"type": "string"},
+        "kind": {"enum": ["character_reference", "location_reference", "prop_reference", "panel_reference", "storyboard_thumbnail"]},
         "usage": {"type": "string"}
       }
     },
-    "box": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "x",
-        "y",
-        "width",
-        "height"
-      ],
+    "normalizedBox": {
+      "type": "object", "additionalProperties": false, "required": ["x", "y", "width", "height"],
       "properties": {
-        "x": {
-          "type": "integer"
-        },
-        "y": {
-          "type": "integer"
-        },
-        "width": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "height": {
-          "type": "integer",
-          "minimum": 1
-        }
+        "x": {"type": "number", "minimum": 0, "maximum": 1}, "y": {"type": "number", "minimum": 0, "maximum": 1},
+        "width": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}, "height": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "mangaStyle": {
+      "type": "object", "additionalProperties": false,
+      "required": ["palette", "linework", "line_weight_strategy", "solid_black_strategy", "screen_tones", "contrast_plan", "depth_plan", "motion_language", "genre"],
+      "properties": {
+        "palette": {"enum": ["black-and-white", "grayscale", "color"]},
+        "linework": {"type": "string", "minLength": 1},
+        "line_weight_strategy": {"type": "string", "minLength": 1},
+        "solid_black_strategy": {"type": "string", "minLength": 1},
+        "screen_tones": {"type": "string", "minLength": 1},
+        "contrast_plan": {"type": "string", "minLength": 1},
+        "depth_plan": {"type": "string", "minLength": 1},
+        "motion_language": {"type": "string", "minLength": 1},
+        "genre": {"type": "string", "minLength": 1}
+      }
+    },
+    "eventDirection": {
+      "type": "object", "additionalProperties": false,
+      "required": ["event_type", "intensity", "importance", "shot_size", "camera_angle", "camera_motion", "action_direction", "emotional_beat", "pose_and_expression", "show_dont_tell_cue"],
+      "properties": {
+        "event_type": {"enum": ["establishing", "dialogue", "action", "reaction", "reveal", "transition", "montage", "silence"]},
+        "intensity": {"type": "integer", "minimum": 1, "maximum": 5},
+        "importance": {"type": "integer", "minimum": 1, "maximum": 5},
+        "shot_size": {"enum": ["extreme_wide", "wide", "full", "medium", "close_up", "extreme_close_up", "detail", "pov"]},
+        "camera_angle": {"enum": ["eye_level", "high_angle", "low_angle", "dutch", "birds_eye", "worms_eye", "over_shoulder", "pov"]},
+        "camera_motion": {"enum": ["static", "pan", "tilt", "push_in", "pull_out", "tracking", "handheld", "impact"]},
+        "action_direction": {"enum": ["left_to_right", "right_to_left", "toward_camera", "away_from_camera", "static", "mixed"]},
+        "emotional_beat": {"type": "string", "minLength": 1},
+        "pose_and_expression": {"type": "string", "minLength": 1},
+        "show_dont_tell_cue": {"type": "string", "minLength": 1}
+      }
+    },
+    "panelComposition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["camera", "framing", "reading_focus", "event_direction", "background_priority"],
+      "properties": {
+        "camera": {"type": "string", "minLength": 1}, "framing": {"type": "string", "minLength": 1},
+        "reading_focus": {"type": "string", "minLength": 1}, "event_direction": {"$ref": "#/$defs/eventDirection"},
+        "background_priority": {"enum": ["minimal", "supporting", "story_critical"]}
+      }
+    },
+    "characterReferenceComposition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sheet_layout", "views", "expressions", "proportion_guide", "continuity_focus", "background"],
+      "properties": {
+        "sheet_layout": {"type": "string", "minLength": 1},
+        "views": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+        "expressions": {"type": "array", "minItems": 4, "items": {"type": "string"}},
+        "proportion_guide": {"type": "string", "minLength": 1},
+        "continuity_focus": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "background": {"type": "string", "minLength": 1}
+      }
+    },
+    "locationReferenceComposition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sheet_layout", "views", "spatial_map", "scale_cues", "continuity_landmarks", "lighting_states"],
+      "properties": {
+        "sheet_layout": {"type": "string", "minLength": 1},
+        "views": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+        "spatial_map": {"type": "string", "minLength": 1}, "scale_cues": {"type": "string", "minLength": 1},
+        "continuity_landmarks": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "lighting_states": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      }
+    },
+    "propReferenceComposition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sheet_layout", "views", "scale_reference", "functional_states", "continuity_markers", "background"],
+      "properties": {
+        "sheet_layout": {"type": "string", "minLength": 1},
+        "views": {"type": "array", "minItems": 3, "items": {"type": "string"}},
+        "scale_reference": {"type": "string", "minLength": 1},
+        "functional_states": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "continuity_markers": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "background": {"type": "string", "minLength": 1}
+      }
+    },
+    "thumbnailComposition": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reading_sequence", "panel_blocks", "balloon_placeholders", "visual_focus", "roughness"],
+      "properties": {
+        "reading_sequence": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "panel_blocks": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/normalizedBox"}},
+        "balloon_placeholders": {"type": "array", "items": {"$ref": "#/$defs/normalizedBox"}},
+        "visual_focus": {"type": "string", "minLength": 1},
+        "roughness": {"const": "planning_thumbnail_not_final_art"}
+      }
+    },
+    "qualityProfile": {
+      "type": "object", "additionalProperties": false,
+      "required": ["tier", "goals", "variation_policy", "continuity_strictness", "detail_budget", "self_check_required"],
+      "properties": {
+        "tier": {"enum": ["standard", "high"]},
+        "goals": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "variation_policy": {"enum": ["event_driven", "reference_driven", "layout_driven"]},
+        "continuity_strictness": {"const": "locked"},
+        "detail_budget": {"enum": ["standard", "high"]},
+        "self_check_required": {"type": "boolean"}
+      }
+    },
+    "correctionRequirements": {
+      "type": "object", "additionalProperties": false,
+      "required": ["source_review_id", "requested_changes", "preserve_elements"],
+      "properties": {
+        "source_review_id": {"type": "string"},
+        "requested_changes": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "preserve_elements": {"type": "array", "minItems": 1, "items": {"type": "string"}}
       }
     },
     "revision": {
-      "type": "object",
-      "additionalProperties": false,
-      "required": [
-        "version",
-        "output_filename",
-        "notes"
-      ],
+      "type": "object", "additionalProperties": false,
+      "required": ["version", "output_filename", "notes"],
       "properties": {
-        "version": {
-          "type": "string",
-          "pattern": "^v[0-9]{3}$"
-        },
-        "output_filename": {
-          "$ref": "#/$defs/relativePath"
-        },
-        "supersedes_job_id": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "supersedes_output_filename": {
-          "type": [
-            "string",
-            "null"
-          ]
-        },
-        "notes": {
-          "type": "string"
-        }
+        "version": {"type": "string", "pattern": "^v[0-9]{3}$"},
+        "output_filename": {"$ref": "#/$defs/relativePath"},
+        "supersedes_job_id": {"type": ["string", "null"]},
+        "supersedes_output_filename": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+        "notes": {"type": "string"}
       }
     }
   }

@@ -1,8 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "job_id": "pilot-001-ref-location-v001",
   "job_type": "location_reference",
   "output_filename": ".manga-studio/handoff/generated/refs/rain-platform-reference-v001.png",
+  "output_spec": {"format": "png", "width": 2400, "height": 1600, "color_mode": "grayscale", "alpha_allowed": false},
+  "content_constraints": {"age_band": "teen and older", "content_rating": "teen", "content_boundaries": ["No graphic injury", "No sexual content", "Threat remains suspenseful rather than sadistic"], "sensitivity_requirements": ["Fear responses should not be mocked", "Avoid glamorizing reckless isolation"], "accessibility_goals": ["Clear event order", "Readable concise dialogue", "Every SFX includes reader-facing meaning"]},
   "required_reference_images": [],
   "reference_priority": [],
   "scene_state": {
@@ -12,19 +14,42 @@
   },
   "character_state": {},
   "composition": {
-    "format": "location reference sheet",
+    "sheet_layout": "Large spatial overview with three perspective views and focused landmark details.",
     "views": [
       "wide platform view",
       "track edge view",
       "detail view of hanging bell and timetable board"
     ],
-    "background": "station platform environment only"
+    "spatial_map": "Show the roof posts, track edge, tunnel mouth, bell, timetable board, and both platform exits in one consistent plan.",
+    "scale_cues": "Include unlabeled human-height silhouettes and standard door and bench proportions.",
+    "continuity_landmarks": ["small brass hanging bell", "weathered timetable board", "three roof posts", "dark single-track tunnel"],
+    "lighting_states": ["rainy night under platform lamps", "platform lamps briefly dimmed"]
   },
+  "safe_zone_coordinate_system": "source_normalized",
   "dialogue_safe_zones": [],
   "manga_style": {
     "palette": "black-and-white",
     "linework": "clear architectural ink lines, wet surfaces shown with screen tones",
+    "line_weight_strategy": "Heavy structural foregrounds, medium landmarks, and fine receding architecture.",
+    "solid_black_strategy": "Reserve dense black for the tunnel, roof cavities, and night beyond the platform.",
+    "screen_tones": "Wet floor reflections, rain, and lamp falloff use separable restrained tones.",
+    "contrast_plan": "Landmarks stay identifiable in both the overview and small detail views.",
+    "depth_plan": "Consistent perspective grids connect all views and preserve platform geography.",
+    "motion_language": "Only rain and reflected ripples imply movement; architecture remains stable.",
     "genre": "quiet supernatural mystery manga"
+  },
+  "quality_profile": {
+    "tier": "high",
+    "goals": [
+      "clear reusable environment geometry",
+      "consistent landmarks and spatial logic",
+      "production-ready visual reference detail",
+      "professional black-and-white manga finish"
+    ],
+    "variation_policy": "reference_driven",
+    "continuity_strictness": "locked",
+    "detail_budget": "high",
+    "self_check_required": true
   },
   "required_elements": [
     "covered rural platform roof",

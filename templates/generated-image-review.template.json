@@ -1,0 +1,33 @@
+{
+  "schema_version": "1.0.0",
+  "review_id": "example-panel-visual-review-v001",
+  "project_id": "example-project",
+  "review_type": "generated_image",
+  "target": ".manga-studio/continuity/intake/example-panel-v001-intake-v001.json",
+  "target_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "status": "review_ready",
+  "automated": false,
+  "approval_required": true,
+  "metric_scope": "human_visual_assessment",
+  "findings": [],
+  "visual_assessment": {
+    "reviewer": "human-reviewer",
+    "reviewed_at": "2026-01-01T00:00:00Z",
+    "story_clarity": 4,
+    "event_readability": 4,
+    "reference_adherence": 4,
+    "character_acting": 4,
+    "composition": 4,
+    "monochrome_finish": 4,
+    "continuity": 4,
+    "lettering_readability": 5,
+    "content_boundary_compliance": 5,
+    "required_elements_present": true,
+    "prohibited_elements_absent": true,
+    "dialogue_safe_zones_usable": true,
+    "artifact_free": true,
+    "notes": [
+      "Panel artwork contains no lettering; lettering_readability rates reserved dialogue-safe space."
+    ]
+  }
+}

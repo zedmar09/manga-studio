@@ -1,8 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "job_id": "pilot-001-ref-supporting-character-v001",
   "job_type": "character_reference",
   "output_filename": ".manga-studio/handoff/generated/refs/supporting-ren-reference-v001.png",
+  "output_spec": {"format": "png", "width": 2000, "height": 2400, "color_mode": "grayscale", "alpha_allowed": false},
+  "content_constraints": {"age_band": "teen and older", "content_rating": "teen", "content_boundaries": ["No graphic injury", "No sexual content", "Threat remains suspenseful rather than sadistic"], "sensitivity_requirements": ["Fear responses should not be mocked", "Avoid glamorizing reckless isolation"], "accessibility_goals": ["Clear event order", "Readable concise dialogue", "Every SFX includes reader-facing meaning"]},
   "required_reference_images": [],
   "reference_priority": [],
   "scene_state": {
@@ -23,20 +25,43 @@
     }
   },
   "composition": {
-    "format": "reference sheet",
+    "sheet_layout": "Orthographic turnaround across the top with expression studies and proportion guide below.",
     "views": [
       "full-body front view",
       "full-body side view",
-      "three-quarter bust view",
-      "two small expression studies"
+      "full-body back view",
+      "three-quarter bust view"
     ],
+    "expressions": ["practical neutral", "skeptical focus", "startled restraint", "protective concern", "dry amusement"],
+    "proportion_guide": "Keep height relative to Mira, coat length, glasses placement, and messenger-bag strap consistent.",
+    "continuity_focus": ["round glasses", "side-parted hair silhouette", "long coat below knees", "umbrella in left hand"],
     "background": "plain white"
   },
+  "safe_zone_coordinate_system": "source_normalized",
   "dialogue_safe_zones": [],
   "manga_style": {
     "palette": "black-and-white",
     "linework": "clean ink linework with restrained screen tones",
+    "line_weight_strategy": "Strong outer silhouette, medium clothing folds, and fine glasses and facial details.",
+    "solid_black_strategy": "Use compact black hair and clothing accents without merging glasses into the face.",
+    "screen_tones": "Light neutral tones separate coat, shirt, trousers, and messenger bag.",
+    "contrast_plan": "Glasses, eyes, hands, and bag strap remain readable at reduced reference size.",
+    "depth_plan": "Flat reference presentation with limited form shading for construction clarity.",
+    "motion_language": "Static turnaround poses; expression studies use restrained head and shoulder changes.",
     "genre": "quiet supernatural mystery manga"
+  },
+  "quality_profile": {
+    "tier": "high",
+    "goals": [
+      "clear turnaround readability",
+      "consistent identity and proportions",
+      "production-ready visual reference detail",
+      "professional black-and-white manga finish"
+    ],
+    "variation_policy": "reference_driven",
+    "continuity_strictness": "locked",
+    "detail_budget": "high",
+    "self_check_required": true
   },
   "required_elements": [
     "round glasses",

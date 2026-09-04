@@ -1,0 +1,58 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/generated-image.schema.json",
+  "title": "Manga Studio Generated Image Intake",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "intake_id", "project_id", "job_id", "job_path", "job_sha256", "image_path",
+    "captured_at", "file", "expected", "status", "findings", "approval_required"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "intake_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "job_id": {"type": "string", "minLength": 1},
+    "job_path": {"$ref": "story-common.schema.json#/$defs/relativePath"},
+    "job_sha256": {"$ref": "story-common.schema.json#/$defs/sha256"},
+    "image_path": {"$ref": "story-common.schema.json#/$defs/relativePath"},
+    "captured_at": {"type": "string", "minLength": 1},
+    "file": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sha256", "format", "width", "height", "color_mode", "bit_depth", "has_alpha", "size_bytes"],
+      "properties": {
+        "sha256": {"$ref": "story-common.schema.json#/$defs/sha256"},
+        "format": {"enum": ["png", "jpeg", "webp", "tiff"]},
+        "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1},
+        "color_mode": {"enum": ["bilevel", "grayscale", "grayscale_alpha", "indexed", "rgb", "rgba", "cmyk", "unknown"]},
+        "bit_depth": {"type": "integer", "minimum": 1}, "has_alpha": {"type": "boolean"},
+        "size_bytes": {"type": "integer", "minimum": 1}
+      }
+    },
+    "expected": {
+      "type": "object", "additionalProperties": false,
+      "required": ["output_filename", "format", "width", "height", "color_mode", "alpha_allowed", "palette"],
+      "properties": {
+        "output_filename": {"$ref": "story-common.schema.json#/$defs/relativePath"},
+        "format": {"enum": ["png", "jpeg", "webp", "tiff"]},
+        "width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1},
+        "color_mode": {"enum": ["bilevel", "grayscale", "rgb", "rgba"]},
+        "alpha_allowed": {"type": "boolean"},
+        "palette": {"enum": ["black-and-white", "grayscale", "color"]}
+      }
+    },
+    "status": {"enum": ["technical_valid", "review_required", "blocked"]},
+    "findings": {
+      "type": "array",
+      "items": {
+        "type": "object", "additionalProperties": false, "required": ["severity", "code", "message"],
+        "properties": {
+          "severity": {"enum": ["info", "warning", "error"]},
+          "code": {"type": "string", "minLength": 1},
+          "message": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "approval_required": {"const": true}
+  }
+}

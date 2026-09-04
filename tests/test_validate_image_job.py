@@ -11,6 +11,7 @@ REPO_ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(REPO_ROOT / "scripts" / "lib"))
 
 from manga_studio.validation import validate_image_job
+from manga_studio.json_schema import validate_instance
 
 
 PANEL_PROHIBITIONS = [
@@ -47,10 +48,20 @@ class ValidateImageJobTests(unittest.TestCase):
 
     def valid_panel_job(self) -> dict:
         return {
-            "schema_version": "1.0.0",
+            "schema_version": "1.3.0",
             "job_id": "test-panel-page-001-p1-v001",
             "job_type": "manga_panel",
             "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-01-v001.png",
+            "output_spec": {
+                "format": "png", "width": 1400, "height": 2200,
+                "color_mode": "grayscale", "alpha_allowed": False,
+            },
+            "content_constraints": {
+                "age_band": "teen and older", "content_rating": "teen",
+                "content_boundaries": ["No graphic injury"],
+                "sensitivity_requirements": ["Treat fear seriously"],
+                "accessibility_goals": ["Clear event order"],
+            },
             "required_reference_images": [
                 {
                     "reference_id": "character-reference-v001",
@@ -71,18 +82,46 @@ class ValidateImageJobTests(unittest.TestCase):
                 "character-001": "Facing the scene focus."
             },
             "composition": {
-                "camera": "medium shot"
+                "camera": "medium shot",
+                "framing": "Character centered with the scene focus visible.",
+                "reading_focus": "Character first, then scene focus.",
+                "event_direction": {
+                    "event_type": "reaction", "intensity": 3, "importance": 3,
+                    "shot_size": "medium", "camera_angle": "eye_level",
+                    "camera_motion": "static", "action_direction": "static",
+                    "emotional_beat": "Recognition.",
+                    "pose_and_expression": "The character turns and focuses.",
+                    "show_dont_tell_cue": "The turn and focused gaze reveal recognition.",
+                },
+                "background_priority": "supporting",
             },
+            "safe_zone_coordinate_system": "source_normalized",
             "dialogue_safe_zones": [
                 {
-                    "x": 20,
-                    "y": 20,
-                    "width": 300,
-                    "height": 160
+                    "x": 0.05,
+                    "y": 0.05,
+                    "width": 0.35,
+                    "height": 0.2
                 }
             ],
             "manga_style": {
-                "palette": "black-and-white"
+                "palette": "black-and-white",
+                "linework": "Clean production ink.",
+                "line_weight_strategy": "Heavy silhouettes, medium contours, fine details.",
+                "solid_black_strategy": "Reserve blacks for focal contrast.",
+                "screen_tones": "Restrained grayscale depth tones.",
+                "contrast_plan": "Keep the character readable against the setting.",
+                "depth_plan": "Separate foreground, subject, and background.",
+                "motion_language": "Use pose direction instead of decorative lines.",
+                "genre": "mystery manga",
+            },
+            "quality_profile": {
+                "tier": "high",
+                "goals": ["event clarity", "strict continuity", "professional manga finish"],
+                "variation_policy": "event_driven",
+                "continuity_strictness": "locked",
+                "detail_budget": "high",
+                "self_check_required": True,
             },
             "required_elements": [
                 "primary character"
@@ -119,6 +158,21 @@ class ValidateImageJobTests(unittest.TestCase):
 
         self.assertTrue(any("required reference 'character-reference-v001' is missing" in error for error in errors))
 
+    def test_reference_symlink_cannot_escape_project(self) -> None:
+        with tempfile.TemporaryDirectory() as outside:
+            external = Path(outside) / "external.png"
+            external.write_bytes(b"external fixture")
+            link = self.ref_dir / "external-v001.png"
+            link.symlink_to(external)
+            job = self.valid_panel_job()
+            job["required_reference_images"][0]["path"] = link.relative_to(self.project_root).as_posix()
+            job_path = self.project_root / "job.json"
+            write_json(job_path, job)
+
+            errors = validate_image_job(job_path, self.project_root)
+
+            self.assertTrue(any("resolves outside the project root" in error for error in errors))
+
     def test_panel_job_must_prohibit_text_balloons_borders_and_marks(self) -> None:
         job = self.valid_panel_job()
         job["prohibited_elements"] = ["watermarks"]
@@ -130,6 +184,43 @@ class ValidateImageJobTests(unittest.TestCase):
         self.assertTrue(any("manga_panel prohibited_elements is missing" in error for error in errors))
         self.assertTrue(any("dialogue_text" in error for error in errors))
         self.assertTrue(any("panel_borders" in error for error in errors))
+
+    def test_schema_rejects_zero_width_normalized_safe_zone(self) -> None:
+        job = self.valid_panel_job()
+        job["dialogue_safe_zones"][0]["width"] = 0
+
+        errors = validate_instance(job, REPO_ROOT / "schemas/image-job.schema.json")
+
+        self.assertTrue(any("must be greater than 0" in error for error in errors))
+
+    def test_active_job_requires_high_quality_profile(self) -> None:
+        job = self.valid_panel_job()
+        job["quality_profile"]["tier"] = "standard"
+        job_path = self.project_root / "job.json"
+        write_json(job_path, job)
+
+        errors = validate_image_job(job_path, self.project_root)
+
+        self.assertIn("active image jobs must use quality_profile.tier 'high'", errors)
+
+    def test_reference_priority_cannot_repeat_or_mix_resolved_and_deferred_ids(self) -> None:
+        job = self.valid_panel_job()
+        job["release_status"] = "deferred"
+        job["blocking_reasons"] = ["Reference job has not been approved."]
+        job["deferred_reference_dependencies"] = [{
+            "reference_id": "character-reference-v001",
+            "source_job_id": "test-character-reference-job-v001",
+            "kind": "character_reference",
+            "usage": "Resolve before release.",
+        }]
+        job["reference_priority"] = ["character-reference-v001", "character-reference-v001"]
+        job_path = self.project_root / "duplicate-reference.json"
+        write_json(job_path, job)
+
+        errors = validate_image_job(job_path, self.project_root, check_reference_existence=False)
+
+        self.assertIn("reference_priority must not repeat reference IDs", errors)
+        self.assertTrue(any("both resolved and deferred" in error for error in errors))
 
     def test_deferred_panel_uses_job_dependencies_not_missing_reference_paths(self) -> None:
         job = self.valid_panel_job()
@@ -190,6 +281,11 @@ class ValidateImageJobTests(unittest.TestCase):
         job["job_id"] = "test-panel-page-001-p1-v002"
         job["job_type"] = "correction"
         job["revision_of_job_id"] = "test-panel-page-001-p1-v001"
+        job["correction_requirements"] = {
+            "source_review_id": "page-001-p1-review-v001",
+            "requested_changes": ["Correct the right-hand prop placement."],
+            "preserve_elements": ["Face, costume, camera, and background."],
+        }
         job["output_filename"] = ".manga-studio/handoff/corrections/page-001-panel-01-v001.png"
         job["revision_history"] = [
             {
@@ -214,6 +310,38 @@ class ValidateImageJobTests(unittest.TestCase):
 
         self.assertTrue(any("new output_filename" in error for error in errors))
         self.assertTrue(any("must differ from supersedes_output_filename" in error for error in errors))
+
+    def test_correction_requires_review_bound_change_and_preservation_scope(self) -> None:
+        job = self.valid_panel_job()
+        job["job_id"] = "test-panel-page-001-p1-v002"
+        job["job_type"] = "correction"
+        job["revision_of_job_id"] = "test-panel-page-001-p1-v001"
+        job["output_filename"] = ".manga-studio/handoff/corrections/page-001-panel-01-v002.png"
+        job["revision_history"] = [
+            {
+                "version": "v002",
+                "output_filename": ".manga-studio/handoff/corrections/page-001-panel-01-v002.png",
+                "supersedes_job_id": "test-panel-page-001-p1-v001",
+                "supersedes_output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-01-v001.png",
+                "notes": "Correction without a bounded scope.",
+            }
+        ]
+        job_path = self.project_root / "job.json"
+        write_json(job_path, job)
+
+        errors = validate_image_job(job_path, self.project_root)
+
+        self.assertIn("correction jobs must include correction_requirements", errors)
+
+    def test_latest_revision_version_must_match_job_id(self) -> None:
+        job = self.valid_panel_job()
+        job["job_id"] = "test-panel-page-001-p1-v002"
+        job_path = self.project_root / "job.json"
+        write_json(job_path, job)
+
+        errors = validate_image_job(job_path, self.project_root)
+
+        self.assertIn("latest revision version must match the version suffix in job_id", errors)
 
 
 if __name__ == "__main__":

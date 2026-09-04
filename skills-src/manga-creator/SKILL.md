@@ -3,7 +3,7 @@ name: manga-creator
 description: Orchestrate a portable Manga Studio story workspace, selecting only the specialist skills needed for creation, import, diagnosis, repair, continuation, adaptation, continuity audit, or visual-production preparation.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Creator
@@ -26,7 +26,7 @@ The requested operating mode and a story directory or a path inside one. For a n
 
 ## Optional Inputs
 
-Title, languages, genre labels, source roots, structure-preservation preferences, reading direction, and target format.
+Title, languages, genre labels, source roots, structure-preservation preferences, reading direction, target audience/content boundaries, opening and structure preferences, screen/print target format, and the author's definition of creative, reader, publication, or commercial success.
 
 ## Project Discovery
 
@@ -36,7 +36,7 @@ Run the launcher described above with `discover --project <path>`. If discovery 
 
 ## Source Of Truth
 
-Original files are immutable provenance evidence. Approved canon governs story facts; the active approved manuscript governs prose; the active approved storyboard governs panel planning; approvals, decisions, and locks govern workflow state; approved visual references govern production.
+Original files are immutable provenance evidence. Approved canon governs story facts; the active approved manuscript governs prose; the active approved storyboard governs panel planning; approvals, decisions, and locks govern workflow state; approved visual references govern production. An active success plan records goals and testable hypotheses but never outranks canon, the creative brief, author voice, safety boundaries, rights, or creator health.
 
 ## Owned Outputs
 
@@ -46,16 +46,20 @@ Original files are immutable provenance evidence. Approved canon governs story f
 
 1. Discover or initialize the project and run `status`.
 2. Select the requested operating mode; do not run every specialist automatically.
-3. For `create_new`, route to story architecture and only the bible or writing skills needed next.
-4. For import, diagnosis, repair, or adaptation, inventory, obtain explicit classification/usage-role decisions, import, and structure before diagnosis or revision planning.
-5. For continuation, load approved canon, unresolved plot threads, and the active manuscript before routing to writing skills.
-6. For continuity audit, choose story consistency review or production continuity review according to the target.
-7. For visual preparation, use storyboard, panel, consistency, and image-job skills only after their prerequisites. For each ready job, provide the deterministic exported ChatGPT Markdown and its exact attachment checklist rather than asking the user to reconstruct a prompt.
-8. Run the appropriate validation profile and report blockers without bypassing gates.
+3. For `create_new`, route to story architecture for a versioned creative brief before long-form architecture. Capture premise, core message, thematic question, reader takeaway, story promise, audience/content boundaries, target length, originality boundaries, show-don't-tell policy, opening strategy, and a story-appropriate structure such as Kishotenketsu only when it serves the concept.
+4. When the user asks about success, readership, serialization, publishing, sustainability, marketing, or monetization, create a separate versioned success plan linked by hash to the active creative brief. Define success in the author's terms; label market claims as hypotheses; keep demographic, genre, and format distinct; and never promise popularity, publication, or revenue.
+5. For import, diagnosis, repair, or adaptation, inventory, obtain explicit classification/usage-role decisions, import, and structure before diagnosis or revision planning.
+6. For continuation, load approved canon, unresolved plot threads, the active manuscript, and any active success plan before routing to writing skills.
+7. For continuity audit, choose story consistency review or production continuity review according to the target.
+8. Before visual preparation, require an approved creative brief, complete dramatic profiles for production characters, an approved structured nemu, event-driven page intent, explicit reading sequence, motivated camera variation, structured SFX, and a `high` quality profile.
+9. Use storyboard, panel, consistency, image-job, compositor, lettering, and continuity skills only when their gates and assets are ready. For each ready image job, provide the deterministic exported ChatGPT Markdown and exact attachment checklist rather than asking the user to reconstruct a prompt.
+10. On image return, run `validate-generated-image`, then require a separate human visual assessment and explicit hash-bound approval before the file enters `handoff/approved/` or composition.
+11. Run page-quality review plus the appropriate validation profile. Automated page scores are planning indicators only; actual art quality, acting, impact, reference adherence, and artifacts belong to the human visual assessment.
+12. For print/both output, run `preflight-print` against trim, bleed, safe margins, binding gutter, DPI, page side, export format, and color profile; require an approved current preflight before print production.
 
 ## Required Schemas
 
-`project.schema.json`, source inventory/provenance/map schemas, `stable-id-map.schema.json`, approval/lock schemas, and the contracts owned by selected specialists.
+`project.schema.json`, `creative-brief.schema.json`, `success-plan.schema.json` when success planning is active, `character.schema.json`, `nemu.schema.json`, `generated-image.schema.json`, source inventory/provenance/map schemas, `stable-id-map.schema.json`, approval/lock schemas, and the contracts owned by selected specialists.
 
 ## Next-Skill Handoff
 
@@ -83,4 +87,4 @@ Example: from a nested prose directory, discover its story root, inventory Markd
 
 ## Acceptance Criteria
 
-The correct story is isolated, the requested mode is explicit, only necessary specialists are selected, sources remain byte-identical, and validation reports the current gate state.
+The correct story is isolated, the requested mode is explicit, only necessary specialists are selected, sources remain byte-identical, success criteria are project-specific and non-guaranteeing when present, production jobs use the high-quality contract, technical and visual reviews remain distinct, and validation reports gate state without claiming that artwork was generated or approved.

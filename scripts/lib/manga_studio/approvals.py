@@ -7,8 +7,16 @@ from typing import Any, Dict, Iterable, List, Optional
 
 from .project import STAGE_GATES, ProjectContext, ProjectOperationError, image_ready_reasons, project_relative, sha256_file
 from .json_schema import validate_json_file
+from .print_preflight import preflight_project
 from .structure import validate_source_maps
-from .validation import load_json, validate_relative_project_path, write_json
+from .validation import (
+    load_json,
+    validate_image_job,
+    validate_project_path_containment,
+    validate_relative_project_path,
+    validate_success_plan,
+    write_json,
+)
 
 
 APPROVAL_STATUSES = {"approved", "rejected", "superseded", "invalidated"}
@@ -16,6 +24,8 @@ ARTIFACT_TYPES = {
     "source_inventory",
     "source_structure",
     "source_map",
+    "creative_brief",
+    "success_plan",
     "story_model",
     "canon",
     "diagnostic_report",
@@ -25,8 +35,11 @@ ARTIFACT_TYPES = {
     "manuscript",
     "continuity",
     "storyboard",
+    "nemu",
     "page_plan",
     "panel_plan",
+    "generated_image",
+    "print_preflight",
 }
 
 GATE_APPROVAL_TYPES = {
@@ -35,10 +48,10 @@ GATE_APPROVAL_TYPES = {
     "DIAGNOSTIC_APPROVED": {"diagnostic_report"},
     "REVISION_PLAN_APPROVED": {"revision_plan"},
     "MANUSCRIPT_APPROVED": {"manuscript"},
-    "STORY_LOCKED": set(),
+    "STORY_LOCKED": {"creative_brief"},
     "STORYBOARD_APPROVED": {"storyboard"},
     "STORYBOARD_LOCKED": set(),
-    "IMAGE_READY": {"continuity"},
+    "IMAGE_READY": {"continuity", "nemu"},
 }
 
 GATE_PREREQUISITES = {
@@ -64,21 +77,187 @@ GATE_FIXED_TARGETS = {
 GATE_ACTIVE_TARGET_FIELDS = {
     "CANON_APPROVED": {"canon": "active_canon_version"},
     "MANUSCRIPT_APPROVED": {"manuscript": "active_manuscript_version"},
+    "STORY_LOCKED": {"creative_brief": "active_creative_brief_version"},
     "STORYBOARD_APPROVED": {"storyboard": "active_storyboard_version"},
+    "IMAGE_READY": {"nemu": "active_nemu_version"},
 }
 
 GATE_TARGET_PREFIXES = {
     "DIAGNOSTIC_APPROVED": {"diagnostic_report": ".manga-studio/analysis/diagnostics/"},
     "REVISION_PLAN_APPROVED": {"revision_plan": ".manga-studio/revisions/plans/"},
+    "STORY_LOCKED": {"creative_brief": ".manga-studio/story/briefs/"},
+    "IMAGE_READY": {"nemu": ".manga-studio/storyboard/nemu/"},
 }
 
 GATE_ARTIFACT_SCHEMAS = {
     "source_inventory": "source-inventory.schema.json",
+    "creative_brief": "creative-brief.schema.json",
     "canon": "canon.schema.json",
     "diagnostic_report": "diagnostic-report.schema.json",
     "revision_plan": "revision-plan.schema.json",
     "continuity": "continuity-state.schema.json",
+    "nemu": "nemu.schema.json",
 }
+
+APPROVAL_TARGET_SCHEMAS = {
+    "generated_image": "review.schema.json",
+    "print_preflight": "review.schema.json",
+}
+
+
+def _validate_special_approval_target(
+    context: ProjectContext, target: Path, artifact_type: str
+) -> List[str]:
+    schema_name = APPROVAL_TARGET_SCHEMAS.get(artifact_type)
+    if schema_name is None:
+        return []
+    errors = validate_json_file(target, context.install_root / "schemas" / schema_name)
+    if errors:
+        return errors
+    artifact = load_json(target)
+    subject_rel = artifact.get("target")
+    if not isinstance(subject_rel, str):
+        errors.append("review target must be a project-relative path")
+    else:
+        subject_errors = validate_project_path_containment(
+            context.project_root, subject_rel, "review target"
+        )
+        errors.extend(subject_errors)
+        subject = context.project_path(subject_rel)
+        if not subject_errors and not subject.is_file():
+            errors.append(f"review target is missing: {subject_rel}")
+        elif not subject_errors and sha256_file(subject) != artifact.get("target_sha256"):
+            errors.append(f"review target checksum changed: {subject_rel}")
+    if artifact_type == "generated_image":
+        if artifact.get("review_type") != "generated_image":
+            errors.append("generated_image approval must target a generated-image visual review")
+        if artifact.get("metric_scope") != "human_visual_assessment" or not isinstance(
+            artifact.get("visual_assessment"), dict
+        ):
+            errors.append("generated_image approval requires a completed human visual assessment")
+        else:
+            assessment = artifact["visual_assessment"]
+            score_fields = (
+                "story_clarity", "event_readability", "reference_adherence", "character_acting",
+                "composition", "monochrome_finish", "continuity", "lettering_readability",
+                "content_boundary_compliance",
+            )
+            below_threshold = [
+                field for field in score_fields
+                if not isinstance(assessment.get(field), int)
+                or isinstance(assessment.get(field), bool)
+                or assessment[field] < 4
+            ]
+            if below_threshold:
+                errors.append(
+                    "generated-image visual review has quality scores below 4: "
+                    + ", ".join(below_threshold)
+                )
+            failed_checks = [
+                field for field in (
+                    "required_elements_present", "prohibited_elements_absent",
+                    "dialogue_safe_zones_usable", "artifact_free",
+                )
+                if assessment.get(field) is not True
+            ]
+            if failed_checks:
+                errors.append(
+                    "generated-image visual review has failed required checks: "
+                    + ", ".join(failed_checks)
+                )
+            if any(
+                isinstance(finding, dict) and finding.get("severity") == "error"
+                for finding in artifact.get("findings", [])
+            ):
+                errors.append("generated-image visual review has unresolved error findings")
+        if artifact.get("automated") is not False:
+            errors.append("generated-image visual review must be explicitly human, not automated")
+        if artifact.get("status") not in {"review_ready", "approved"}:
+            errors.append("generated-image visual review must be review_ready before approval")
+        intake_rel = subject_rel
+        if not isinstance(intake_rel, str) or not intake_rel.startswith(".manga-studio/continuity/intake/"):
+            errors.append("generated-image visual review target must be an intake record")
+        else:
+            intake_path = context.project_path(intake_rel)
+            intake_errors = validate_json_file(
+                intake_path, context.install_root / "schemas" / "generated-image.schema.json"
+            )
+            errors.extend(f"intake: {message}" for message in intake_errors)
+            if not intake_errors:
+                intake = load_json(intake_path)
+                if intake.get("project_id") != context.config.get("project_id"):
+                    errors.append("generated-image intake belongs to another project")
+                if intake.get("status") == "blocked":
+                    errors.append("a blocked generated-image intake cannot be approved")
+                job_rel = intake.get("job_path")
+                job_path_errors = validate_project_path_containment(
+                    context.project_root, job_rel, "generated-image intake job_path"
+                )
+                errors.extend(job_path_errors)
+                job_path = context.project_path(job_rel) if isinstance(job_rel, str) else None
+                if not isinstance(job_rel, str) or not job_rel.startswith(".manga-studio/handoff/pending/"):
+                    errors.append("generated-image intake job_path must be under handoff/pending")
+                if job_path is None or job_path_errors or not job_path.is_file() or sha256_file(job_path) != intake.get("job_sha256"):
+                    errors.append("generated-image intake job is missing or its checksum changed")
+                else:
+                    job = load_json(job_path)
+                    errors.extend(
+                        f"image job: {message}"
+                        for message in validate_json_file(
+                            job_path, context.install_root / "schemas" / "image-job.schema.json"
+                        )
+                    )
+                    errors.extend(
+                        f"image job: {message}"
+                        for message in validate_image_job(
+                            job_path, context.project_root, check_reference_existence=True
+                        )
+                    )
+                    if job.get("job_id") != intake.get("job_id"):
+                        errors.append("generated-image intake job_id does not match its source job")
+                    if job.get("output_filename") != intake.get("image_path"):
+                        errors.append("generated-image intake image_path does not match job output_filename")
+                    if job.get("release_status") not in {"ready", "released", "completed"}:
+                        errors.append("generated-image intake source job was not released for external generation")
+                image_rel = intake.get("image_path")
+                image_path_errors = validate_project_path_containment(
+                    context.project_root, image_rel, "generated-image intake image_path"
+                )
+                errors.extend(image_path_errors)
+                image_path = context.project_path(image_rel) if isinstance(image_rel, str) else None
+                if image_path is None or image_path_errors or not image_path.is_file() or sha256_file(image_path) != intake.get("file", {}).get("sha256"):
+                    errors.append("generated-image intake file is missing or its checksum changed")
+    elif artifact_type == "print_preflight":
+        if artifact.get("review_type") != "print_preflight":
+            errors.append("print_preflight approval must target a print-preflight review")
+        if artifact.get("metric_scope") != "technical_preflight":
+            errors.append("print_preflight approval requires technical_preflight scope")
+        if artifact.get("status") not in {"review_ready", "approved"}:
+            errors.append("blocked print preflight cannot be approved")
+        if subject_rel != ".manga-studio/project.json":
+            errors.append("print-preflight review must target .manga-studio/project.json")
+        current_targets = {
+            path.relative_to(context.project_root).as_posix(): sha256_file(path)
+            for path in [
+                context.project_file,
+                *(
+                    path for path in sorted(context.workspace_path("pages").glob("*.json"))
+                    if not path.name.startswith("._")
+                ),
+            ]
+        }
+        recorded_targets = {
+            item.get("relative_path"): item.get("sha256")
+            for item in artifact.get("target_hashes", [])
+            if isinstance(item, dict)
+        }
+        if len(recorded_targets) != len(artifact.get("target_hashes", [])):
+            errors.append("print-preflight target hashes contain duplicate paths")
+        if recorded_targets != current_targets:
+            errors.append("print-preflight target hashes do not match the current project and page specifications")
+        print_errors, _, _ = preflight_project(context)
+        errors.extend(f"current print preflight: {message}" for message in print_errors)
+    return errors
 
 
 def _timestamp() -> str:
@@ -107,6 +286,25 @@ def record_approval(
     target = target.expanduser().resolve()
     if not target.is_file():
         raise ProjectOperationError(f"approval target does not exist: {target}")
+    special_errors: List[str] = []
+    if decision == "approved":
+        if artifact_type == "success_plan":
+            special_errors.extend(
+                validate_json_file(
+                    target, context.install_root / "schemas" / "success-plan.schema.json"
+                )
+            )
+            special_errors.extend(
+                validate_success_plan(
+                    target, context.config.get("project_id"), context.project_root
+                )
+            )
+        else:
+            special_errors.extend(
+                _validate_special_approval_target(context, target, artifact_type)
+            )
+    if special_errors:
+        raise ProjectOperationError("; ".join(special_errors))
     target_rel = project_relative(context.project_root, target)
     errors = validate_relative_project_path(target_rel, "target_relative_path")
     if errors:
@@ -176,7 +374,9 @@ def validate_approval(context: ProjectContext, approval_path: Path) -> List[str]
     if record.get("status") not in APPROVAL_STATUSES:
         errors.append(f"unsupported approval status: {record.get('status')}")
     target_rel = record.get("target_relative_path")
-    path_errors = validate_relative_project_path(target_rel, "approval.target_relative_path")
+    path_errors = validate_project_path_containment(
+        context.project_root, target_rel, "approval.target_relative_path"
+    )
     errors.extend(path_errors)
     if not path_errors:
         target = context.project_path(target_rel)
@@ -184,6 +384,10 @@ def validate_approval(context: ProjectContext, approval_path: Path) -> List[str]
             errors.append(f"approval target is missing: {target_rel}")
         elif sha256_file(target) != record.get("target_sha256"):
             errors.append(f"approval target checksum changed: {target_rel}")
+        elif record.get("decision") == "approved":
+            errors.extend(
+                _validate_special_approval_target(context, target, record.get("artifact_type"))
+            )
     return errors
 
 
@@ -202,6 +406,8 @@ def find_approval(context: ProjectContext, approval_id: str) -> Optional[Path]:
     if direct.is_file():
         return direct
     for path in context.workspace_path("approvals").glob("*.json"):
+        if path.name.startswith("._"):
+            continue
         try:
             if load_json(path).get("approval_id") == approval_id:
                 return path
@@ -213,6 +419,8 @@ def find_approval(context: ProjectContext, approval_id: str) -> Optional[Path]:
 def invalidate_stale_approvals(context: ProjectContext) -> List[str]:
     invalidated: List[str] = []
     for path in sorted(context.workspace_path("approvals").glob("*.json")):
+        if path.name.startswith("._"):
+            continue
         try:
             record = load_json(path)
         except Exception:

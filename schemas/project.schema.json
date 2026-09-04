@@ -61,7 +61,14 @@
       "properties": {
         "color_mode": {"type": "string", "enum": ["black-and-white", "grayscale", "color"]},
         "page_width_px": {"type": "integer", "minimum": 1},
-        "page_height_px": {"type": "integer", "minimum": 1}
+        "page_height_px": {"type": "integer", "minimum": 1},
+        "output_intent": {"type": "string", "enum": ["screen", "print", "both"]},
+        "print_profile": {
+          "anyOf": [
+            {"type": "null"},
+            {"$ref": "#/$defs/printProfile"}
+          ]
+        }
       }
     },
     "workflow_phase": {"type": "string", "minLength": 1},
@@ -101,10 +108,48 @@
     "active_manuscript_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
     "active_canon_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
     "active_storyboard_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+    "active_creative_brief_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+    "active_success_plan_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+    "active_nemu_version": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
     "blocking_reasons": {"type": "array", "items": {"type": "string"}}
   },
   "$defs": {
     "relativePath": {"type": "string", "pattern": "^(?!/)(?!~)(?!.*(^|/)\\.\\.(?:/|$)).+"},
-    "nullableRelativePath": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]}
+    "nullableRelativePath": {"anyOf": [{"$ref": "#/$defs/relativePath"}, {"type": "null"}]},
+    "printProfile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name", "unit", "dpi", "trim_width", "trim_height", "bleed",
+        "safe_margin", "binding", "inner_gutter", "page_side", "export_format",
+        "crop_marks", "color_profile"
+      ],
+      "properties": {
+        "name": {"type": "string", "minLength": 1},
+        "unit": {"type": "string", "enum": ["mm", "in"]},
+        "dpi": {"type": "integer", "minimum": 72, "maximum": 2400},
+        "trim_width": {"type": "number", "minimum": 0.01},
+        "trim_height": {"type": "number", "minimum": 0.01},
+        "bleed": {"$ref": "#/$defs/edgeMeasurements"},
+        "safe_margin": {"$ref": "#/$defs/edgeMeasurements"},
+        "binding": {"type": "string", "enum": ["none", "perfect", "saddle_stitch", "case_bound", "digital"]},
+        "inner_gutter": {"type": "number", "minimum": 0},
+        "page_side": {"type": "string", "enum": ["auto", "left", "right", "single"]},
+        "export_format": {"type": "string", "enum": ["pdf", "png", "tiff"]},
+        "crop_marks": {"type": "boolean"},
+        "color_profile": {"type": "string", "minLength": 1}
+      }
+    },
+    "edgeMeasurements": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["top", "right", "bottom", "left"],
+      "properties": {
+        "top": {"type": "number", "minimum": 0},
+        "right": {"type": "number", "minimum": 0},
+        "bottom": {"type": "number", "minimum": 0},
+        "left": {"type": "number", "minimum": 0}
+      }
+    }
   }
 }

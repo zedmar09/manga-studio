@@ -3,7 +3,7 @@ name: manga-canon-manager
 description: Maintain versioned, approved story canon and persistent entity mappings for characters, locations, organizations, props, timeline events, plot threads, and setups/payoffs.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Canon Manager
@@ -47,13 +47,13 @@ Versioned story-canon files under `.manga-studio/canon/`, canon decisions under 
 1. Validate story provenance and load the active canon version.
 2. Resolve entities by persistent ID, not display name or array position.
 3. Record aliases when names change; require review for ambiguous matches.
-4. Separate facts, constraints, unknowns, timeline events, plot threads, and setup/payoff links.
+4. Separate facts, constraints, unknowns, timeline events, plot threads, and setup/payoff links. For characters, keep stable dramatic canon such as desire, fear, contradiction, and moral limits distinct from changing scene state.
 5. Write a new canon version and a diff against the active version.
 6. After a separate approval exists, present the explicit active-version and lock commands; never mutate approval or lock state as part of canon creation.
 
 ## Required Schemas
 
-`canon.schema.json`, `timeline-event.schema.json`, `relationship.schema.json`, `plot-thread.schema.json`, `setup-payoff.schema.json`, `character-state.schema.json`, `voice-guide.schema.json`, provenance, and stable-ID schemas.
+`canon.schema.json`, `character.schema.json`, `timeline-event.schema.json`, `relationship.schema.json`, `plot-thread.schema.json`, `setup-payoff.schema.json`, `character-state.schema.json`, `voice-guide.schema.json`, provenance, and stable-ID schemas.
 
 ## Next-Skill Handoff
 

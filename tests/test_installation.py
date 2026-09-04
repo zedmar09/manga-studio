@@ -71,7 +71,7 @@ class InstallationTests(unittest.TestCase):
 
             self.assertIsNotNone(backup)
             self.assertTrue((backup / "skills" / "manga-creator" / "SKILL.md").exists())
-            self.assertIn('version: "3.0.0"', (destination / "manga-creator" / "SKILL.md").read_text(encoding="utf-8"))
+            self.assertIn('version: "3.3.0"', (destination / "manga-creator" / "SKILL.md").read_text(encoding="utf-8"))
 
     def test_copy_and_symlink_installs_have_self_contained_runtime(self) -> None:
         for mode in ("copy", "symlink"):
@@ -173,7 +173,7 @@ class InstallationTests(unittest.TestCase):
                 destination
                 / ".manga-studio-runtime"
                 / "versions"
-                / "3.0.0"
+                / "3.3.0"
                 / "schemas"
                 / "approval.schema.json"
             )

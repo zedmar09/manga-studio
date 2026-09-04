@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "pilot-001",
+  "brief_id": "pilot-001-creative-brief",
+  "version": "v001",
+  "status": "proposed",
+  "premise": "Two teenagers at an empty station hear a bell that should only ring when a traveler returns.",
+  "core_message": "Courage becomes meaningful when uncertainty is acknowledged rather than denied.",
+  "thematic_question": "How much evidence is enough before loyalty requires action?",
+  "intended_reader_takeaway": "A quiet warning can carry more weight than spectacle when character choices make its meaning clear.",
+  "story_promise": "A restrained supernatural mystery told through rules, physical clues, and the trust between Mira and Ren.",
+  "target_audience": {
+    "age_band": "teen and older",
+    "content_rating": "teen",
+    "content_boundaries": ["No graphic injury", "No sexual content", "Threat remains suspenseful rather than sadistic"],
+    "sensitivity_requirements": ["Fear responses should not be mocked", "Avoid glamorizing reckless isolation"],
+    "accessibility_goals": ["Clear event order", "Readable concise dialogue", "Every SFX includes reader-facing meaning"]
+  },
+  "genre": ["supernatural mystery"],
+  "tone": ["quiet", "rain-soaked", "controlled dread"],
+  "target_length": {"unit": "pages", "minimum": 1, "maximum": 8, "flexible": true},
+  "opening_strategy": {
+    "mode": "mystery_question",
+    "hook": "The station bell rings even though no train is due.",
+    "first_page_promise": "Rules exist, the impossible event violates one, and Mira chooses to answer it.",
+    "rationale": "The unexplained sound starts the conflict without forcing action spectacle that does not fit the tone."
+  },
+  "structure_strategy": {
+    "framework": "kishotenketsu",
+    "rationale": "A short escalation from ordinary station logic to an impossible implication suits a four-beat page.",
+    "flexible": true,
+    "beats": [
+      {"name": "ki", "purpose": "Establish the bell and station rule.", "expected_turn": "The bell trembles after ringing."},
+      {"name": "sho", "purpose": "Develop the contradiction.", "expected_turn": "The platform is visibly empty."},
+      {"name": "ten", "purpose": "Reframe absence as an approaching threat.", "expected_turn": "Mira raises the old ticket punch."},
+      {"name": "ketsu", "purpose": "Connect the warning to a deliberate choice.", "expected_turn": "Mira faces the tunnel before the train arrives."}
+    ]
+  },
+  "originality": {
+    "comparables": [],
+    "differentiators": ["A supernatural transit rule is revealed through a small mechanical prop and restrained dialogue."],
+    "prohibited_derivation": ["Do not imitate a named creator's style", "Do not copy characters, panels, dialogue, or signature imagery from existing manga"]
+  },
+  "show_dont_tell_policy": {
+    "visualizable_information": ["The empty platform", "The trembling bell", "Mira's shift from fear to resolve", "The ticket punch aimed at the tunnel"],
+    "dialogue_only_when": ["A station rule cannot be inferred from the image alone", "A question sharpens rather than repeats the visible contradiction"],
+    "exposition_limits": ["No dialogue explains visible body language", "No balloon repeats the panel summary", "One new rule or inference per balloon"],
+    "silence_opportunities": ["Hold on the empty platform before Ren speaks", "Let the final tunnel-facing pose carry the page-turn threat"]
+  },
+  "basis": {"source_evidence": [], "decision_ids": []}
+}

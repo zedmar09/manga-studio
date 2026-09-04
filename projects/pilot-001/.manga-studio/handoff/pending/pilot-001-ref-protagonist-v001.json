@@ -1,8 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "job_id": "pilot-001-ref-protagonist-v001",
   "job_type": "character_reference",
   "output_filename": ".manga-studio/handoff/generated/refs/protagonist-mira-reference-v001.png",
+  "output_spec": {"format": "png", "width": 2000, "height": 2400, "color_mode": "grayscale", "alpha_allowed": false},
+  "content_constraints": {"age_band": "teen and older", "content_rating": "teen", "content_boundaries": ["No graphic injury", "No sexual content", "Threat remains suspenseful rather than sadistic"], "sensitivity_requirements": ["Fear responses should not be mocked", "Avoid glamorizing reckless isolation"], "accessibility_goals": ["Clear event order", "Readable concise dialogue", "Every SFX includes reader-facing meaning"]},
   "required_reference_images": [],
   "reference_priority": [],
   "scene_state": {
@@ -22,20 +24,43 @@
     }
   },
   "composition": {
-    "format": "reference sheet",
+    "sheet_layout": "Orthographic turnaround across the top with expression studies and proportion guide below.",
     "views": [
       "full-body front view",
       "full-body side view",
-      "three-quarter bust view",
-      "two small expression studies"
+      "full-body back view",
+      "three-quarter bust view"
     ],
+    "expressions": ["guarded neutral", "quiet suspicion", "controlled fear", "decisive resolve", "rare warm smile"],
+    "proportion_guide": "Keep head-to-body ratio, shoulder width, coat hem, and ticket-punch hand scale consistent.",
+    "continuity_focus": ["short dark bob silhouette", "crescent hair clip above left temple", "raincoat collar", "narrow shoulder bag"],
     "background": "plain white"
   },
+  "safe_zone_coordinate_system": "source_normalized",
   "dialogue_safe_zones": [],
   "manga_style": {
     "palette": "black-and-white",
     "linework": "clean ink linework with restrained screen tones",
+    "line_weight_strategy": "Strong outer silhouette, medium garment construction, and fine facial details.",
+    "solid_black_strategy": "Use solid black for hair masses while retaining separable strand groups and facial readability.",
+    "screen_tones": "Light neutral tones distinguish coat layers without introducing color.",
+    "contrast_plan": "Face, hands, and silhouette remain legible at reduced reference size.",
+    "depth_plan": "Flat reference presentation with only enough form shading to explain construction.",
+    "motion_language": "Static turnaround poses; expression studies may use subtle head angles only.",
     "genre": "quiet supernatural mystery manga"
+  },
+  "quality_profile": {
+    "tier": "high",
+    "goals": [
+      "clear turnaround readability",
+      "consistent identity and proportions",
+      "production-ready visual reference detail",
+      "professional black-and-white manga finish"
+    ],
+    "variation_policy": "reference_driven",
+    "continuity_strictness": "locked",
+    "detail_budget": "high",
+    "self_check_required": true
   },
   "required_elements": [
     "Mira's crescent hair clip",

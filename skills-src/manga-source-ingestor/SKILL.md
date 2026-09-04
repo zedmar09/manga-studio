@@ -3,7 +3,7 @@ name: manga-source-ingestor
 description: Inventory, classify, snapshot, normalize, and record provenance for existing story sources using portable Manga Studio adapters without changing originals.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Source Ingestor

@@ -1,0 +1,103 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "replace-with-project-id",
+  "plan_id": "success-plan-v001",
+  "version": "v001",
+  "status": "draft",
+  "creative_brief_path": ".manga-studio/story/briefs/replace-with-creative-brief-v001.json",
+  "creative_brief_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "success_definition": {
+    "statement": "Define what a successful, sustainable outcome means for this project.",
+    "primary_outcomes": ["creative_completion"],
+    "time_horizon": "Define a review horizon.",
+    "non_goals": [],
+    "success_is_not_guaranteed": true
+  },
+  "audience_and_positioning": {
+    "intended_readers": ["Describe the primary reader group without stereotyping it."],
+    "reader_need": "Describe the experience or value promised to the reader.",
+    "genre_demographic_format_promises": ["State one promise the work intends to fulfill."],
+    "market_hypotheses": [],
+    "comparables": [],
+    "differentiators": ["State one meaningful differentiator."],
+    "cultural_translation_notes": []
+  },
+  "creative_execution": {
+    "one_line_logline": "Write a one-line premise with protagonist, disruption, stakes, and distinction.",
+    "protagonist_drive": {
+      "want": "State the protagonist's external desire.",
+      "need": "State the protagonist's internal need.",
+      "stakes": "State what changes if the protagonist fails."
+    },
+    "emotional_core": "State the central emotional truth.",
+    "early_hook": {
+      "question_or_disruption": "State the early compelling question or disruption.",
+      "deadline_unit": "page",
+      "latest_unit": 1,
+      "payoff_signal": "State how readers will know the opening promise is progressing."
+    },
+    "escalation_and_reset": ["State how pressure grows and where breathing room belongs."],
+    "serialized_unit_design": {
+      "opening_beats": ["State the unit-opening function."],
+      "movement_requirements": ["State what must change within each unit."],
+      "ending_beats": ["State the intended ending pressure or emotional turn."],
+      "arc_ranges_are_story_specific": true
+    },
+    "readability_checks": ["A first-time reader can identify event order and the dominant action."],
+    "repeatable_identity": ["State a repeatable story or visual-direction signature without imitating a named creator."]
+  },
+  "publishing_strategy": {
+    "status": "research_required",
+    "release_unit": "complete_work",
+    "target_channels": [],
+    "cadence": "Not selected; choose only after measuring sustainable capacity.",
+    "buffer": {"target": 0, "unit": "not_applicable", "rationale": "Set after scope and cadence are known."},
+    "format_requirements": [],
+    "monetization_hypotheses": [],
+    "discoverability_deliverables": [
+      {"deliverable": "pitch", "owner": "codex_text", "status": "planned", "requirement": "One-paragraph reader-facing pitch.", "image_job_path": null},
+      {"deliverable": "cover", "owner": "chatgpt_image_generation", "status": "planned", "requirement": "Represent as a structured image-generation job after visual gates pass.", "image_job_path": null}
+    ],
+    "community_strategy": {
+      "status": "research_required",
+      "channels": [],
+      "engagement_principles": [],
+      "moderation_and_safety": []
+    },
+    "rights_and_contract_checks": [],
+    "visual_assets_remain_external_to_codex": true
+  },
+  "collaboration_and_sustainability": {
+    "roles": [],
+    "agreement_requirements": [],
+    "outsourcing_triggers": [],
+    "capacity_limit": "Record the maximum sustainable production load.",
+    "rest_policy": "Record protected rest and recovery time.",
+    "backup_policy": "Record versioned local and off-device backup expectations.",
+    "financial_constraints": [],
+    "efficiency_practices": ["Reuse approved templates and versioned production references without overwriting prior work."],
+    "quality_floor": ["Reader clarity and continuity do not fall below the approved standard."],
+    "scope_reduction_order": ["Reduce optional promotional scope before weakening story clarity or creator health."]
+  },
+  "measurement_and_iteration": {
+    "feedback_checkpoints": [],
+    "primary_metrics": [
+      {
+        "name": "completion readiness",
+        "kind": "leading",
+        "definition": "Approved production units compared with the planned scope.",
+        "target": "Set after scope is approved.",
+        "review_point": "At each planned milestone.",
+        "data_source": "Manga Studio approval records.",
+        "interpretation_limit": "Completion readiness does not measure reader appeal or commercial success."
+      }
+    ],
+    "observations": [],
+    "experiments": [],
+    "pivot_rules": [],
+    "protected_elements": ["Approved canon", "Author voice", "Audience safety boundaries", "Creator health"]
+  },
+  "risks": [],
+  "assumptions": [],
+  "basis": {"source_evidence": [], "decision_ids": [], "research_sources": []}
+}

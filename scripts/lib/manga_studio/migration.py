@@ -32,7 +32,30 @@ def _backup(path: Path, root: Path, workspace_root: Path) -> None:
 def migrate_project(context: ProjectContext) -> List[str]:
     current = context.config.get("schema_version")
     if current == SCHEMA_VERSION:
-        return [f"project already uses schema {SCHEMA_VERSION}"]
+        actions: List[str] = []
+        for relative in WORKSPACE_DIRECTORIES:
+            path = context.workspace_path(relative)
+            if not path.is_dir():
+                path.mkdir(parents=True, exist_ok=True)
+                actions.append(f"created .manga-studio/{relative}/")
+        config = load_json(context.project_file)
+        target = config.setdefault("target_manga_format", {})
+        changed = False
+        for key, value in (
+            ("output_intent", "screen"),
+            ("print_profile", None),
+        ):
+            if key not in target:
+                target[key] = value
+                changed = True
+        for key in ("active_creative_brief_version", "active_success_plan_version", "active_nemu_version"):
+            if key not in config:
+                config[key] = None
+                changed = True
+        if changed:
+            write_json(context.project_file, config)
+            actions.append("added Manga Studio 3.3 project defaults without changing story sources")
+        return actions or [f"project already uses schema {SCHEMA_VERSION} and current workspace layout"]
     if current != "2.0.0":
         raise ProjectOperationError(f"no migration path from project schema {current!r} to {SCHEMA_VERSION}")
     backup_root = context.workspace_path("migrations/v2-to-v3")

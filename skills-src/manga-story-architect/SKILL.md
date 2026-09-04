@@ -3,7 +3,7 @@ name: manga-story-architect
 description: Design or revise story structure, scene purpose, arcs, plot threads, setups, and payoffs as versioned plans without assuming chapters or a particular genre.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Story Architect
@@ -14,7 +14,7 @@ Create a coherent story architecture for new work, approved repairs, continuatio
 
 ## Activation Conditions
 
-Use for high-level story design, structural revision, scene sequencing, or continuation planning after required approvals.
+Use for high-level story design, structural revision, scene sequencing, continuation planning, or a project-specific manga success strategy after required approvals.
 
 ## Compatible Operating Modes
 
@@ -22,11 +22,11 @@ Use for high-level story design, structural revision, scene sequencing, or conti
 
 ## Required Inputs
 
-Project configuration, active canon when present, stable IDs, and either a creative brief or an approved revision plan.
+Project configuration, active canon when present, stable IDs, and the available concept, source evidence, or approved revision plan.
 
 ## Optional Inputs
 
-Source snapshots, diagnostics, unresolved plot threads, target length, and chapter-detection preferences.
+Source snapshots, diagnostics, unresolved plot threads, target length, chapter-detection preferences, intended readers, publication goals, sustainable capacity, feedback access, and user-provided or researched market evidence.
 
 ## Project Discovery
 
@@ -36,24 +36,28 @@ Use shared discovery and stop if missing. Only `manga-creator` may initialize th
 
 ## Source Of Truth
 
-Approved canon and user decisions constrain architecture. Existing approved manuscript structure is preserved according to project rules. Architecture proposals do not become canon by themselves.
+Approved canon and user decisions constrain architecture. Existing approved manuscript structure is preserved according to project rules. Architecture proposals do not become canon by themselves. A success plan is an advisory strategy: it may test reader or market hypotheses but cannot redefine approved story truth or protected creative elements.
 
 ## Owned Outputs
 
-Versioned structural plans, scene maps, plot-thread maps, and setup/payoff maps under `.manga-studio/manuscript/` or `.manga-studio/revisions/` as appropriate.
+Versioned creative briefs under `.manga-studio/story/briefs/`, versioned success plans under `.manga-studio/story/success-plans/`, plus structural plans, scene maps, plot-thread maps, and setup/payoff maps under `.manga-studio/manuscript/` or `.manga-studio/revisions/` as appropriate.
 
 ## Procedure
 
 1. Validate the story profile and relevant approval gates.
-2. Resolve chapters, scenes, threads, and events by stable IDs; create IDs through the shared CLI when needed.
-3. Model structure appropriate to the story, including a chapterless story when configured.
-4. Track scene purpose, causality, escalation, arcs, unresolved threads, and setups/payoffs.
-5. Compare against active versions and write a new proposal.
-6. Request approval before downstream writing treats it as active.
+2. Create or verify a creative brief covering premise, message, thematic question, takeaway, story promise, target audience, content boundaries, genre/tone, target length, opening hook, originality boundaries, and show-don't-tell policy. Treat the needle-drop opening and Kishotenketsu as selectable tools, not mandatory formulas.
+3. When success planning is requested, create a `success-plan.schema.json` artifact linked to the exact creative-brief path and checksum. Define one to three primary outcomes, intended readers and reader need, a one-line logline, protagonist want/need/stakes, emotional core, early hook, unit movement and ending promises, sustainable cadence/buffer, distribution status, discoverability and community strategy, collaborator scope/payment/credit/IP requirements, efficient repeatable practices, feedback checkpoints, one to three metrics, small experiments, pivot rules, protected elements, risks, and assumptions.
+4. Treat demographics, genres, and delivery formats as distinct signals. Do not prescribe generic arc lengths, update frequency, platform, monetization, or marketing tactics as universal truths; record them as story-specific decisions or explicitly unvalidated hypotheses. Current platform, legal, and market claims require dated sources or qualified human review as appropriate.
+5. Plan promotional visuals only as externally owned deliverables. Covers, thumbnails, strips, key images, and reference sheets must become structured ChatGPT Image Generation Jobs after production gates; video and other media stay with an explicitly named external owner.
+6. Resolve chapters, scenes, threads, and events by stable IDs; create IDs through the shared CLI when needed.
+7. Model structure appropriate to the story, including a chapterless story when configured. Test scene purpose, causality, escalation, reversals, breathing room, arcs, unresolved threads, and setups/payoffs.
+8. Make every major turn arise from character choice, world pressure, or established setup; flag generic genre imitation and unearned surprise.
+9. Compare against active versions and write a new proposal.
+10. Request approval for the creative brief, success plan when present, and architecture before downstream work treats them as active.
 
 ## Required Schemas
 
-`project.schema.json`, `stable-id-map.schema.json`, provenance schemas, and canon entity schemas relevant to the story.
+`project.schema.json`, `creative-brief.schema.json`, `success-plan.schema.json` when active, `stable-id-map.schema.json`, provenance schemas, and canon entity schemas relevant to the story.
 
 ## Next-Skill Handoff
 
@@ -81,4 +85,4 @@ Example: organize a single-file short story into stable scenes without inventing
 
 ## Acceptance Criteria
 
-The structure is story-specific, stable-ID based, canon-compatible, versioned, and clear enough for scoped writing without forcing a genre template.
+The structure is story-specific, stable-ID based, canon-compatible, versioned, and clear enough for scoped writing without forcing a genre template. Any success plan distinguishes controllable craft and production choices from uncertain market outcomes, has measurable but limited signals, protects the work's identity and creator health, and assigns every visual asset outside Codex.

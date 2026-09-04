@@ -30,6 +30,7 @@ REQUIRED_STORY_SCHEMAS = {
     "story-issue.schema.json", "diagnostic-report.schema.json", "revision-policy.schema.json",
     "revision-plan.schema.json", "change-set.schema.json", "approval.schema.json",
     "decision-log.schema.json", "stage-lock.schema.json",
+    "success-plan.schema.json",
 }
 
 
@@ -62,7 +63,29 @@ def _check_runtime(runtime_root: Path, expected_version: str, errors: List[str])
         errors.append("installed runtime version_path is missing")
         return None
     version_root = runtime_root / version_path
-    for required in ("scripts/manga_studio.py", "schemas/project.schema.json", "templates/story-model.template.json", "manifests/manga-skills.json", "VERSION"):
+    for required in (
+        "scripts/manga_studio.py",
+        "scripts/compose_page.py",
+        "scripts/add_lettering.py",
+        "scripts/review_page.py",
+        "scripts/validate_generated_image.py",
+        "scripts/preflight_print.py",
+        "scripts/lib/manga_studio/page_pipeline.py",
+        "scripts/lib/manga_studio/image_intake.py",
+        "scripts/lib/manga_studio/print_preflight.py",
+        "schemas/project.schema.json",
+        "schemas/page.schema.json",
+        "schemas/panel.schema.json",
+        "schemas/review.schema.json",
+        "schemas/generated-image.schema.json",
+        "schemas/creative-brief.schema.json",
+        "schemas/success-plan.schema.json",
+        "schemas/nemu.schema.json",
+        "templates/success-plan.template.json",
+        "templates/story-model.template.json",
+        "manifests/manga-skills.json",
+        "VERSION",
+    ):
         if not (version_root / required).is_file():
             errors.append(f"installed runtime payload is missing: {version_root / required}")
     if (version_root / "VERSION").is_file():
@@ -171,9 +194,13 @@ def run_doctor(
         return [f"unknown doctor mode: {mode}"]
 
     schema_root = runtime_validation_root / "schemas"
-    available_schemas = {path.name for path in schema_root.glob("*.schema.json")}
+    available_schemas = {
+        path.name for path in schema_root.glob("*.schema.json")
+        if not path.name.startswith("._")
+    }
     expected_schemas = {
         path.name for path in (install_root / "schemas").glob("*.schema.json")
+        if not path.name.startswith("._")
     } | REQUIRED_STORY_SCHEMAS
     missing_schemas = sorted(expected_schemas - available_schemas)
     if missing_schemas:

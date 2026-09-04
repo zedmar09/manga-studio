@@ -10,152 +10,202 @@
     "page_number",
     "status",
     "reading_order",
+    "reading_sequence",
     "page_size",
+    "page_intent",
+    "layout",
     "panels",
+    "lettering_style",
     "lettering"
   ],
   "properties": {
-    "schema_version": {
-      "type": "string"
-    },
-    "page_id": {
-      "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9-]*$"
-    },
-    "page_number": {
-      "type": "integer",
-      "minimum": 1
-    },
+    "schema_version": {"type": "string"},
+    "page_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "page_number": {"type": "integer", "minimum": 1},
     "status": {
       "type": "string",
-      "enum": [
-        "draft_waiting_for_art",
-        "ready_for_composition",
-        "composed",
-        "lettered",
-        "exported"
-      ]
+      "enum": ["draft_waiting_for_art", "ready_for_composition", "composed", "lettered", "exported"]
     },
-    "reading_order": {
-      "type": "string",
-      "enum": [
-        "right-to-left",
-        "left-to-right"
-      ]
+    "reading_order": {"type": "string", "enum": ["right-to-left", "left-to-right"]},
+    "reading_sequence": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string"}
     },
     "page_size": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "width",
-        "height",
-        "unit"
-      ],
+      "required": ["width", "height", "unit"],
       "properties": {
-        "width": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "height": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "unit": {
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1},
+        "unit": {"type": "string", "enum": ["px"]}
+      }
+    },
+    "page_intent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["purpose", "pacing", "layout_profile", "reader_effect"],
+      "properties": {
+        "purpose": {"type": "string"},
+        "pacing": {"type": "string", "enum": ["compressed", "steady", "expansive", "impact"]},
+        "layout_profile": {
           "type": "string",
-          "enum": [
-            "px"
-          ]
+          "enum": ["dialogue", "cinematic", "action", "reveal", "montage", "suspense", "comedy", "custom"]
+        },
+        "dominant_event": {"type": "string"},
+        "reader_effect": {"type": "string"},
+        "emotional_curve": {
+          "type": "array",
+          "items": {"type": "integer", "minimum": 1, "maximum": 5}
+        },
+        "page_turn": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["kind", "setup"],
+          "properties": {
+            "kind": {"type": "string", "enum": ["none", "question", "reveal", "threat", "decision", "joke", "emotional_turn"]},
+            "setup": {"type": "string"},
+            "payoff_next_page": {"type": "boolean"}
+          }
         }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "margin": {"type": "integer", "minimum": 0},
+        "gutter": {"type": "integer", "minimum": 0},
+        "background": {"type": "string"},
+        "spread_role": {"type": "string", "enum": ["single", "left", "right", "double_page"]},
+        "allow_panel_overlap": {"type": "boolean"},
+        "default_border": {"$ref": "#/$defs/border"},
+        "safe_area": {"$ref": "#/$defs/box"}
       }
     },
     "panels": {
       "type": "array",
       "minItems": 1,
-      "items": {
-        "$ref": "panel.schema.json"
-      }
+      "items": {"$ref": "panel.schema.json"}
     },
+    "lettering_style": {"$ref": "#/$defs/letteringStyle"},
     "lettering": {
       "type": "array",
-      "items": {
-        "$ref": "#/$defs/letteringItem"
-      }
+      "items": {"$ref": "#/$defs/letteringItem"}
     }
   },
   "$defs": {
     "box": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "x",
-        "y",
-        "width",
-        "height"
-      ],
+      "required": ["x", "y", "width", "height"],
       "properties": {
-        "x": {
-          "type": "integer"
-        },
-        "y": {
-          "type": "integer"
-        },
-        "width": {
-          "type": "integer",
-          "minimum": 1
-        },
-        "height": {
-          "type": "integer",
-          "minimum": 1
-        }
+        "x": {"type": "integer"},
+        "y": {"type": "integer"},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1}
+      }
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": {"type": "integer"},
+        "y": {"type": "integer"}
+      }
+    },
+    "border": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "visible": {"type": "boolean"},
+        "color": {"type": "string"},
+        "width": {"type": "integer", "minimum": 0, "maximum": 24},
+        "line_join": {"type": "string", "enum": ["miter", "round", "bevel"]}
+      }
+    },
+    "letteringStyle": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "font_family": {"type": "string"},
+        "font_file": {"$ref": "#/$defs/relativePath"},
+        "embed_font": {"type": "boolean"},
+        "line_break_profile": {"type": "string", "enum": ["latin", "cjk", "japanese", "custom"]},
+        "kinsoku_opening_characters": {"type": "string"},
+        "kinsoku_closing_characters": {"type": "string"},
+        "font_size": {"type": "integer", "minimum": 8},
+        "min_font_size": {"type": "integer", "minimum": 6},
+        "font_weight": {"type": "integer", "minimum": 100, "maximum": 900},
+        "line_height": {"type": "number", "minimum": 1},
+        "fill": {"type": "string"},
+        "stroke": {"type": "string"},
+        "stroke_width": {"type": "integer", "minimum": 0, "maximum": 16},
+        "text_color": {"type": "string"},
+        "padding": {"type": "integer", "minimum": 0}
       }
     },
     "letteringItem": {
       "type": "object",
       "additionalProperties": false,
-      "required": [
-        "panel_id",
-        "kind",
-        "text",
-        "box"
-      ],
+      "required": ["panel_id", "kind", "text", "box"],
       "properties": {
-        "panel_id": {
-          "type": "string"
-        },
+        "lettering_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+        "panel_id": {"type": "string"},
+        "reading_order": {"type": "integer", "minimum": 1},
         "kind": {
           "type": "string",
-          "enum": [
-            "speech",
-            "caption",
-            "thought"
-          ]
+          "enum": ["speech", "caption", "thought", "sfx", "whisper", "shout", "radio", "narration"]
         },
-        "speaker": {
-          "type": "string"
+        "speaker": {"type": "string"},
+        "text": {"type": "string"},
+        "box": {"$ref": "#/$defs/box"},
+        "tail_to": {"$ref": "#/$defs/point"},
+        "shape": {
+          "type": "string",
+          "enum": ["ellipse", "rounded", "rectangle", "cloud", "burst", "jagged", "none"]
         },
-        "text": {
-          "type": "string"
-        },
-        "box": {
-          "$ref": "#/$defs/box"
-        },
-        "tail_to": {
+        "writing_mode": {"type": "string", "enum": ["horizontal", "vertical"]},
+        "text_align": {"type": "string", "enum": ["start", "middle", "end"]},
+        "rotation": {"type": "integer", "minimum": -180, "maximum": 180},
+        "font_family": {"type": "string"},
+        "line_break_profile": {"type": "string", "enum": ["latin", "cjk", "japanese", "custom"]},
+        "ruby_text": {"type": "string"},
+        "font_size": {"type": "integer", "minimum": 8},
+        "min_font_size": {"type": "integer", "minimum": 6},
+        "font_weight": {"type": "integer", "minimum": 100, "maximum": 900},
+        "font_style": {"type": "string", "enum": ["normal", "italic"]},
+        "line_height": {"type": "number", "minimum": 1},
+        "padding": {"type": "integer", "minimum": 0},
+        "fill": {"type": "string"},
+        "stroke": {"type": "string"},
+        "stroke_width": {"type": "integer", "minimum": 0, "maximum": 16},
+        "text_color": {"type": "string"},
+        "opacity": {"type": "number", "minimum": 0, "maximum": 1},
+        "allow_overlap": {"type": "boolean"},
+        "allow_outside_safe_zone": {"type": "boolean"},
+        "allow_cross_panel": {"type": "boolean"},
+        "sound": {
           "type": "object",
           "additionalProperties": false,
-          "required": [
-            "x",
-            "y"
-          ],
+          "required": ["source", "meaning", "intensity"],
           "properties": {
-            "x": {
-              "type": "integer"
-            },
-            "y": {
-              "type": "integer"
-            }
+            "source": {"type": "string"},
+            "meaning": {"type": "string"},
+            "intensity": {"type": "integer", "minimum": 1, "maximum": 5},
+            "language": {"type": "string"},
+            "romanization": {"type": "string"},
+            "translation": {"type": "string"}
           }
         }
       }
+    },
+    "relativePath": {
+      "type": "string",
+      "pattern": "^(?!/)(?!.*(^|/)\\.\\.(?:/|$)).+"
     }
   }
 }

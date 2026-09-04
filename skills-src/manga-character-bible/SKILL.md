@@ -3,7 +3,7 @@ name: manga-character-bible
 description: Build and maintain versioned character canon, arcs, relationships, voice constraints, and continuity facts without creating visual reference artwork.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Character Bible
@@ -46,13 +46,15 @@ Versioned character records under `.manga-studio/canon/characters/` and characte
 
 1. Validate story provenance and load active canon.
 2. Resolve each character through the stable ID map, preserving aliases after renames.
-3. Record role, goals, constraints, relationships, arc state, voice guidance, known facts, and explicit unknowns.
-4. Keep visual identity textual and evidence-based; do not request or create art here.
-5. Write a new version and diff; route canon adoption through approval.
+3. Separate static canon in `character.schema.json` from changing scene/timeline state in `character-state.schema.json`.
+4. For each production character, record external goal, internal need, core fear, stakes, flaw, contradiction, moral limits, arc direction, voice principles, relationship drivers, known facts, and explicit unknowns.
+5. Test whether choices remain understandable under pressure and whether body-language opportunities can replace exposition.
+6. Keep visual identity textual and evidence-based; do not request or create art here.
+7. Write a new version and diff; route canon adoption through approval.
 
 ## Required Schemas
 
-`project.schema.json`, `stable-id-map.schema.json`, `character.schema.json`, and provenance schemas.
+`project.schema.json`, `stable-id-map.schema.json`, `character.schema.json`, `character-state.schema.json`, `relationship.schema.json`, `voice-guide.schema.json`, and provenance schemas.
 
 ## Next-Skill Handoff
 
@@ -80,4 +82,4 @@ Example: two independent stories may each contain a character named Alex; each r
 
 ## Acceptance Criteria
 
-Character records are project-isolated, versioned, evidence-linked, voice-aware, and free of implicit visual-generation work.
+Character records are project-isolated, versioned, evidence-linked, motivation-complete, voice-aware, explicit about moral limits and changing state, and free of implicit visual-generation work.

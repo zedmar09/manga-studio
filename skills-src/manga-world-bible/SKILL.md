@@ -3,7 +3,7 @@ name: manga-world-bible
 description: Build and maintain versioned world canon for locations, organizations, props, rules, cultures, and timelines without imposing genre-specific concepts.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga World Bible
@@ -46,7 +46,7 @@ Versioned records under `.manga-studio/canon/locations/`, `organizations/`, `pro
 
 1. Validate story provenance and load active canon.
 2. Resolve entities through stable project-local IDs.
-3. Record only relevant facts, constraints, spatial rules, state transitions, timeline links, and unknowns.
+3. Record only relevant facts, constraints, spatial rules, scale relationships, persistent landmarks, prop operating states, state transitions, timeline links, and unknowns.
 4. Check proposed additions against manuscript evidence and existing canon.
 5. Write versioned records and diffs; route adoption through canon approval.
 
@@ -80,4 +80,4 @@ Example: a realistic kitchen and a fictional orbital habitat use the same neutra
 
 ## Acceptance Criteria
 
-World records are minimal, sufficient, stable-ID based, genre-neutral, versioned, and consistent with approved evidence.
+World records are minimal, sufficient, stable-ID based, genre-neutral, versioned, consistent with approved evidence, and precise enough to support later location/prop reference jobs without inventing appearance.

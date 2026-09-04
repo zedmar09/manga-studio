@@ -1,8 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "job_id": "pilot-001-panel-page-001-p4-v001",
   "job_type": "manga_panel",
   "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-04-v001.png",
+  "output_spec": {"format": "png", "width": 1400, "height": 2200, "color_mode": "grayscale", "alpha_allowed": false},
+  "content_constraints": {"age_band": "teen and older", "content_rating": "teen", "content_boundaries": ["No graphic injury", "No sexual content", "Threat remains suspenseful rather than sadistic"], "sensitivity_requirements": ["Fear responses should not be mocked", "Avoid glamorizing reckless isolation"], "accessibility_goals": ["Clear event order", "Readable concise dialogue", "Every SFX includes reader-facing meaning"]},
   "required_reference_images": [],
   "reference_priority": [
     "rain-platform-reference-v001",
@@ -22,27 +24,56 @@
     "ren": "Behind Mira, watchful and tense."
   },
   "composition": {
-    "panel_canvas": {
-      "width": 1400,
-      "height": 2200
-    },
     "camera": "low track-level vertical shot",
     "framing": "ticket punch points toward a dark tunnel opening; Mira in foreground, Ren behind",
-    "reading_focus": "ticket punch, Mira, dark tunnel"
+    "reading_focus": "ticket punch, Mira, dark tunnel",
+    "event_direction": {
+      "event_type": "action",
+      "intensity": 5,
+      "importance": 5,
+      "shot_size": "full",
+      "camera_angle": "worms_eye",
+      "camera_motion": "tracking",
+      "action_direction": "right_to_left",
+      "emotional_beat": "the pair choose to confront the unseen arrival",
+      "pose_and_expression": "Mira leads with a decisive arm line; Ren braces behind her and watches the tunnel",
+      "show_dont_tell_cue": "Mira's forward line and Ren's planted stance show their choice to face the unseen train."
+    },
+    "background_priority": "story_critical"
   },
+  "safe_zone_coordinate_system": "source_normalized",
   "dialogue_safe_zones": [
     {
-      "x": 170,
-      "y": 120,
-      "width": 980,
-      "height": 340
+      "x": 0.1,
+      "y": 0.11,
+      "width": 0.68,
+      "height": 0.19
     }
   ],
   "manga_style": {
     "palette": "black-and-white",
     "linework": "dramatic ink perspective with deep blacks",
+    "line_weight_strategy": "Heavy rail and tunnel silhouettes, medium character contours, and fine rain texture.",
+    "solid_black_strategy": "Make the tunnel a dominant black mass while preserving readable figure silhouettes.",
     "screen_tones": "rain, tunnel shadow, wet track highlights",
+    "contrast_plan": "Pale wet rails and faces cut through the tunnel's solid-black threat.",
+    "depth_plan": "Foreshortened punch, figures, rails, and tunnel create four readable depth layers.",
+    "motion_language": "Rail diagonals and Mira's arm drive the eye right-to-left into the tunnel.",
     "genre": "quiet supernatural mystery manga"
+  },
+  "quality_profile": {
+    "tier": "high",
+    "goals": [
+      "event clarity at thumbnail size",
+      "expressive character acting",
+      "dynamic event-driven composition",
+      "strict reference continuity",
+      "professional black-and-white manga finish"
+    ],
+    "variation_policy": "event_driven",
+    "continuity_strictness": "locked",
+    "detail_budget": "high",
+    "self_check_required": true
   },
   "required_elements": [
     "Mira's right arm extended",

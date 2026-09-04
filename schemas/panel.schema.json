@@ -9,65 +9,148 @@
     "source_job_id",
     "frame",
     "art_path",
+    "source_canvas",
+    "safe_zone_coordinate_system",
     "dialogue_safe_zones",
     "summary"
   ],
   "properties": {
-    "panel_id": {
-      "type": "string",
-      "pattern": "^[a-z0-9][a-z0-9-]*$"
-    },
-    "source_job_id": {
-      "type": "string"
-    },
-    "frame": {
-      "$ref": "#/$defs/box"
-    },
-    "art_path": {
-      "anyOf": [
-        {
-          "$ref": "#/$defs/relativePath"
-        },
-        {
-          "type": "null"
-        }
-      ]
-    },
-    "dialogue_safe_zones": {
+    "panel_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9-]*$"},
+    "source_job_id": {"type": "string"},
+    "frame": {"$ref": "#/$defs/box"},
+    "clip_polygon": {
       "type": "array",
-      "items": {
-        "$ref": "#/$defs/box"
+      "minItems": 3,
+      "items": {"$ref": "#/$defs/point"}
+    },
+    "z_index": {"type": "integer"},
+    "fit": {"type": "string", "enum": ["cover", "contain"]},
+    "focus": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": {"type": "number", "minimum": 0, "maximum": 1},
+        "y": {"type": "number", "minimum": 0, "maximum": 1}
       }
     },
-    "summary": {
-      "type": "string"
-    }
+    "border": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "visible": {"type": "boolean"},
+        "color": {"type": "string"},
+        "width": {"type": "integer", "minimum": 0, "maximum": 24},
+        "line_join": {"type": "string", "enum": ["miter", "round", "bevel"]}
+      }
+    },
+    "bleed": {"type": "boolean"},
+    "inset": {"type": "boolean"},
+    "allow_overlap": {"type": "boolean"},
+    "event": {"$ref": "#/$defs/event"},
+    "art_path": {
+      "anyOf": [
+        {"$ref": "#/$defs/relativePath"},
+        {"type": "null"}
+      ]
+    },
+    "source_canvas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["width", "height"],
+      "properties": {
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1}
+      }
+    },
+    "safe_zone_coordinate_system": {"const": "source_normalized"},
+    "dialogue_safe_zones": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/normalizedBox"}
+    },
+    "summary": {"type": "string"}
   },
   "$defs": {
     "box": {
       "type": "object",
       "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": {"type": "integer"},
+        "y": {"type": "integer"},
+        "width": {"type": "integer", "minimum": 1},
+        "height": {"type": "integer", "minimum": 1}
+      }
+    },
+    "point": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y"],
+      "properties": {
+        "x": {"type": "integer"},
+        "y": {"type": "integer"}
+      }
+    },
+    "normalizedBox": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": {"type": "number", "minimum": 0, "maximum": 1},
+        "y": {"type": "number", "minimum": 0, "maximum": 1},
+        "width": {"type": "number", "exclusiveMinimum": 0, "maximum": 1},
+        "height": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
       "required": [
-        "x",
-        "y",
-        "width",
-        "height"
+        "event_id",
+        "event_type",
+        "intensity",
+        "importance",
+        "dominant_action",
+        "emotional_beat",
+        "shot_size",
+        "camera_angle",
+        "action_direction",
+        "show_dont_tell_cue"
       ],
       "properties": {
-        "x": {
-          "type": "integer"
+        "event_id": {"type": "string"},
+        "event_type": {
+          "type": "string",
+          "enum": ["establishing", "dialogue", "action", "reaction", "reveal", "transition", "montage", "silence"]
         },
-        "y": {
-          "type": "integer"
+        "intensity": {"type": "integer", "minimum": 1, "maximum": 5},
+        "importance": {"type": "integer", "minimum": 1, "maximum": 5},
+        "dominant_action": {"type": "string"},
+        "emotional_beat": {"type": "string"},
+        "show_dont_tell_cue": {"type": "string", "minLength": 1},
+        "shot_size": {
+          "type": "string",
+          "enum": ["extreme_wide", "wide", "full", "medium", "close_up", "extreme_close_up", "detail", "pov"]
         },
-        "width": {
-          "type": "integer",
-          "minimum": 1
+        "camera_angle": {
+          "type": "string",
+          "enum": ["eye_level", "high_angle", "low_angle", "dutch", "birds_eye", "worms_eye", "over_shoulder", "pov"]
         },
-        "height": {
-          "type": "integer",
-          "minimum": 1
-        }
+        "camera_motion": {
+          "type": "string",
+          "enum": ["static", "pan", "tilt", "push_in", "pull_out", "tracking", "handheld", "impact"]
+        },
+        "action_direction": {
+          "type": "string",
+          "enum": ["left_to_right", "right_to_left", "toward_camera", "away_from_camera", "static", "mixed"]
+        },
+        "axis_break": {"type": "boolean"},
+        "transition": {
+          "type": "string",
+          "enum": ["cut", "match_cut", "action_match", "reaction", "reveal", "ellipsis", "smash_cut"]
+        },
+        "continuity_in": {"type": "array", "items": {"type": "string"}},
+        "continuity_out": {"type": "array", "items": {"type": "string"}}
       }
     },
     "relativePath": {

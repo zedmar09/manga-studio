@@ -1,8 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "job_id": "pilot-001-ref-prop-v001",
   "job_type": "prop_reference",
   "output_filename": ".manga-studio/handoff/generated/refs/brass-ticket-punch-reference-v001.png",
+  "output_spec": {"format": "png", "width": 2000, "height": 1600, "color_mode": "grayscale", "alpha_allowed": false},
+  "content_constraints": {"age_band": "teen and older", "content_rating": "teen", "content_boundaries": ["No graphic injury", "No sexual content", "Threat remains suspenseful rather than sadistic"], "sensitivity_requirements": ["Fear responses should not be mocked", "Avoid glamorizing reckless isolation"], "accessibility_goals": ["Clear event order", "Readable concise dialogue", "Every SFX includes reader-facing meaning"]},
   "required_reference_images": [],
   "reference_priority": [],
   "scene_state": {
@@ -11,20 +13,43 @@
   },
   "character_state": {},
   "composition": {
-    "format": "prop reference sheet",
+    "sheet_layout": "Four construction views with an in-hand scale comparison and open/closed mechanism states.",
     "views": [
       "top view",
       "side view",
       "three-quarter view",
       "in-hand scale silhouette"
     ],
+    "scale_reference": "Show the punch in Mira's hand with handle width and jaw length clearly comparable to her fingers.",
+    "functional_states": ["closed resting position", "handles compressed", "jaws open after release"],
+    "continuity_markers": ["crescent-shaped punch die", "two diagonal scratches on left handle", "darkened hinge pin"],
     "background": "plain white"
   },
+  "safe_zone_coordinate_system": "source_normalized",
   "dialogue_safe_zones": [],
   "manga_style": {
     "palette": "black-and-white",
     "linework": "precise ink object rendering with fine scratches",
+    "line_weight_strategy": "Heavy outer silhouette, medium mechanical seams, and fine wear marks.",
+    "solid_black_strategy": "Use compact blacks inside the jaws and hinge recess without hiding construction.",
+    "screen_tones": "Limited gray tones describe worn brass values without color.",
+    "contrast_plan": "The crescent die and identifying scratches remain clear in every view.",
+    "depth_plan": "Orthographic views stay flat while the three-quarter view explains overlapping parts.",
+    "motion_language": "Functional states communicate operation through pose rather than arrows or labels.",
     "genre": "quiet supernatural mystery manga"
+  },
+  "quality_profile": {
+    "tier": "high",
+    "goals": [
+      "clear multi-angle object construction",
+      "consistent silhouette and distinguishing marks",
+      "production-ready visual reference detail",
+      "professional black-and-white manga finish"
+    ],
+    "variation_policy": "reference_driven",
+    "continuity_strictness": "locked",
+    "detail_budget": "high",
+    "self_check_required": true
   },
   "required_elements": [
     "small vintage conductor ticket punch",

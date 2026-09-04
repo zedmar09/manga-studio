@@ -3,7 +3,7 @@ name: manga-chapter-writer
 description: Draft or revise versioned story manuscript units from approved architecture and canon, supporting chapterless stories and preserving author voice and source immutability.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Chapter Writer
@@ -22,11 +22,11 @@ Use when the user asks for manuscript drafting or implementation of an approved 
 
 ## Required Inputs
 
-Approved architecture or revision scope, active canon, stable IDs, author-voice rules, and the preceding active manuscript context when continuing.
+Approved creative brief and architecture or revision scope, active canon, stable IDs, author-voice rules, audience/content boundaries, and the preceding active manuscript context when continuing.
 
 ## Optional Inputs
 
-Source snapshots, target length, scene constraints, dialogue draft, and unresolved plot threads.
+Source snapshots, target length, scene constraints, dialogue draft, unresolved plot threads, and an active success plan's hook, unit-movement, ending-beat, and sustainability constraints.
 
 ## Project Discovery
 
@@ -47,13 +47,15 @@ Versioned manuscript files and metadata under `.manga-studio/manuscript/`.
 1. Validate story profile and required approvals.
 2. Resolve the target unit and related entities through stable IDs.
 3. Load only the source, canon, architecture, and preceding context required for the draft.
-4. Draft in the configured output language and preserve author voice.
-5. Check causality, unresolved threads, canon, and neighboring scene continuity.
-6. Save a new version and deterministic diff; request approval before activation.
+4. Draft in the configured output language and preserve author voice. Favor observable choices, reactions, expressions, and consequences over explanatory dialogue where the medium can show the information.
+5. Check causality, unresolved threads, canon, audience/content boundaries, emotional legibility, and neighboring scene continuity.
+6. Verify the opening promise, scene turns, and ending beat earn the intended reader effect without copying a named work's protected expression. For serialized work, require each unit to change character, conflict, knowledge, relationship, or world state rather than forcing a cliffhanger or arbitrary arc length.
+7. Use success-plan reader goals as testable intent, not permission to flatten voice, chase trends, overstate market fit, or exceed the sustainable scope.
+8. Save a new version and deterministic diff; request approval before activation.
 
 ## Required Schemas
 
-`project.schema.json`, `stable-id-map.schema.json`, provenance schemas, and relevant canon schemas.
+`project.schema.json`, `creative-brief.schema.json`, `success-plan.schema.json` when active, `stable-id-map.schema.json`, provenance schemas, and relevant canon schemas.
 
 ## Next-Skill Handoff
 

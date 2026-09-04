@@ -10,6 +10,7 @@ from pathlib import Path
 SCRIPT_DIR = Path(__file__).resolve().parent
 sys.path.insert(0, str(SCRIPT_DIR / "lib"))
 
+from manga_studio.page_pipeline import latest_version_path, next_version_path
 from manga_studio.profiles import validate_profile
 from manga_studio.project import ProjectDiscoveryError, discover_project
 from manga_studio.validation import load_json
@@ -36,16 +37,28 @@ def main() -> int:
         return 1
 
     package_name = args.chapter_id or context.config["project_id"]
-    output_dir = args.output_dir or context.workspace_path(f"exports/{package_name}")
+    output_dir = args.output_dir or next_version_path(
+        context.workspace_path("exports"), package_name, ""
+    )
     if not output_dir.is_absolute():
         output_dir = context.project_root / output_dir
-    output_dir.mkdir(parents=True, exist_ok=True)
+    if output_dir.exists():
+        print(f"Export failed: refusing to overwrite existing package {output_dir}")
+        return 1
+    output_dir.mkdir(parents=True)
 
     exported_pages = []
     for page_path in sorted(context.workspace_path("pages").glob("*.json")):
+        if page_path.name.startswith("._"):
+            continue
         page = load_json(page_path)
         page_id = page["page_id"]
-        source = context.workspace_path(f"lettering/{page_id}-lettered.svg")
+        source = latest_version_path(
+            context.workspace_path("lettering"), f"{page_id}-lettered", ".svg"
+        ) or context.workspace_path(f"lettering/{page_id}-lettered.svg")
+        if not source.is_file():
+            print(f"Export failed: no lettered version exists for {page_id}")
+            return 1
         destination = output_dir / f"{page_id}.svg"
         shutil.copy2(source, destination)
         exported_pages.append(destination.name)

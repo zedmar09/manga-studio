@@ -3,7 +3,7 @@ name: manga-consistency-manager
 description: Check source, canon, manuscript, revision, and storyboard artifacts for cross-stage story consistency before approvals or locks; it does not review rendered images.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Consistency Manager
@@ -22,7 +22,7 @@ Use before manuscript/storyboard approval or lock, during continuation, or for a
 
 ## Required Inputs
 
-Active or proposed canon, manuscript, storyboard, stable IDs, provenance, and the approval or lock being evaluated.
+Active or proposed creative brief, canon, manuscript, storyboard/nemu, stable IDs, provenance, and the approval or lock being evaluated. Include the active success plan when configured.
 
 ## Optional Inputs
 
@@ -36,7 +36,7 @@ Use shared discovery and stop if missing. Keep all comparisons inside one projec
 
 ## Source Of Truth
 
-Approved canon outranks drafts and plans; active approved manuscript outranks storyboard paraphrases; explicit decisions and stage locks define accepted state; source remains provenance authority.
+Approved canon outranks drafts and plans; active approved manuscript outranks storyboard paraphrases; explicit decisions and stage locks define accepted state; source remains provenance authority. A success plan can constrain declared goals and protected elements but cannot turn a market hypothesis into story fact.
 
 ## Owned Outputs
 
@@ -46,14 +46,14 @@ Versioned consistency reports under `.manga-studio/analysis/` or `.manga-studio/
 
 1. Validate story provenance and active-version paths.
 2. Compare entities and events by stable IDs rather than names or positions.
-3. Check canon facts, causal order, character state, timeline, plot threads, setup/payoff status, dialogue facts, and storyboard fidelity.
+3. Check creative-promise fidelity, canon facts, causal order, character desire/fear/limits, timeline, plot threads, setup/payoff status, dialogue facts, audience/content constraints, sound-cue meaning, show-don't-tell opportunities, event readability, storyboard/nemu fidelity, and any active success plan's protected elements, sustainability floor, hook promise, and feedback decision boundaries.
 4. Separate errors, warnings, intentional changes, and unresolved decisions.
 5. Write a structured report without changing the reviewed artifacts.
 6. Clear a gate only through the appropriate approval workflow.
 
 ## Required Schemas
 
-`project.schema.json`, `stable-id-map.schema.json`, `continuity-state.schema.json`, `review.schema.json`, and schemas for reviewed entities/pages.
+`project.schema.json`, `creative-brief.schema.json`, `success-plan.schema.json` when active, `stable-id-map.schema.json`, `continuity-state.schema.json`, `nemu.schema.json`, `review.schema.json`, and schemas for reviewed entities/pages.
 
 ## Next-Skill Handoff
 

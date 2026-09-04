@@ -46,8 +46,10 @@
   "reading_direction": "right-to-left",
   "target_manga_format": {
     "color_mode": "black-and-white",
-    "page_width_px": 1654,
-    "page_height_px": 2339
+    "page_width_px": 1600,
+    "page_height_px": 2400,
+    "output_intent": "screen",
+    "print_profile": null
   },
   "workflow_phase": "story_foundation",
   "operating_mode": "adapt_existing_to_manga",
@@ -66,6 +68,9 @@
   "active_manuscript_version": null,
   "active_canon_version": null,
   "active_storyboard_version": null,
+  "active_creative_brief_version": ".manga-studio/story/briefs/pilot-001-creative-brief-v001.json",
+  "active_success_plan_version": ".manga-studio/story/success-plans/pilot-001-success-plan-v001.json",
+  "active_nemu_version": ".manga-studio/storyboard/nemu/pilot-001-nemu-v001.json",
   "blocking_reasons": [
     "Pilot story, canon, manuscript, and storyboard approvals are incomplete.",
     "Story and storyboard locks are not set.",

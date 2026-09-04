@@ -30,19 +30,74 @@
         "image_job",
         "generated_image",
         "page_continuity",
-        "export"
+        "page_quality",
+        "export",
+        "technical_intake",
+        "print_preflight"
       ]
     },
     "target": {
       "$ref": "#/$defs/relativePath"
     },
+    "target_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "target_hashes": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["relative_path", "sha256"],
+        "properties": {
+          "relative_path": {"$ref": "#/$defs/relativePath"},
+          "sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    },
     "status": {
       "type": "string",
       "enum": [
         "approved",
+        "review_ready",
         "changes_requested",
         "blocked"
       ]
+    },
+    "automated": {
+      "type": "boolean"
+    },
+    "approval_required": {
+      "type": "boolean"
+    },
+    "metric_scope": {
+      "type": "string",
+      "enum": ["planning_indicators", "human_visual_assessment", "technical_preflight"]
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "overall",
+        "readability",
+        "reading_flow",
+        "pacing",
+        "visual_variety",
+        "continuity",
+        "lettering",
+        "page_impact"
+      ],
+      "properties": {
+        "overall": {"type": "integer", "minimum": 0, "maximum": 100},
+        "readability": {"type": "integer", "minimum": 0, "maximum": 100},
+        "reading_flow": {"type": "integer", "minimum": 0, "maximum": 100},
+        "pacing": {"type": "integer", "minimum": 0, "maximum": 100},
+        "visual_variety": {"type": "integer", "minimum": 0, "maximum": 100},
+        "continuity": {"type": "integer", "minimum": 0, "maximum": 100},
+        "lettering": {"type": "integer", "minimum": 0, "maximum": 100},
+        "page_impact": {"type": "integer", "minimum": 0, "maximum": 100}
+      }
     },
     "findings": {
       "type": "array",
@@ -65,13 +120,86 @@
           "message": {
             "type": "string"
           },
+          "code": {
+            "type": "string"
+          },
+          "panel_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "lettering_ids": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
           "suggested_correction_job": {
             "$ref": "#/$defs/relativePath"
           }
         }
       }
+    },
+    "visual_assessment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reviewer", "reviewed_at", "story_clarity", "event_readability",
+        "reference_adherence", "character_acting", "composition", "monochrome_finish",
+        "continuity", "lettering_readability", "content_boundary_compliance",
+        "required_elements_present", "prohibited_elements_absent",
+        "dialogue_safe_zones_usable", "artifact_free", "notes"
+      ],
+      "properties": {
+        "reviewer": {"type": "string", "minLength": 1},
+        "reviewed_at": {"type": "string", "minLength": 1},
+        "story_clarity": {"type": "integer", "minimum": 1, "maximum": 5},
+        "event_readability": {"type": "integer", "minimum": 1, "maximum": 5},
+        "reference_adherence": {"type": "integer", "minimum": 1, "maximum": 5},
+        "character_acting": {"type": "integer", "minimum": 1, "maximum": 5},
+        "composition": {"type": "integer", "minimum": 1, "maximum": 5},
+        "monochrome_finish": {"type": "integer", "minimum": 1, "maximum": 5},
+        "continuity": {"type": "integer", "minimum": 1, "maximum": 5},
+        "lettering_readability": {"type": "integer", "minimum": 1, "maximum": 5},
+        "content_boundary_compliance": {"type": "integer", "minimum": 1, "maximum": 5},
+        "required_elements_present": {"type": "boolean"},
+        "prohibited_elements_absent": {"type": "boolean"},
+        "dialogue_safe_zones_usable": {"type": "boolean"},
+        "artifact_free": {"type": "boolean"},
+        "notes": {"type": "array", "items": {"type": "string"}}
+      }
     }
   },
+  "allOf": [
+    {
+      "if": {"properties": {"review_type": {"const": "generated_image"}}},
+      "then": {
+        "required": ["target_sha256", "metric_scope", "visual_assessment", "approval_required"],
+        "properties": {
+          "metric_scope": {"const": "human_visual_assessment"},
+          "approval_required": {"const": true}
+        }
+      }
+    },
+    {
+      "if": {"properties": {"review_type": {"const": "page_quality"}}},
+      "then": {
+        "required": ["metric_scope"],
+        "properties": {"metric_scope": {"const": "planning_indicators"}}
+      }
+    },
+    {
+      "if": {"properties": {"review_type": {"const": "print_preflight"}}},
+      "then": {
+        "required": ["target_sha256", "target_hashes", "metric_scope", "approval_required"],
+        "properties": {
+          "metric_scope": {"const": "technical_preflight"},
+          "approval_required": {"const": true}
+        }
+      }
+    }
+  ],
   "$defs": {
     "relativePath": {
       "type": "string",

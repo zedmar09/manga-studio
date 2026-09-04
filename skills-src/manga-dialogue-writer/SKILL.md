@@ -3,7 +3,7 @@ name: manga-dialogue-writer
 description: Draft and refine versioned dialogue for story manuscripts or manga scripts using approved character voices, scene intent, language, and lettering constraints.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Dialogue Writer
@@ -46,9 +46,11 @@ Versioned dialogue drafts or manuscript variants under `.manga-studio/manuscript
 
 1. Validate relevant story state and identify the target by stable scene or page IDs.
 2. Preserve factual content, intent, language, and author-voice rules.
-3. Refine distinct voice, subtext, turn-taking, rhythm, and readable text load.
-4. Keep panel-art jobs free of dialogue, captions, balloons, and sound-effect text.
-5. Save a new version and diff; request approval before replacing active dialogue.
+3. Refine distinct voice, subtext, turn-taking, rhythm, and readable text load. Prefer immediate, natural wording; make speaker, intent, referents, and event sequence understandable without flattening character voice. Remove lines that only repeat visible action.
+4. Check age/genre-appropriate content, accidental ambiguity, unexplained terminology, repetitive exposition, and balloon word load. Flag uncertain audience or sensitivity requirements instead of guessing.
+5. Record sound cues separately with source, reader-facing meaning, intensity, language, script, and translation/romanization when relevant. Use a readable SFX expression that supports the event rather than decorative noise.
+6. Keep panel-art jobs free of dialogue, captions, balloons, and sound-effect text.
+7. Save a new version and diff; request approval before replacing active dialogue.
 
 ## Required Schemas
 
@@ -80,4 +82,4 @@ Example: shorten a page's approved conversation to fit safe zones while preservi
 
 ## Acceptance Criteria
 
-Dialogue is voice-consistent, context-faithful, language-appropriate, versioned, and usable by manuscript or lettering workflows without contaminating art jobs.
+Dialogue and sound cues are voice-consistent, context-faithful, audience-appropriate, easy to follow across the configured language/script, lettering-feasible, versioned, and kept out of artwork-generation jobs.

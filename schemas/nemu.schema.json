@@ -1,0 +1,86 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://manga-studio.local/schemas/nemu.schema.json",
+  "title": "Manga Studio Structured Nemu Bundle",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "project_id", "nemu_id", "version", "status", "representation",
+    "source_storyboard_path", "source_storyboard_sha256", "pages", "review_checklist"
+  ],
+  "properties": {
+    "schema_version": {"const": "1.0.0"},
+    "project_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "nemu_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+    "version": {"type": "string", "pattern": "^v[0-9]{3}$"},
+    "status": {"enum": ["draft", "proposed", "approved", "superseded"]},
+    "representation": {"const": "structured_geometry_only"},
+    "source_storyboard_path": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/relativePath"}, {"type": "null"}]},
+    "source_storyboard_sha256": {"anyOf": [{"$ref": "story-common.schema.json#/$defs/sha256"}, {"type": "null"}]},
+    "pages": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/nemuPage"}},
+    "review_checklist": {
+      "type": "object", "additionalProperties": false,
+      "required": ["reading_flow_clear", "panel_scale_matches_importance", "balloon_order_clear", "dialogue_load_readable", "show_dont_tell_reviewed", "sfx_meaning_clear", "print_safe", "human_review_required"],
+      "properties": {
+        "reading_flow_clear": {"type": "boolean"}, "panel_scale_matches_importance": {"type": "boolean"},
+        "balloon_order_clear": {"type": "boolean"}, "dialogue_load_readable": {"type": "boolean"},
+        "show_dont_tell_reviewed": {"type": "boolean"}, "sfx_meaning_clear": {"type": "boolean"},
+        "print_safe": {"type": "boolean"}, "human_review_required": {"const": true}
+      }
+    }
+  },
+  "$defs": {
+    "pageSize": {
+      "type": "object", "additionalProperties": false, "required": ["width", "height", "unit"],
+      "properties": {"width": {"type": "integer", "minimum": 1}, "height": {"type": "integer", "minimum": 1}, "unit": {"const": "px"}}
+    },
+    "normalizedBox": {
+      "type": "object", "additionalProperties": false, "required": ["x", "y", "width", "height"],
+      "properties": {
+        "x": {"type": "number", "minimum": 0, "maximum": 1}, "y": {"type": "number", "minimum": 0, "maximum": 1},
+        "width": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}, "height": {"type": "number", "exclusiveMinimum": 0, "maximum": 1}
+      }
+    },
+    "nemuPage": {
+      "type": "object", "additionalProperties": false,
+      "required": ["page_id", "page_size", "reading_order", "reading_sequence", "panels", "lettering_plan", "page_turn"],
+      "properties": {
+        "page_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+        "page_size": {"$ref": "#/$defs/pageSize"},
+        "reading_order": {"enum": ["right-to-left", "left-to-right"]},
+        "reading_sequence": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "story-common.schema.json#/$defs/stableId"}},
+        "panels": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/panel"}},
+        "lettering_plan": {"type": "array", "items": {"$ref": "#/$defs/letteringPlan"}},
+        "page_turn": {
+          "type": "object", "additionalProperties": false, "required": ["kind", "setup", "payoff_next_page"],
+          "properties": {
+            "kind": {"enum": ["none", "question", "reveal", "threat", "decision", "joke", "emotional_turn"]},
+            "setup": {"type": "string"}, "payoff_next_page": {"type": "boolean"}
+          }
+        }
+      }
+    },
+    "panel": {
+      "type": "object", "additionalProperties": false,
+      "required": ["panel_id", "frame", "dominant_event", "visual_communication", "dialogue_dependency", "importance"],
+      "properties": {
+        "panel_id": {"$ref": "story-common.schema.json#/$defs/stableId"}, "frame": {"$ref": "#/$defs/normalizedBox"},
+        "dominant_event": {"type": "string", "minLength": 1},
+        "visual_communication": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "dialogue_dependency": {"enum": ["none", "supporting", "essential"]},
+        "importance": {"type": "integer", "minimum": 1, "maximum": 5}
+      }
+    },
+    "letteringPlan": {
+      "type": "object", "additionalProperties": false,
+      "required": ["lettering_id", "panel_id", "kind", "text", "reading_order", "zone"],
+      "properties": {
+        "lettering_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+        "panel_id": {"$ref": "story-common.schema.json#/$defs/stableId"},
+        "kind": {"enum": ["speech", "caption", "thought", "sfx", "whisper", "shout", "radio", "narration"]},
+        "text": {"type": "string", "minLength": 1}, "reading_order": {"type": "integer", "minimum": 1},
+        "zone": {"$ref": "#/$defs/normalizedBox"}
+      }
+    }
+  }
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "pilot-001",
+  "nemu_id": "pilot-001-nemu",
+  "version": "v001",
+  "status": "proposed",
+  "representation": "structured_geometry_only",
+  "source_storyboard_path": null,
+  "source_storyboard_sha256": null,
+  "pages": [
+    {
+      "page_id": "page-001",
+      "page_size": {"width": 1600, "height": 2400, "unit": "px"},
+      "reading_order": "right-to-left",
+      "reading_sequence": ["p1", "p2", "p3", "p4"],
+      "panels": [
+        {"panel_id": "p1", "frame": {"x": 0.4875, "y": 0.041667, "width": 0.45, "height": 0.45}, "dominant_event": "The bell trembles after ringing.", "visual_communication": ["Bell dominates foreground", "Mira freezes", "Ren redirects attention toward Mira"], "dialogue_dependency": "supporting", "importance": 3},
+        {"panel_id": "p2", "frame": {"x": 0.0625, "y": 0.041667, "width": 0.45, "height": 0.45}, "dominant_event": "The view reveals an empty platform.", "visual_communication": ["Wide negative space", "No train is visible", "Rain defines the station boundary"], "dialogue_dependency": "supporting", "importance": 3},
+        {"panel_id": "p3", "frame": {"x": 0.5125, "y": 0.508333, "width": 0.425, "height": 0.45}, "dominant_event": "Mira raises the ticket punch.", "visual_communication": ["Right hand closes around the prop", "Fear resolves into precision"], "dialogue_dependency": "none", "importance": 4},
+        {"panel_id": "p4", "frame": {"x": 0.0625, "y": 0.508333, "width": 0.5, "height": 0.45}, "dominant_event": "Mira aims into the tunnel.", "visual_communication": ["Low angle gives the choice weight", "Tunnel remains unreadable", "Ren stays beside Mira"], "dialogue_dependency": "supporting", "importance": 5}
+      ],
+      "lettering_plan": [
+        {"lettering_id": "page-001-sfx-bell", "panel_id": "p1", "kind": "sfx", "text": "CHIME", "reading_order": 1, "zone": {"x": 0.53125, "y": 0.354167, "width": 0.1375, "height": 0.066667}},
+        {"lettering_id": "page-001-balloon-mira-01", "panel_id": "p1", "kind": "speech", "text": "The bell rang twice. That means someone came back.", "reading_order": 2, "zone": {"x": 0.575, "y": 0.066667, "width": 0.3, "height": 0.079167}},
+        {"lettering_id": "page-001-balloon-ren-01", "panel_id": "p2", "kind": "speech", "text": "Then why is the platform empty?", "reading_order": 3, "zone": {"x": 0.11875, "y": 0.0625, "width": 0.2875, "height": 0.075}},
+        {"lettering_id": "page-001-caption-01", "panel_id": "p3", "kind": "caption", "text": "Mira lifted the old ticket punch.", "reading_order": 4, "zone": {"x": 0.5625, "y": 0.5375, "width": 0.3125, "height": 0.066667}},
+        {"lettering_id": "page-001-balloon-mira-02", "panel_id": "p4", "kind": "speech", "text": "Because the train has not arrived yet.", "reading_order": 5, "zone": {"x": 0.11875, "y": 0.5375, "width": 0.3125, "height": 0.079167}}
+      ],
+      "page_turn": {"kind": "threat", "setup": "Mira points the ticket punch at the dark tunnel.", "payoff_next_page": true}
+    }
+  ],
+  "review_checklist": {
+    "reading_flow_clear": true,
+    "panel_scale_matches_importance": true,
+    "balloon_order_clear": true,
+    "dialogue_load_readable": true,
+    "show_dont_tell_reviewed": true,
+    "sfx_meaning_clear": true,
+    "print_safe": true,
+    "human_review_required": true
+  }
+}

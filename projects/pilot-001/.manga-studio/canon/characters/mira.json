@@ -16,5 +16,17 @@
   "continuity_notes": [
     "Hair clip remains visible unless hood covers it.",
     "Scarf should stay pale against black-and-white tones."
-  ]
+  ],
+  "dramatic_profile": {
+    "external_goal": "Identify who or what triggered the impossible station bell.",
+    "internal_need": "Trust her own perception without hiding uncertainty behind procedure.",
+    "core_fear": "That following the warning will confirm someone was lost because she hesitated.",
+    "stakes": "Ignoring the bell could leave a returning traveler trapped beyond the tunnel.",
+    "flaw": "She converts fear into rigid certainty before she has enough evidence.",
+    "contradiction": "She appears methodical while choosing to confront an event that defies every rule.",
+    "moral_limits": ["She will not knowingly use another person as bait."],
+    "arc_direction": "Move from solitary certainty toward evidence-based trust in Ren.",
+    "voice_principles": ["Concise observations", "Names the rule before challenging it", "Avoids melodramatic declarations"],
+    "relationship_drivers": ["Needs Ren's skepticism to test her conclusions", "Protects Ren by withholding how afraid she is"]
+  }
 }

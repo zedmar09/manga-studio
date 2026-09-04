@@ -3,7 +3,7 @@ name: manga-revision-planner
 description: Convert approved diagnostics into versioned, dependency-aware revision proposals while preserving source text, author voice, canon authority, and approval boundaries.
 metadata:
   namespace: manga-studio
-  version: "3.0.0"
+  version: "3.3.0"
 ---
 
 # Manga Revision Planner
@@ -26,7 +26,7 @@ Approved diagnosis, active canon, source provenance, stable IDs, revision mode, 
 
 ## Optional Inputs
 
-Target length, adaptation format, priority constraints, prior revision plans, and user decisions.
+Target length, adaptation format, priority constraints, active success plan, reader feedback or analytics, prior revision plans, and user decisions.
 
 ## Project Discovery
 
@@ -46,14 +46,15 @@ Versioned policies, plans, change sets, and deterministic diffs under `.manga-st
 
 1. Verify `DIAGNOSTIC_APPROVED` and story-profile validity.
 2. Convert each accepted finding into a scoped revision objective linked to stable IDs.
-3. Record target stable IDs, triggering issue IDs, source evidence, operation, expected result, alternatives, preserved elements, voice/canon/continuity/structural impact, dependencies, and acceptance criteria.
+3. Record target stable IDs, triggering issue IDs, source evidence, operation, expected result, alternatives, preserved elements, voice/canon/continuity/structural impact, creative-brief and audience/content impact, success-plan hypothesis or metric impact when relevant, dependencies, risks, rollback notes, and acceptance criteria.
 4. Order work without assuming chapters exist or that the source is already manga.
-5. Produce a deterministic diff plan; do not edit source or manuscript files.
-6. Request approval before activating the plan.
+5. Refuse metric-chasing changes that lack sufficient evidence or violate protected canon, author voice, content boundaries, rights, or sustainability limits. Prefer a bounded single-variable experiment when causality is uncertain.
+6. Produce a deterministic diff plan; do not edit source or manuscript files.
+7. Request approval before activating the plan.
 
 ## Required Schemas
 
-`revision-policy.schema.json`, `revision-plan.schema.json`, `change-set.schema.json`, `approval.schema.json`, and `decision-log.schema.json`.
+`revision-policy.schema.json`, `revision-plan.schema.json`, `change-set.schema.json`, `success-plan.schema.json` when active, `approval.schema.json`, and `decision-log.schema.json`.
 
 ## Next-Skill Handoff
 
@@ -81,4 +82,4 @@ Example: propose consolidating two repetitive scenes while preserving both origi
 
 ## Acceptance Criteria
 
-Every proposed change has evidence, scope, dependencies, risks, owner, and acceptance checks, and no authoritative file changes before approval.
+Every proposed change has evidence, scope, dependencies, risks, creative-promise impact, owner, rollback guidance, and acceptance checks, and no authoritative file changes before approval.

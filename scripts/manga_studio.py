@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import difflib
 import json
+import subprocess
 import sys
 from pathlib import Path
 
@@ -67,7 +68,9 @@ def build_parser() -> argparse.ArgumentParser:
     import_parser = subparsers.add_parser("import", help="Snapshot and normalize supported inventoried sources.")
     _project_argument(import_parser)
 
-    migrate = subparsers.add_parser("migrate", help="Migrate a v2 story workspace to schema v3 without changing sources.")
+    migrate = subparsers.add_parser(
+        "migrate", help="Migrate v2 metadata or refresh a v3 workspace without changing story sources."
+    )
     _project_argument(migrate)
 
     structure = subparsers.add_parser("structure", help="Create immutable structural source maps.")
@@ -161,6 +164,43 @@ def build_parser() -> argparse.ArgumentParser:
         "--stdout", action="store_true", help="Print the Markdown instead of writing a file."
     )
 
+    compose_parser = subparsers.add_parser(
+        "compose-page", help="Compose approved panels into the next versioned unlettered SVG."
+    )
+    compose_parser.add_argument("page_spec", type=Path)
+    compose_parser.add_argument("--project", type=Path)
+    compose_parser.add_argument("--output", type=Path)
+
+    lettering_parser = subparsers.add_parser(
+        "add-lettering", help="Add the next versioned vector lettering layer to a composed page."
+    )
+    lettering_parser.add_argument("page_spec", type=Path)
+    lettering_parser.add_argument("--project", type=Path)
+    lettering_parser.add_argument("--input", type=Path)
+    lettering_parser.add_argument("--output", type=Path)
+
+    review_page_parser = subparsers.add_parser(
+        "review-page", help="Create a deterministic, human-approval-required page-quality review."
+    )
+    review_page_parser.add_argument("page_spec", type=Path)
+    review_page_parser.add_argument("--project", type=Path)
+    review_page_parser.add_argument("--output", type=Path)
+
+    image_intake_parser = subparsers.add_parser(
+        "validate-generated-image",
+        help="Technically validate an externally generated image and write a versioned intake record.",
+    )
+    image_intake_parser.add_argument("job", type=Path)
+    image_intake_parser.add_argument("image", type=Path)
+    image_intake_parser.add_argument("--project", type=Path)
+    image_intake_parser.add_argument("--output", type=Path)
+
+    print_parser = subparsers.add_parser(
+        "preflight-print", help="Check page geometry against the configured physical print profile."
+    )
+    _project_argument(print_parser)
+    print_parser.add_argument("--output", type=Path)
+
     subparsers.add_parser("doctor", help="Run toolkit installation-readiness checks.")
     return parser
 
@@ -191,6 +231,26 @@ def main(argv: list[str] | None = None) -> int:
 
             errors = run_doctor(SCRIPT_DIR.parent, verbose=True)
             return 1 if errors else 0
+
+        production_scripts = {
+            "compose-page": ("compose_page.py", ("page_spec",)),
+            "add-lettering": ("add_lettering.py", ("page_spec",)),
+            "review-page": ("review_page.py", ("page_spec",)),
+            "validate-generated-image": ("validate_generated_image.py", ("job", "image")),
+            "preflight-print": ("preflight_print.py", ("path",)),
+        }
+        if args.command in production_scripts:
+            script_name, positionals = production_scripts[args.command]
+            command = [sys.executable, str(SCRIPT_DIR / script_name)]
+            for positional in positionals:
+                value = getattr(args, positional, None)
+                if value is not None:
+                    command.append(str(value))
+            for option in ("project", "input", "output"):
+                value = getattr(args, option, None)
+                if value is not None:
+                    command.extend([f"--{option}", str(value)])
+            return subprocess.run(command, check=False).returncode
 
         context = discover_project(_selected_path(args))
 

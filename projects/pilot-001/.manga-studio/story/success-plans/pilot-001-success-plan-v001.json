@@ -1,0 +1,179 @@
+{
+  "schema_version": "1.0.0",
+  "project_id": "pilot-001",
+  "plan_id": "pilot-001-success-plan",
+  "version": "v001",
+  "status": "proposed",
+  "creative_brief_path": ".manga-studio/story/briefs/pilot-001-creative-brief-v001.json",
+  "creative_brief_sha256": "271313a5131c33c049180e637e5e5850b785cc0a2e3adb36dd5fff74f46cd8f2",
+  "success_definition": {
+    "statement": "Finish one readable four-panel manga page whose supernatural rule, emotional turn, and final choice are understandable without outside explanation.",
+    "primary_outcomes": ["creative_completion", "reader_impact"],
+    "time_horizon": "Review after the first fully lettered and continuity-reviewed page.",
+    "non_goals": ["Predicting sales from a one-page fixture", "Expanding the pilot into a complete chapter during this milestone"],
+    "success_is_not_guaranteed": true
+  },
+  "audience_and_positioning": {
+    "intended_readers": ["Teen and older readers who enjoy concise supernatural mysteries"],
+    "reader_need": "A complete, intriguing emotional beat with clear event order and enough unanswered tension to invite another page.",
+    "genre_demographic_format_promises": [
+      "A supernatural rule is established through action rather than a lore dump.",
+      "The four-panel page reads right-to-left and resolves its immediate beat while opening a larger question."
+    ],
+    "market_hypotheses": [
+      {
+        "statement": "The bell-rule contradiction can create curiosity without action spectacle.",
+        "evidence_status": "unvalidated",
+        "evidence_source_ids": [],
+        "validation_method": "Ask first-time test readers what question makes them want to continue."
+      }
+    ],
+    "comparables": [],
+    "differentiators": ["A small mechanical transit prop carries the supernatural rule and the protagonist's decision."],
+    "cultural_translation_notes": ["Explain the fictional station rule through visible cause and effect rather than assuming railway custom knowledge."]
+  },
+  "creative_execution": {
+    "one_line_logline": "At an empty station, a cautious teenager must answer a bell that rings only when an impossible traveler returns.",
+    "protagonist_drive": {
+      "want": "Mira wants to identify the source of the impossible bell.",
+      "need": "Mira needs to act without pretending her fear is certainty.",
+      "stakes": "Ignoring the warning may leave Ren and an arriving traveler exposed to an unknown threat."
+    },
+    "emotional_core": "Courage is a deliberate response to uncertainty, not the absence of fear.",
+    "early_hook": {
+      "question_or_disruption": "Why did the return bell ring when the platform and timetable say no one is coming?",
+      "deadline_unit": "page",
+      "latest_unit": 1,
+      "payoff_signal": "The final panel turns the unexplained sound into Mira's concrete decision to face the tunnel."
+    },
+    "escalation_and_reset": [
+      "Move from the bell, to the empty platform, to the violated rule, to Mira's commitment.",
+      "Use the empty-platform hold as breathing room before the final choice."
+    ],
+    "serialized_unit_design": {
+      "opening_beats": ["Open on an impossible sensory event with immediate physical evidence."],
+      "movement_requirements": ["Every panel adds a clue, consequence, inference, or choice."],
+      "ending_beats": ["End on an earned decision that changes the direction of the next unit."],
+      "arc_ranges_are_story_specific": true
+    },
+    "readability_checks": [
+      "A first-time reader identifies the bell, the empty platform, and Mira's final action in order.",
+      "Dialogue adds the station rule or inference and does not repeat visible information.",
+      "SFX meaning remains understandable in the output language."
+    ],
+    "repeatable_identity": [
+      "Quiet supernatural tension built from ordinary mechanisms, restrained dialogue, expressive acting, and decisive black-and-white contrast."
+    ]
+  },
+  "publishing_strategy": {
+    "status": "research_required",
+    "release_unit": "complete_work",
+    "target_channels": [],
+    "cadence": "One completed pilot milestone; no serialization cadence is assumed.",
+    "buffer": {"target": 0, "unit": "not_applicable", "rationale": "A buffer becomes relevant only if the author approves a serialized continuation."},
+    "format_requirements": ["Black-and-white screen page at the dimensions in project.json"],
+    "monetization_hypotheses": [],
+    "discoverability_deliverables": [
+      {"deliverable": "pitch", "owner": "codex_text", "status": "planned", "requirement": "A one-paragraph pitch consistent with the approved creative brief.", "image_job_path": null},
+      {"deliverable": "character_sheet", "owner": "chatgpt_image_generation", "status": "planned", "requirement": "Use only the structured character-reference image jobs after production gates pass.", "image_job_path": null}
+    ],
+    "community_strategy": {
+      "status": "not_applicable",
+      "channels": [],
+      "engagement_principles": ["Ask for concrete comprehension feedback rather than engagement bait."],
+      "moderation_and_safety": ["Do not expose private manuscript or test-reader information."]
+    },
+    "rights_and_contract_checks": [
+      {"check": "Confirm authorship, collaborator permissions, and ownership before public release.", "status": "open", "verification_owner": "human"}
+    ],
+    "visual_assets_remain_external_to_codex": true
+  },
+  "collaboration_and_sustainability": {
+    "roles": [
+      {"role": "author and approver", "owner": "human", "scope": "Creative decisions, approvals, rights, and final visual judgment.", "agreement_status": "not_applicable"},
+      {"role": "story and production orchestration", "owner": "Codex", "scope": "Text, structured plans, validation, handoff, lettering, composition, review, and export; never artwork generation or editing.", "agreement_status": "documented"},
+      {"role": "image production", "owner": "ChatGPT Image Generation", "scope": "External image generation from approved structured jobs and attached references.", "agreement_status": "documented"}
+    ],
+    "agreement_requirements": ["For any paid collaborator, document scope, milestones, deadlines, payment, credit, confidentiality, and IP ownership before work begins."],
+    "outsourcing_triggers": ["Add human editorial or lettering support if clarity failures persist after two scoped revisions."],
+    "capacity_limit": "Keep the milestone to one four-panel page until its workflow is verified end to end.",
+    "rest_policy": "No release target may require skipping planned rest or approving work without review.",
+    "backup_policy": "Retain versioned project metadata and keep externally returned image versions without overwrite.",
+    "financial_constraints": ["No paid production or release commitment is assumed until the author defines budget and runway."],
+    "efficiency_practices": ["Reuse page, lettering, and handoff templates.", "Reuse only approved external reference assets and preserve their hashes.", "Batch deterministic validation without lowering the human visual-review threshold."],
+    "quality_floor": ["Clear reading order", "Legible lettering", "Canon and visual-reference continuity", "Approved audience boundaries"],
+    "scope_reduction_order": ["Remove optional promotion", "Delay release", "Reduce future page count", "Never remove required clarity, safety, rights, or review checks"]
+  },
+  "measurement_and_iteration": {
+    "feedback_checkpoints": [
+      {
+        "stage": "structured nemu before image release",
+        "reader_profile": "A reader unfamiliar with the pilot premise",
+        "questions": ["What happened in order?", "What rule did you infer?", "What choice did Mira make?", "What do you expect next?"],
+        "decision_scope": "Revise panel allocation, event emphasis, or dialogue load without changing approved canon."
+      },
+      {
+        "stage": "lettered page before export",
+        "reader_profile": "Teen-or-older test readers, including at least one reader using the output language as a second language",
+        "questions": ["Was any balloon or sound hard to understand?", "Did your eye follow the intended reading order?", "Which panel carried the strongest impact?"],
+        "decision_scope": "Revise lettering or propose a new panel correction version; never overwrite approved artwork."
+      }
+    ],
+    "primary_metrics": [
+      {
+        "name": "unaided event comprehension",
+        "kind": "qualitative",
+        "definition": "Readers can recount the four dominant events and Mira's final decision without explanation.",
+        "target": "All planned events are identified by every pilot test reader.",
+        "review_point": "After the first lettered page.",
+        "data_source": "Recorded answers to the feedback checkpoint questions.",
+        "interpretation_limit": "A small convenience sample measures clarity only, not market demand."
+      },
+      {
+        "name": "production gate completion",
+        "kind": "leading",
+        "definition": "Required pilot approvals, image intake, human visual checks, composition, lettering, continuity review, and export are complete.",
+        "target": "All first-milestone gates pass with no unresolved error finding.",
+        "review_point": "Before final export.",
+        "data_source": "Manga Studio validation and approval records.",
+        "interpretation_limit": "A complete workflow does not guarantee artistic recognition, audience growth, or revenue."
+      }
+    ],
+    "observations": [],
+    "experiments": [
+      {
+        "hypothesis": "Removing one explanatory line will improve pace without reducing understanding.",
+        "single_variable": true,
+        "success_signal": "Readers infer the station rule and final choice equally well while reporting less repetition.",
+        "guardrails": ["Do not change canon", "Do not alter generated artwork", "Keep audience boundaries and output language unchanged"]
+      }
+    ],
+    "pivot_rules": [
+      {
+        "trigger": "Two independent test rounds identify the same event-order or rule-comprehension failure.",
+        "minimum_evidence": "At least two readers per round describe the same concrete failure.",
+        "allowed_changes": ["Dialogue wording", "Balloon placement", "Panel emphasis", "A new versioned correction job"],
+        "protected_elements": ["Approved canon", "Core message", "Author voice", "Original source files", "Artwork version history"]
+      }
+    ],
+    "protected_elements": ["Approved canon", "Core message", "Author voice", "Audience safety boundaries", "Creator health", "Original source immutability"]
+  },
+  "risks": [
+    {"risk": "The restrained opening may read as static rather than tense.", "likelihood": "medium", "impact": "medium", "mitigation": "Test event comprehension and emotional anticipation at nemu and lettered-page checkpoints.", "owner": "author"},
+    {"risk": "External image output may drift from locked references or safe zones.", "likelihood": "medium", "impact": "high", "mitigation": "Use hash-locked references, technical intake, human visual review, and versioned correction jobs.", "owner": "Codex and human approver"}
+  ],
+  "assumptions": ["No publication platform or monetization model has been selected for the pilot."],
+  "basis": {
+    "source_evidence": [],
+    "decision_ids": [],
+    "research_sources": [
+      {
+        "source_id": "success-considerations-user-note",
+        "kind": "user_input",
+        "citation": "User-provided manga success considerations",
+        "accessed_on": "2026-09-04",
+        "notes": "Used as planning input; market claims remain hypotheses until independently validated."
+      }
+    ]
+  }
+}

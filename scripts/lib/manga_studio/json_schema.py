@@ -113,12 +113,18 @@ def _validate(
     if isinstance(instance, (int, float)) and not isinstance(instance, bool):
         if "minimum" in schema and instance < schema["minimum"]:
             errors.append(f"{instance_path} must be at least {schema['minimum']}")
+        if "exclusiveMinimum" in schema and instance <= schema["exclusiveMinimum"]:
+            errors.append(f"{instance_path} must be greater than {schema['exclusiveMinimum']}")
         if "maximum" in schema and instance > schema["maximum"]:
             errors.append(f"{instance_path} must be at most {schema['maximum']}")
+        if "exclusiveMaximum" in schema and instance >= schema["exclusiveMaximum"]:
+            errors.append(f"{instance_path} must be less than {schema['exclusiveMaximum']}")
 
     if isinstance(instance, list):
         if "minItems" in schema and len(instance) < schema["minItems"]:
             errors.append(f"{instance_path} must contain at least {schema['minItems']} item(s)")
+        if "maxItems" in schema and len(instance) > schema["maxItems"]:
+            errors.append(f"{instance_path} must contain at most {schema['maxItems']} item(s)")
         if schema.get("uniqueItems"):
             encoded = [json.dumps(item, sort_keys=True) for item in instance]
             if len(encoded) != len(set(encoded)):

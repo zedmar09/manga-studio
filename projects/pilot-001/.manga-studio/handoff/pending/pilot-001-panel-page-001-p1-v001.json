@@ -1,8 +1,10 @@
 {
-  "schema_version": "1.0.0",
+  "schema_version": "1.3.0",
   "job_id": "pilot-001-panel-page-001-p1-v001",
   "job_type": "manga_panel",
   "output_filename": ".manga-studio/handoff/generated/panels/page-001-panel-01-v001.png",
+  "output_spec": {"format": "png", "width": 1400, "height": 2200, "color_mode": "grayscale", "alpha_allowed": false},
+  "content_constraints": {"age_band": "teen and older", "content_rating": "teen", "content_boundaries": ["No graphic injury", "No sexual content", "Threat remains suspenseful rather than sadistic"], "sensitivity_requirements": ["Fear responses should not be mocked", "Avoid glamorizing reckless isolation"], "accessibility_goals": ["Clear event order", "Readable concise dialogue", "Every SFX includes reader-facing meaning"]},
   "required_reference_images": [],
   "reference_priority": [
     "protagonist-mira-reference-v001",
@@ -21,27 +23,56 @@
     "ren": "Standing beside Mira, watchful, umbrella lowered."
   },
   "composition": {
-    "panel_canvas": {
-      "width": 1400,
-      "height": 2200
-    },
     "camera": "medium vertical shot",
     "framing": "small hanging bell large in foreground, Mira and Ren behind it under the roof",
-    "reading_focus": "bell first, then Mira, then Ren"
+    "reading_focus": "bell first, then Mira, then Ren",
+    "event_direction": {
+      "event_type": "establishing",
+      "intensity": 2,
+      "importance": 3,
+      "shot_size": "medium",
+      "camera_angle": "low_angle",
+      "camera_motion": "push_in",
+      "action_direction": "static",
+      "emotional_beat": "recognition of a supernatural warning",
+      "pose_and_expression": "Mira goes still and alert; Ren turns his attention from the bell to Mira",
+      "show_dont_tell_cue": "The bell's vibration, Mira's arrested posture, and Ren's redirected gaze reveal the warning without explanatory text."
+    },
+    "background_priority": "supporting"
   },
+  "safe_zone_coordinate_system": "source_normalized",
   "dialogue_safe_zones": [
     {
-      "x": 160,
-      "y": 120,
-      "width": 980,
-      "height": 330
+      "x": 0.18,
+      "y": 0.06,
+      "width": 0.7,
+      "height": 0.2
     }
   ],
   "manga_style": {
     "palette": "black-and-white",
     "linework": "high-contrast ink linework",
+    "line_weight_strategy": "Heavy foreground bell contours, medium character contours, and fine rain detail.",
+    "solid_black_strategy": "Reserve deep blacks for the roof structure and night void behind the figures.",
     "screen_tones": "rain and night shadows in restrained tones",
+    "contrast_plan": "The pale bell edge and faces separate clearly from the dark roof and night.",
+    "depth_plan": "Foreground bell, middle-ground characters, and receding platform remain distinct.",
+    "motion_language": "Small vibration marks on the bell contrast with still character poses.",
     "genre": "quiet supernatural mystery manga"
+  },
+  "quality_profile": {
+    "tier": "high",
+    "goals": [
+      "event clarity at thumbnail size",
+      "expressive character acting",
+      "dynamic event-driven composition",
+      "strict reference continuity",
+      "professional black-and-white manga finish"
+    ],
+    "variation_policy": "event_driven",
+    "continuity_strictness": "locked",
+    "detail_budget": "high",
+    "self_check_required": true
   },
   "required_elements": [
     "hanging bell visibly trembling",
